@@ -13,11 +13,23 @@
 		<result property="memberGender" column="member_gender"/>
 		<result property="memberPhone" column="member_phone"/>
 		<result property="memberAddr" column="member_addr"/>
+		<result property="adminWhether" column="admin_whether"/>
 	</resultMap>
 	
 	<select id="memberList" resultMap="memberMap">
 		SELECT *
 		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	
+	<select id="memberbyid" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
 	</select>
 	
 </mapper>

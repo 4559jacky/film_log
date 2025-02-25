@@ -33,16 +33,16 @@
           <a class="nav-link" href="#">자유게시판</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">FAQ</a>
+          <a class="nav-link" href="/faq">FAQ</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link" href="/memberLogin">로그인</a>
+          <a class="nav-link" href="/memberLoginPass">로그인</a>
         </li>
       </ul>
-      <form class="d-flex">
+      <!-- <form class="d-flex">
         <input class="form-control me-sm-2" type="search" placeholder="Search">
         <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      </form> -->
     </div>
   </div>
 </nav>

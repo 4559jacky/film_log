@@ -1,4 +1,4 @@
-package com.filmlog.member.controller;
+package com.filmlog.qna;
 
 import java.io.IOException;
 
@@ -9,17 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-@WebServlet("/memberLoginPass")
-public class MemberLoginPassServlet extends HttpServlet {
+@WebServlet("/writeQna")
+public class WriteQnaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-    public MemberLoginPassServlet() {
-        super();
-    }
+       
+    public WriteQnaServlet() {}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("/views/member/login.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("views/qna/writeQna.jsp");
 		view.forward(request, response);
 	}
 
