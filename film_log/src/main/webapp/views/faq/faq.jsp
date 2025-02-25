@@ -12,46 +12,42 @@
 <body>
 <%@ include file="/views/include/nav.jsp" %>
 <br>
+<div class="container-sm">
+<p class="text-center fs-1">FAQ</p>
+<br>
+<div class="d-grid gap-2 d-md-flex justify-content-md-end">
+<c:if test="${isAdmin == 'F'}">
+<button type="button" class="btn btn-secondary">1:1 문의하기</button>
+</c:if>
+</div>
+<hr class="my-2">
+<br>
+</div>
   <div class="container-sm">
 <div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingOne">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Accordion Item #1
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
+  <c:forEach var="faq" items="${faqList}" varStatus="status">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="heading${status.index}">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapse${status.index}"
+                    aria-expanded="false"
+                    aria-controls="collapse${status.index}">
+                ${faq.title}
+            </button>
+        </h2>
+        <div id="collapse${status.index}" class="accordion-collapse collapse"
+             aria-labelledby="heading${status.index}" 
+             data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                ${faq.content}
+            </div>
+        </div>
     </div>
-  </div>
-
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingTwo">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-        Accordion Item #2
-      </button>
-    </h2>
-    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingThree">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Accordion Item #3
-      </button>
-    </h2>
-    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-      </div>
-    </div>
-  </div>
+  </c:forEach>
 </div>
+
 </div>
 <script src='<c:url value="/resources/js/bootstrap.min.js"/>'></script>
 </body>

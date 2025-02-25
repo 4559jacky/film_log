@@ -30,6 +30,7 @@ public class FaqServlet extends HttpServlet {
 
 		List<Faq> faqList = faqService.selectFaqAll();
 		RequestDispatcher view = request.getRequestDispatcher("/views/faq/faq.jsp");
+		System.out.println(member.getAdminWhether());
 		request.setAttribute("isAdmin", member.getAdminWhether());
 		request.setAttribute("faqList", faqList);
 		view.forward(request, response);
