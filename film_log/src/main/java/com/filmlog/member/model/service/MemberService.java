@@ -1,4 +1,4 @@
-package com.filmlog.member.service;
+package com.filmlog.member.model.service;
 
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.filmlog.member.dao.MemberDao;
-import com.filmlog.member.vo.Member;
+import com.filmlog.member.model.dao.MemberDao;
+import com.filmlog.member.model.vo.Member;
 
 public class MemberService {
 	

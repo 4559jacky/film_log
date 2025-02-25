@@ -1,4 +1,4 @@
-package com.filmlog.member.vo;
+package com.filmlog.member.model.vo;
 
 public class Member {
 	private int memberNo;

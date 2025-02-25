@@ -1,10 +1,10 @@
-package com.filmlog.member.dao;
+package com.filmlog.member.model.dao;
 
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
-import com.filmlog.member.vo.Member;
+import com.filmlog.member.model.vo.Member;
 
 public class MemberDao {
 
