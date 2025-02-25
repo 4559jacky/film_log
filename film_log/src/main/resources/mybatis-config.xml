@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 	<properties resource="driver.properties"/>
 	<typeAliases>
+		<typeAlias type="com.filmlog.movie.vo.Movie" alias="movie"/>
 		<typeAlias type="com.filmlog.member.model.vo.Member" alias="member"/>
 		<typeAlias type="com.filmlog.faq.model.vo.Faq" alias="faq"/>
 	</typeAliases>
