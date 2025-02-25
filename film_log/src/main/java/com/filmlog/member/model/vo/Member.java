@@ -1,4 +1,4 @@
-package com.filmlog.member.vo;
+package com.filmlog.member.model.vo;
 
 public class Member {
 	private int memberNo;
@@ -10,13 +10,14 @@ public class Member {
 	private String memberPhone;
 	private String memberGender;
 	private String memberAddr;
+	private String adminWhether;
 	
 	public Member() {
 		super();
 	}
 
 	public Member(int memberNo, String memberId, String memberPwd, String memberName, String memberNickname,
-			String memberBirth, String memberPhone, String memberGender, String memberAddr) {
+			String memberBirth, String memberPhone, String memberGender, String memberAddr, String adminWhether) {
 		super();
 		this.memberNo = memberNo;
 		this.memberId = memberId;
@@ -27,6 +28,7 @@ public class Member {
 		this.memberGender = memberGender;
 		this.memberPhone = memberPhone;
 		this.memberAddr = memberAddr;
+		this.adminWhether = adminWhether;
 	}
 
 	public int getMemberNo() {
@@ -102,12 +104,20 @@ public class Member {
 		this.memberPhone = memberPhone;
 	}
 
+	public String getAdminWhether() {
+		return adminWhether;
+	}
+
+	public void setAdminWhether(String adminWhether) {
+		this.adminWhether = adminWhether;
+	}
+
 	@Override
 	public String toString() {
 		return "Member [memberNo=" + memberNo + ", memberId=" + memberId + ", memberPwd=" + memberPwd + ", memberName="
 				+ memberName + ", memberNickname=" + memberNickname + ", memberBirth=" + memberBirth + ", memberPhone="
-				+ memberPhone + ", memberGender=" + memberGender + ", memberAddr=" + memberAddr + "]";
+				+ memberPhone + ", memberGender=" + memberGender + ", memberAddr=" + memberAddr + ", adminWhether="
+				+ adminWhether + "]";
 	}
-
 	
 }
