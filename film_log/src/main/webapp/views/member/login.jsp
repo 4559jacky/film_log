@@ -16,7 +16,7 @@
 				<form action='/memberLoginEnd' name="login_form" method="post">
 					<input type="text"	name="member_id" 	placeholder="아이디"> <br>
 					<input type="password"	name="member_pw" 	placeholder="비밀번호"> <br>
-					<a href="#">아이디 찾기</a>
+					<a href="/findId">아이디 찾기</a>
 					<a href="#">비밀번호 변경</a><br>
 					<input type="button"	value="로그인" onclick="loginForm();">				
 				</form>
