@@ -27,4 +27,11 @@ public class MemberService {
 		return member;
 	}
 	
+	public Member tempSelectAdmin(int memberNo) {
+		SqlSession session = getSqlSession();
+		Member result = memberDao.tempSelectAdmin(session, memberNo);
+		session.close();
+		return result;
+	}
+	
 }
