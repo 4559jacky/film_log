@@ -41,7 +41,7 @@ public class MemberCreateServlet extends HttpServlet {
 		
 		response.setContentType("application/json; charset=utf-8");
 		response.getWriter().print(obj);
-	}
+	} 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
