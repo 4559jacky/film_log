@@ -11,5 +11,9 @@ public class MemberDao {
 	public List<Member> selectMemberAll(SqlSession session) {
 		return session.selectList("memberMapper.memberList");
 	}
+	
+	public Member tempSelectAdmin(SqlSession session, int memberNo) {
+		return session.selectOne("memberMapper.memberOne", memberNo);
+	}
 
 }

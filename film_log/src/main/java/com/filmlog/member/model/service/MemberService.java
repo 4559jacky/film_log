@@ -20,4 +20,11 @@ public class MemberService {
 		return resultList;
 	}
 	
+	public Member tempSelectAdmin(int memberNo) {
+		SqlSession session = getSqlSession();
+		Member result = memberDao.tempSelectAdmin(session, 2);
+		session.close();
+		return result;
+	}
+	
 }
