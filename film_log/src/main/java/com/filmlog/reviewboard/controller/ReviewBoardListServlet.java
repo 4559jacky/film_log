@@ -1,40 +1,42 @@
 package com.filmlog.reviewboard.controller;
 
 import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class ReviewBoardServlet
- */
-@WebServlet("/ReviewBoardServlet")
-public class ReviewBoardServlet extends HttpServlet {
+import com.filmlog.reviewboard.model.service.ReviewBoardService;
+import com.filmlog.reviewboard.model.vo.ReviewBoard;
+
+
+@WebServlet("/reviewBoardList")
+public class ReviewBoardListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ReviewBoardServlet() {
+    
+    public ReviewBoardListServlet() {
         super();
-        // TODO Auto-generated constructor stub
+     
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardList();
+		System.out.println(resultList);
+		
+		RequestDispatcher view = request.getRequestDispatcher("/views/reviewBoard/reviewBoardList.jsp");
+		request.setAttribute("resultList", resultList);
+		view.forward(request, response);
+		
+	
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
