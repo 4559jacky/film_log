@@ -13,16 +13,16 @@
 				<h3>Login</h3>
 			</div>
 			<div class="login_form">
-				<form action='/memberLoginEnd' name="login_form" method="post">
+				<form action='/memberLogin' name="login_form" method="post">
 					<input type="text"	name="member_id" 	placeholder="아이디"> <br>
-					<input type="password"	name="member_pw" 	placeholder="비밀번호"> <br>
+					<input type="password"	name="member_pwd" 	placeholder="비밀번호"> <br>
 					<a href="/findId">아이디 찾기</a>
-					<a href="#">비밀번호 변경</a><br>
+					<a href="/changePwd">비밀번호 변경</a><br>
 					<input type="button"	value="로그인" onclick="loginForm();">				
 				</form>
 			</div>
 			<div class="find_password_create_account">
-				<a href='/memberCreate'>회원가입</a>
+				<a href='/memberCreatePass'>회원가입</a>
 			</div>
 		</div>
 	</section>
@@ -32,9 +32,9 @@
 			if (form.member_id.value == '') {
 				alert('아이디를 입력하세요.');
 				form.member_id.focus();	
-			} else if (form.member_pw.value == '') {
+			} else if (form.member_pwd.value == '') {
 				alert('비밀번호를 입력하세요.');
-				form.member_pw.focus();
+				form.member_pwd.focus();
 			} else {
 				form.submit();
 			}

@@ -16,4 +16,9 @@ public class MemberDao {
 		return session.selectOne("memberMapper.memberOne", memberNo);
 	}
 
+	public Member selectMemberById(SqlSession session, String memberId) {
+		return session.selectOne("memberMapper.memberbyid",memberId);
+	}
+
 }
+
