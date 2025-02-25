@@ -20,4 +20,10 @@
 		FROM `member`
 	</select>
 	
+	<select id="memberbyid" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
 </mapper>
