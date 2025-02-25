@@ -22,7 +22,7 @@ public class MemberService {
 	
 	public Member tempSelectAdmin(int memberNo) {
 		SqlSession session = getSqlSession();
-		Member result = memberDao.tempSelectAdmin(session, 2);
+		Member result = memberDao.tempSelectAdmin(session, memberNo);
 		session.close();
 		return result;
 	}

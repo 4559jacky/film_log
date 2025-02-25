@@ -26,7 +26,8 @@ public class FaqServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 임시로 관리자 계정 가져옴
 		// 이후에 nav에 있는 세션에 있는 값을 사용
-		Member member = memberService.tempSelectAdmin(2);
+		Member member = memberService.tempSelectAdmin(1);
+		System.out.println(member);
 
 		List<Faq> faqList = faqService.selectFaqAll();
 		RequestDispatcher view = request.getRequestDispatcher("/views/faq/faq.jsp");
