@@ -22,6 +22,10 @@
 	안녕하세요~
 
 	정재익
+	<form action="/reviewBoardList" name="search_member_form" method="post">
+		<input type="submit">
+	</form>
+
 
 	<form action="/memberList" name="search_member_form" method="post">
 		<input type="submit">
