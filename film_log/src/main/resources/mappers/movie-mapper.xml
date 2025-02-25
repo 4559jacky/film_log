@@ -3,5 +3,24 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="movieMapper">
+	<resultMap type="movie" id="movieMap">
+			<result property="movieNo" column="movie_no"/>
+			<result property="movieTitle" column="movie_title"/>
+			<result property="moviePlot" column="movie_plot"/>
+			<result property="movieDirector" column="movie_director"/>
+			<result property="movieActor" column="movie_actor"/>
+			<result property="releaseDate" column="release_date"/>	
+			<result property="runTime" column="run_time"/>
+			<result property="rating" column="rating"/>
+			<result property="viewsNum" column="views_num"/>	
+			<result property="genreNo" column="genre_no"/>
+			<result property="movieAddressUrl" column="movie_address_url"/>	
+	</resultMap>
+	<select id="movieList" resultMap="movieMap" parameterType="movie">
+		SELECT *
+		FROM `movie`
+	</select>
+
+
 
 </mapper>

@@ -24,7 +24,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">영화목록</a>
+          <a class="nav-link" href="/movieList">영화목록</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">리뷰게시판</a>
