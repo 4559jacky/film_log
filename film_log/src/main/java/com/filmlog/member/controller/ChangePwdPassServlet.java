@@ -9,17 +9,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-@WebServlet("/memberLoginPass")
-public class MemberLoginPassServlet extends HttpServlet {
+@WebServlet("/changePwd")
+public class ChangePwdPassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    public MemberLoginPassServlet() {
+	public ChangePwdPassServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("/views/member/login.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/member/changePwd.jsp");
 		view.forward(request, response);
 	}
 

@@ -36,7 +36,7 @@
           <a class="nav-link" href="#">FAQ</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link" href="/memberLogin">로그인</a>
+          <a class="nav-link" href="/memberLoginPass">로그인</a>
         </li>
       </ul>
       <form class="d-flex">
