@@ -1,40 +1,33 @@
-package com.filmlog.member.vo;
+package com.filmlog.member.controller;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/**
- * Servlet implementation class MemberServlet
- */
-@WebServlet("/MemberServlet")
+import com.filmlog.member.service.MemberService;
+import com.filmlog.member.vo.Member;
+
+@WebServlet("/memberList")
 public class MemberServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private MemberService memberService = new MemberService();
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public MemberServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		List<Member> memberList = memberService.selectMemberAll();
+		System.out.println(memberList);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		request.setCharacterEncoding("utf-8");
 		doGet(request, response);
 	}
 
