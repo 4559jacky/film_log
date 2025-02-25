@@ -3,5 +3,21 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="memberMapper">
-
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="memberAddr" column="member_addr"/>
+	</resultMap>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	
 </mapper>
