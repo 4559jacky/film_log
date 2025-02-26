@@ -18,7 +18,7 @@
 <p class="text-center fs-1">FAQ</p>
 <br>
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-<c:if test="${isAdmin == 'F'}">
+<c:if test="${member.adminWhether == 'F' }">
 <button type="button" class="btn btn-secondary" onclick="window.location.href='/writeQna'">1:1 문의하기</button>
 </c:if>
 </div>

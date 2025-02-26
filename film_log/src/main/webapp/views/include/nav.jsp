@@ -59,6 +59,6 @@
 	    </div>
 	  </div>
 	</nav>
-	<script src="<c:url value='/resources/js/bootstrap.bundle.min.js'/>"></script>
+	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 </body>
 </html>

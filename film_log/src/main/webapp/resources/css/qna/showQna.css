@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+#qna_over_div {
+	background-color: white;
+	border-radius : 20px;
+}
+
+#qna_title {
+	height : 50px;
+}

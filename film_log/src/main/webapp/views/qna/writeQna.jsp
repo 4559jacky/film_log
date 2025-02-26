@@ -19,7 +19,7 @@
 	<form name="qnaForm" method="post">
 	<div class="container">
 		<div class="mb-3">
-		<input type="hidden" name="member_no" value="1">
+		<input type="hidden" name="member_no" value="${member.memberNo}">
 			<select class="form-select" name="qna_type" aria-label="Default select example">
   				<option value="0">문의 종류</option>
   				<option value="1">영화 문의</option>

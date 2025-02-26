@@ -15,12 +15,10 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class Qna {
-	private int qnaBoardNo;
-	private int qnaType;
-	private String title;
-	private String content;
+public class QnaResponse {
+	private int responseNo;
+	private String responseContent;
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
-	private int memberNo;
+	private int qnaBoardNo;
 }
