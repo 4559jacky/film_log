@@ -22,6 +22,7 @@ public class Movie {
 	private String movieDirector;
 	private String movieActor;
 	private Date releaseDate;
+	private Date closeDate;
 	private int runTime;
 	private float rating;
 	private int viewsNum;
