@@ -16,6 +16,13 @@
 		<result property="adminWhether" column="admin_whether"/>
 	</resultMap>
 	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
 	<select id="memberList" resultMap="memberMap">
 		SELECT *
 		FROM `member`
@@ -26,10 +33,19 @@
 		WHERE member_no = #{param1}
 	</select>
 	
-	<select id="memberbyid" resultMap="memberMap" parameterType="string">
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
 		SELECT *
 		FROM `member`
 		WHERE member_id = #{member_id}
 	</select>
+	
+	<insert id="insertMemberOne" parameterType="member">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_birth
+			,member_gender ,member_phone ,member_addr ,admin_whether)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberBirth}
+			,#{memberGender} ,#{memberPhone} ,#{memberAddr} ,#{adminWhether})
+	</insert>
 	
 </mapper>

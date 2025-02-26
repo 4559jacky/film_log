@@ -1,5 +1,18 @@
 package com.filmlog.member.model.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Member {
 	private int memberNo;
 	private String memberId;
@@ -12,112 +25,26 @@ public class Member {
 	private String memberAddr;
 	private String adminWhether;
 	
-	public Member() {
+	public Member(String memberId, String memberPwd) {
 		super();
-	}
-
-	public Member(int memberNo, String memberId, String memberPwd, String memberName, String memberNickname,
-			String memberBirth, String memberPhone, String memberGender, String memberAddr, String adminWhether) {
-		super();
-		this.memberNo = memberNo;
 		this.memberId = memberId;
 		this.memberPwd = memberPwd;
-		this.memberName = memberName;
-		this.memberNickname = memberNickname;
-		this.memberBirth = memberBirth;
-		this.memberGender = memberGender;
-		this.memberPhone = memberPhone;
-		this.memberAddr = memberAddr;
-		this.adminWhether = adminWhether;
-	}
-
-	public int getMemberNo() {
-		return memberNo;
-	}
-
-	public void setMemberNo(int memberNo) {
-		this.memberNo = memberNo;
-	}
-
-	public String getMemberId() {
-		return memberId;
-	}
-
-	public void setMemberId(String memberId) {
-		this.memberId = memberId;
-	}
-
-	public String getMemberPwd() {
-		return memberPwd;
-	}
-
-	public void setMemberPwd(String memberPwd) {
-		this.memberPwd = memberPwd;
-	}
-
-	public String getMemberName() {
-		return memberName;
-	}
-
-	public void setMemberName(String memberName) {
-		this.memberName = memberName;
-	}
-
-	public String getMemberNickname() {
-		return memberNickname;
-	}
-
-	public void setMemberNickname(String memberNickname) {
-		this.memberNickname = memberNickname;
-	}
-
-	public String getMemberBirth() {
-		return memberBirth;
-	}
-
-	public void setMemberBirth(String memberBirth) {
-		this.memberBirth = memberBirth;
-	}
-
-	public String getMemberGender() {
-		return memberGender;
-	}
-
-	public void setMemberGender(String memberGender) {
-		this.memberGender = memberGender;
-	}
-
-	public String getMemberAddr() {
-		return memberAddr;
-	}
-
-	public void setMemberAddr(String memberAddr) {
-		this.memberAddr = memberAddr;
 	}
 	
-
-	public String getMemberPhone() {
-		return memberPhone;
-	}
-
-	public void setMemberPhone(String memberPhone) {
+	public Member(String memberId, String memberPwd, String memberName, String memberNickname, String memberBirth,
+			String memberPhone, String memberGender, String memberAddr, String adminWhether) {
+		super();
+		this.memberId = memberId;
+		this.memberPwd = memberPwd;
+		this.memberName = memberName;
+		this.memberNickname = memberNickname;
+		this.memberBirth = memberBirth;
 		this.memberPhone = memberPhone;
-	}
-
-	public String getAdminWhether() {
-		return adminWhether;
-	}
-
-	public void setAdminWhether(String adminWhether) {
+		this.memberGender = memberGender;
+		this.memberAddr = memberAddr;
 		this.adminWhether = adminWhether;
 	}
-
-	@Override
-	public String toString() {
-		return "Member [memberNo=" + memberNo + ", memberId=" + memberId + ", memberPwd=" + memberPwd + ", memberName="
-				+ memberName + ", memberNickname=" + memberNickname + ", memberBirth=" + memberBirth + ", memberPhone="
-				+ memberPhone + ", memberGender=" + memberGender + ", memberAddr=" + memberAddr + ", adminWhether="
-				+ adminWhether + "]";
-	}
+	
+	
 	
 }
