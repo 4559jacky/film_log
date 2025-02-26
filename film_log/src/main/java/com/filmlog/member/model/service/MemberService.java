@@ -12,14 +12,16 @@ import com.filmlog.member.model.vo.Member;
 public class MemberService {
 	
 	private MemberDao memberDao = new MemberDao();
-
+	
+	// 데이터베이스 테스트 회원 데이터 가져오기.
 	public List<Member> selectMemberAll() {
 		SqlSession session = getSqlSession();
 		List<Member> resultList = memberDao.selectMemberAll(session);
 		session.close();
 		return resultList;
 	}
-
+	
+	// 아이디 중복 체크
 	public Member selectMemberById(String memberId) {
 		SqlSession session = getSqlSession();
 		Member member = memberDao.selectMemberById(session, memberId);
@@ -32,6 +34,21 @@ public class MemberService {
 		Member result = memberDao.tempSelectAdmin(session, memberNo);
 		session.close();
 		return result;
+	}
+	
+	// 회원가입
+	public int InsertMember(Member mem) {
+		SqlSession session = getSqlSession();
+		int result = memberDao.InsertMember(session, mem);
+		session.close();
+		return result;
+	}
+
+	public Member selectMemberOne(Member member) {
+		SqlSession session = getSqlSession();
+		Member m = memberDao.selectMemberOne(session, member);
+		session.close();
+		return m;
 	}
 	
 }
