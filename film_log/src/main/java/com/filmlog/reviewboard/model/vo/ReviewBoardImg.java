@@ -2,8 +2,6 @@ package com.filmlog.reviewboard.model.vo;
 
 import java.time.LocalDateTime;
 
-import com.filmlog.common.vo.Paging;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,15 +15,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
-public class ReviewBoard extends Paging{
+public class ReviewBoardImg {
 	
+	private int imgNo;
 	private int reviewBoardNo;
-	private String reviewBoardTitle;
-	private String reviewBoardContent;
-	private int reviewBoardWriter;
-	private String memberName;
-	private LocalDateTime regDate;
-	private int views;
-	private int movieNo;
-	
+	private String oriImg;
+	private String newImg;
+	private String imgPath;
 }
