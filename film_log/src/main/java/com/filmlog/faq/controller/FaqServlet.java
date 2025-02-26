@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.filmlog.faq.model.service.FaqService;
 import com.filmlog.faq.model.vo.Faq;
@@ -26,13 +27,15 @@ public class FaqServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 임시로 관리자 계정 가져옴
 		// 이후에 nav에 있는 세션에 있는 값을 사용
-		Member member = memberService.tempSelectAdmin(1);
-		System.out.println(member);
+		Member member = new Member();
+		
+		HttpSession session = request.getSession(false);
+		if(session != null && session.getAttribute("member") != null) {
+			member = (Member)session.getAttribute("member");
+		}
 
 		List<Faq> faqList = faqService.selectFaqAll();
 		RequestDispatcher view = request.getRequestDispatcher("/views/faq/faq.jsp");
-		System.out.println(member.getAdminWhether());
-		request.setAttribute("isAdmin", member.getAdminWhether());
 		request.setAttribute("faqList", faqList);
 		view.forward(request, response);
 	}

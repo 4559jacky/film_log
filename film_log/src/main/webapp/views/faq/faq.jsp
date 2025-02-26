@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <title>FAQ</title>
 <link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/resources/css/include/allpage.css" rel="stylesheet" type="text/css">
 <script src="<c:url value='/resuorces/js/jquery-3.7.1.js'/>"></script>
 </head>
 <body>
@@ -17,11 +18,11 @@
 <p class="text-center fs-1">FAQ</p>
 <br>
 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-<c:if test="${isAdmin == 'F'}">
+<c:if test="${member.adminWhether == 'F' }">
 <button type="button" class="btn btn-secondary" onclick="window.location.href='/writeQna'">1:1 문의하기</button>
 </c:if>
 </div>
-<hr class="my-2">
+<hr class="my-2" id="hr">
 <br>
 </div>
   <div class="container-sm">
