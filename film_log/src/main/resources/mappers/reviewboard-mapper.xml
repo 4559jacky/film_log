@@ -12,12 +12,27 @@
 		<result property="views" column="views"/>	
 	</resultMap>
 	
-	<select id="reviewBoardList" resultMap="reviewBoardMap" parameterType="reviewBoard">
+	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
 		FROM `review_board` r
 		JOIN `member` m
 		ON r.member_no = m.member_no
+		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
 	
+	<insert id="insertReviewBoard" parameterType="reviewBoard"
+	useGeneratedKeys="true" keyProperty="reviewBoardNo">
+		INSERT INTO `review_board`(review_board_title ,review_board_content ,member_no, movie_no)
+		VALUES (#{reviewBoardTitle}, #{reviewBoardContent}, #{reviewBoardWriter}, #{movieNo})
+	</insert>
+	
+ 	<insert id="insertReviewBoardImg"  parameterType="reviewBoardImg">
+		INSERT INTO `review_board_img`(ori_img ,new_img ,img_path,review_board_no)
+		VALUES (#{oriImg}, #{newImg}, #{imgPath}, #{reviewBoardNo})
+	</insert> 
+	
+	<select id="selectReviewBoardCount" parameterType="reviewBoard" resultType="_int">
+		SELECT COUNT(*) FROM review_board
+	</select>
 	
 </mapper>

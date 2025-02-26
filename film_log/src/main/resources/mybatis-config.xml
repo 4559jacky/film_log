@@ -5,7 +5,8 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 	<properties resource="driver.properties"/>
 	<typeAliases>
-		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoard" alias="reviewboard"/>
+		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoard" alias="reviewBoard"/>
+		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardImg" alias="reviewBoardImg"/>
 		<typeAlias type="com.filmlog.movie.model.vo.Movie" alias="movie"/>
 		<typeAlias type="com.filmlog.member.model.vo.Member" alias="member"/>
 		<typeAlias type="com.filmlog.faq.model.vo.Faq" alias="faq"/>

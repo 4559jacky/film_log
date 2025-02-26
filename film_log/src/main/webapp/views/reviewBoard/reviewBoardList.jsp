@@ -10,7 +10,7 @@
 <title>게시글 조회</title>
 </head>
 <body>
-	
+	<div class="review_board_list">
 	<table border="1">
 		<thead>
 			<tr>
@@ -26,12 +26,15 @@
 			<c:choose>
 				<c:when test="${not empty resultList }">
 					<c:forEach var="r" items="${resultList }">
-						<tr>
+						<tr data-board-no="${r.reviewBoardNo }">
 							<td>${r.reviewBoardNo }</td>
 							<td>${r.reviewBoardTitle }</td>
 							<td>${r.reviewBoardContent }</td>
 							<td>${r.memberName }</td>
-							<td>${r.regDate }</td>
+							<fmt:parseDate value="${r.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
+							<td>
+								<fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/>
+							</td>
 							<td>${r.views }</td>
 						</tr>
 					</c:forEach>
@@ -44,7 +47,21 @@
 			</c:choose>
 		</tbody>
 	</table>
-	
+	</div>
+	<c:if test="${not empty paging}">
+		<div class="center">
+			<div class="pagination">
+				<c:if test="${paging.prev} ">
+				</c:if>
+			</div>
+		</div>
+	</c:if>
+	<script>
+		$('.review_board_list tbody tr').on('click',function(){
+			const boardNo = $(this).data('board-no');
+			location.href='/reviewBoardDetail?board_no='+boardNo;
+		})	
+	</script>
 	<a href="/reviewBoardInsertPass">게시글 작성하기</a>
 </body>
 </html>

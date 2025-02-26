@@ -25,7 +25,17 @@ public class ReviewBoardListServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardList();
+		String nowPage = request.getParameter("nowPage");
+		
+		ReviewBoard option = new ReviewBoard();
+		if(nowPage != null) {
+			option.setNowPage(Integer.parseInt(nowPage));
+		}
+		
+		int totalData = new ReviewBoardService().selectReviewBoardCount(option);
+		option.setTotalData(totalData);
+		
+		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardAll(option);
 		System.out.println(resultList);
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/reviewBoard/reviewBoardList.jsp");

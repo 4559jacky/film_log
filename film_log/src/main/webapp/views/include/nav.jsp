@@ -22,7 +22,7 @@
           <a class="nav-link" href="/movieList">영화목록</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">리뷰게시판</a>
+          <a class="nav-link" href="reviewBoardList">리뷰게시판</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">자유게시판</a>
