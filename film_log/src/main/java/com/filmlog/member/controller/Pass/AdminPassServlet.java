@@ -1,4 +1,4 @@
-package com.filmlog.member.controller;
+package com.filmlog.member.controller.Pass;
 
 import java.io.IOException;
 
@@ -9,16 +9,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/findId")
-public class FindIdPassServlet extends HttpServlet {
+@WebServlet("/adminPass")
+public class AdminPassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public FindIdPassServlet() {
+    public AdminPassServlet() {
         super();
+        // TODO Auto-generated constructor stub
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("/views/member/findId.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/member/admin/admin.jsp");
 		view.forward(request, response);
 	}
 

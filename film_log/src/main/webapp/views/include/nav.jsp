@@ -38,12 +38,12 @@
         	</c:when>
         	<c:when test="${member.adminWhether == 'T' }">
         		<li class="nav-item">
-		          <a class="nav-link" href="memberLoginPass">관리자 페이지</a>
+		          <a class="nav-link" href="adminPass">관리자 페이지</a>
 		        </li>
         	</c:when>
         	<c:when test="${member.adminWhether == 'F' }">
         		<li class="nav-item">
-		          <a class="nav-link" href="memberLoginPass">마이 페이지</a>
+		          <a class="nav-link" href="myPass">마이 페이지</a>
 		        </li>
         	</c:when>
         </c:choose>
