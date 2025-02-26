@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+#exampleFormControlTextarea1{
+	resize : none;
+}
+
+#form-select {
+	width : 100px;
+}

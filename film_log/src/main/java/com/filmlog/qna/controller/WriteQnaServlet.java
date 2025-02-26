@@ -1,4 +1,4 @@
-package com.filmlog.qna;
+package com.filmlog.qna.controller;
 
 import java.io.IOException;
 
