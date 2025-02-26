@@ -32,6 +32,11 @@
 		FROM `member`
 		WHERE member_no = #{param1}
 	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
 	
 	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
 		SELECT *

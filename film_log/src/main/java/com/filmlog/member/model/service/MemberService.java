@@ -51,4 +51,10 @@ public class MemberService {
 		return m;
 	}
 	
+	// 닉네임 중복 체크
+	public Member selectMemberByNickname(String memberNickname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }
