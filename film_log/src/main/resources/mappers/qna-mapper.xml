@@ -23,4 +23,15 @@
 		INSERT INTO `qna_board`(qna_type ,title, content ,member_no)
 		VALUES (#{qnaType} ,#{title} ,#{content} ,#{memberNo})
 	</insert>
+	
+	<update id="updateQna" parameterType="qna"
+	useGeneratedKeys="true" keyProperty="qnaBoardNo">
+		UPDATE `qna_board` SET qna_type=#{qnaType} ,title=#{title} ,content=#{content}
+		WHERE qna_board_no = #{qnaBoardNo}
+	</update>
+	
+	<delete id="deleteQna" parameterType="_int">
+		DELETE FROM `qna_board`
+		WHERE qna_board_no = #{qnaBoardNo};
+	</delete>
 </mapper>

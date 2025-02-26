@@ -35,11 +35,33 @@
 	<br>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
 	<c:if test="${qna.memberNo == member.memberNo}">
-		<button type="button" class="btn btn-secondary">수정</button>
-		<button type="button" class="btn btn-light">삭제</button>
+		<button type="button" class="btn btn-secondary" onclick="location.href='/updateQnaPass?qna_board_no=${qna.qnaBoardNo}'">수정</button>
+		<button type="button" class="btn btn-light" onclick="deleteQna(${qna.qnaBoardNo});">삭제</button>
 	</c:if>
 	</div>
 	<br>
 </div>
+<script>
+	const deleteQna = function(qnaBoardNo) {
+		if(confirm("정말 삭제하시겠습니까?")) {
+			$.ajax({
+				url:"/deleteQna",
+				type : "post",
+				dataType : "JSON",
+				data : {
+					"qna_board_no" : qnaBoardNo
+				},
+				contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+				success : function(data) {
+					alert(data.res_msg);
+					if(data.res_code == "200") {
+						location.href="/";
+						// 나중에 마이페이지 내 문의 내역 보기로 이동
+					}
+				}
+			})
+		}
+	}
+</script>
 </body>
 </html>
