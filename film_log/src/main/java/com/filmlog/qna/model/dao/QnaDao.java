@@ -6,6 +6,14 @@ import com.filmlog.qna.model.vo.Qna;
 
 public class QnaDao {
 	
+	public int deleteQna(SqlSession session, int qnaBoardNo) {
+		return session.delete("qnaMapper.deleteQna", qnaBoardNo);
+	}
+	
+	public int updateQna(SqlSession session, Qna qna) {
+		return session.update("qnaMapper.updateQna", qna);
+	}
+	
 	public Qna selectOneQna(SqlSession session, int qnaBoardNo) {
 		return session.selectOne("qnaMapper.selectOneQna", qnaBoardNo);
 	}
