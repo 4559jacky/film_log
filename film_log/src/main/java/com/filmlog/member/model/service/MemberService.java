@@ -53,8 +53,10 @@ public class MemberService {
 	
 	// 닉네임 중복 체크
 	public Member selectMemberByNickname(String memberNickname) {
-		// TODO Auto-generated method stub
-		return null;
+		SqlSession session = getSqlSession();
+		Member member = memberDao.selectMemberByNickname(session, memberNickname);
+		session.close();
+		return member;
 	}
 	
 }
