@@ -27,20 +27,6 @@ public class MemberCreateServlet extends HttpServlet {
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String memberId = request.getParameter("member_id");
-
-		Member member = memberService.selectMemberById(memberId);
-		JSONObject obj = new JSONObject();
-		obj.put("res_code", "200");
-		obj.put("res_msg", "사용가능한 아이디입니다.");
-
-		if(member != null) {
-			obj.put("res_code", "500");
-			obj.put("res_msg", "중복된 아이디입니다.");
-		}
-		
-		response.setContentType("application/json; charset=utf-8");
-		response.getWriter().print(obj);
-		
 		String memberPwd = request.getParameter("member_pwd");
 		String memberName = request.getParameter("member_name");
 		String memberNickname = request.getParameter("member_nickname");
@@ -55,7 +41,17 @@ public class MemberCreateServlet extends HttpServlet {
 		
 		int result = memberService.InsertMember(mem);
 		
+		JSONObject obj2 = new JSONObject();
+		obj2.put("res_code","500");
+		obj2.put("res_msg", "회원가입에 실패하였습니다.");
 		
+		if(result > 0) {
+			obj2.put("res_code","200");
+			obj2.put("res_msg", "회원가입에 성공하였습니다.");
+		}
+		
+		response.setContentType("application/json; charset=utf-8");
+		response.getWriter().print(obj2);
 		
 	} 
 
