@@ -29,6 +29,11 @@ public class MemberDao {
 	public Member selectMemberOne(SqlSession session, Member member) {
 		return session.selectOne("memberMapper.selectMemberOne",member);
 	}
+	
+	// 닉네임 중복 체크
+	public Member selectMemberByNickname(SqlSession session, String memberNickname) {
+		return session.selectOne("memberMapper.selectMemberByNickname",memberNickname);
+	}
 
 }
 

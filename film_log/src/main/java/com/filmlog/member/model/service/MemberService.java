@@ -51,4 +51,12 @@ public class MemberService {
 		return m;
 	}
 	
+	// 닉네임 중복 체크
+	public Member selectMemberByNickname(String memberNickname) {
+		SqlSession session = getSqlSession();
+		Member member = memberDao.selectMemberByNickname(session, memberNickname);
+		session.close();
+		return member;
+	}
+	
 }
