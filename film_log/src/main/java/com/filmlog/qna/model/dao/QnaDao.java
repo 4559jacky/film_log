@@ -1,5 +1,6 @@
 package com.filmlog.qna.model.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -8,6 +9,14 @@ import com.filmlog.qna.model.vo.Qna;
 import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaDao {
+	
+	public int selectQnaCount(SqlSession session, Qna option) {
+		return session.selectOne("qnaMapper.selectQnaCount", option);
+	}
+	
+	public List<Qna> selectQnaAll(SqlSession session) {
+		return session.selectList("qnaMapper.selectQnaAll");
+	}
 	
 	public int insertResponse(SqlSession session, Map<String, Object> map) {
 		return session.insert("qnaMapper.insertResponse", map);

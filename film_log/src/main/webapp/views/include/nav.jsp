@@ -6,7 +6,7 @@
 <script src="<c:url value='/resources/js/jquery-3.7.1.js'/>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 <c:set var="member" value="${member}"/>
-<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light" style="height : 80px;">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">필름 로그</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,7 +47,7 @@
             관리자 메뉴
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">1:1 문의 목록 조회</a></li>
+            <li><a class="dropdown-item" href="/qnaList">1:1 문의 목록 조회</a></li>
             <li><a class="dropdown-item" href="#">회원 목록 조회</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">전체 영화 목록 조회</a></li>

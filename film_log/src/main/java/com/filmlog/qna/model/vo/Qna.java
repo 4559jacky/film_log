@@ -2,6 +2,8 @@ package com.filmlog.qna.model.vo;
 
 import java.time.LocalDateTime;
 
+import com.filmlog.common.vo.Paging;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import lombok.ToString;
 @Setter
 @Builder
 @ToString
-public class Qna {
+public class Qna extends Paging {
 	private int qnaBoardNo;
 	private int qnaType;
 	private String title;

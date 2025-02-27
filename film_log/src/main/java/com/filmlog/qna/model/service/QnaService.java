@@ -2,6 +2,7 @@ package com.filmlog.qna.model.service;
 
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -11,6 +12,18 @@ import com.filmlog.qna.model.vo.Qna;
 import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaService {
+	
+	public int selectQnaCount(Qna option) {
+		SqlSession session = getSqlSession();
+		int result = new QnaDao().selectQnaCount(session, option);
+		return result;
+	}
+	
+	public List<Qna> selectQnaAll() {
+		SqlSession session = getSqlSession();
+		List<Qna> qnaList = new QnaDao().selectQnaAll(session);
+		return qnaList;
+	}
 	
 	public int insertResponse(Map<String, Object> map) {
 		SqlSession session = getSqlSession();
