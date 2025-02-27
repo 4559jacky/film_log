@@ -16,6 +16,13 @@
 			<result property="genreNo" column="genre_no"/>
 			<result property="movieAddressUrl" column="movie_address_url"/>	
 	</resultMap> -->
+	
+	<!-- 장르 추가 -->
+	<insert id="insertGenre" parameterType="genre">
+		INSERT IGNORE INTO `genre_dto` (id, name)
+		VALUES (#{id},#{name})
+	</insert>
+	
 	<!-- 영화 목록 -->
 	<select id="movieList" resultType="com.filmlog.movie.model.vo.MovieDTO">
         SELECT * 
@@ -24,8 +31,8 @@
 	
 	<!-- 영화 추가 -->
 	<insert id="insertMovie" parameterType="movie">
-		INSERT INTO `movie` (id, title, overview, release_date, vote_count, vote_average, genre_ids, poster_path)
-		VALUES (#{id},#{title},#{overview},#{releaseDate},#{voteCount},#{voteAverage},#{genreIds},#{posterPath})
+		INSERT IGNORE INTO `movie_dto` (id, title, overview, release_date, vote_count, vote_average, poster_path)
+		VALUES (#{id},#{title},#{overview},#{releaseDate},#{voteCount},#{voteAverage},#{posterPath})
 	</insert>
 
 
