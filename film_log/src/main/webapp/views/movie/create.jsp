@@ -13,8 +13,7 @@
 <body>
 	<c:set var="insertMovie" value="${movie }"/>
 	<form action="<c:url value='/movieCreate'/>"method="post">
-		<input type="hidden" name="movie_id"/>
-		<textarea name="movie_overview"><c:out value="${movie.overview }"/></textarea>
+		<input type="text" name="movie_id"/>
 		<input type="submit" value="추가">
 	</form>
 	
