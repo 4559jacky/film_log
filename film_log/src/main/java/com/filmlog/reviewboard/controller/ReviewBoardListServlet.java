@@ -40,6 +40,7 @@ public class ReviewBoardListServlet extends HttpServlet {
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/reviewBoard/reviewBoardList.jsp");
 		request.setAttribute("resultList", resultList);
+		request.setAttribute("paging", option);
 		view.forward(request, response);
 		
 	

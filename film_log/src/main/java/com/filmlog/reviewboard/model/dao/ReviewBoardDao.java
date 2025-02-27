@@ -26,8 +26,27 @@ public class ReviewBoardDao {
 		return session.insert("reviewboardMapper.insertReviewBoardImg",img);
 	}
 	
+	//페이징 처리
 	public int selectReviewBoardCount(ReviewBoard option,SqlSession session) {
 		int result = session.selectOne("reviewboardMapper.selectReviewBoardCount",option);
+		return result;
+	}
+	
+	// 게시글 상세 조회
+	public ReviewBoard selectReviewBoardOne(int reviewBoardNo ,SqlSession session) {
+		ReviewBoard reviewBoard = session.selectOne("reviewboardMapper.selectReviewBoardOne",reviewBoardNo);
+		return reviewBoard;
+	}
+	
+	// 게시글 이미지 출력
+	public ReviewBoardImg selectImgOne(int imgNo ,SqlSession session) {
+		ReviewBoardImg reviewBoardImg = session.selectOne("reviewboardMapper.selectImgOne",imgNo);
+		return reviewBoardImg;
+	}
+	
+	// 게시글 삭제
+	public int deleteReviewBoard(int reviewBoardNo, SqlSession session) {
+		int result = session.delete("reviewboardMapper.deleteReviewBoard",reviewBoardNo);
 		return result;
 	}
 	

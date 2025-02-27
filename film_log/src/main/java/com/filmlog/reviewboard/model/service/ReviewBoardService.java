@@ -53,11 +53,38 @@ public class ReviewBoardService {
 		return result;
 	}
 	
+	// 페이징 처리
 	public int selectReviewBoardCount(ReviewBoard option) {
 		SqlSession session = getSqlSession();
 		int result = new ReviewBoardDao().selectReviewBoardCount(option,session);
 		session.close();
 		return result;
 	}
+	
+	// 리뷰 게시글 상세 조회
+	public ReviewBoard selectReviewBoardOne(int reviewBoardNo) {
+		SqlSession session = getSqlSession();
+		ReviewBoard reviewboard = new ReviewBoardDao().selectReviewBoardOne(reviewBoardNo, session);
+		session.close();
+		
+		return reviewboard;
+		
+	}
+	
+	// 이미지 파일 출력
+	public ReviewBoardImg selectImgOne(int imgNo) {
+		SqlSession session = getSqlSession();
+		ReviewBoardImg reviewboardImg = new ReviewBoardDao().selectImgOne(imgNo, session);
+		session.close();
+		
+		return reviewboardImg;
+	}
+	
+	public int deleteReviewBoard(int reviewBoardNo) {
+		SqlSession session = getSqlSession();
+		int result = new ReviewBoardDao().deleteReviewBoard(reviewBoardNo,session);
+		return result;
+	}
+
 	
 }
