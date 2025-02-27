@@ -17,6 +17,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.filmlog.movie.model.service.MovieService;
+import com.filmlog.movie.model.vo.Actor;
+import com.filmlog.movie.model.vo.Genre;
 import com.filmlog.movie.model.vo.MovieDTO;
 
 @WebServlet("/movieList")
@@ -29,40 +31,101 @@ public class MovieApiServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			HttpRequest req = HttpRequest.newBuilder()
-				    .uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=1&sort_by=popularity.desc"))
-				    .header("accept", "application/json")
-				    .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNWE3ZGI2MDE3NGM1NDA4NWQ3NDA0NTM4MzllMzYyNyIsIm5iZiI6MTc0MDQwMDcxMy42NDk5OTk5LCJzdWIiOiI2N2JjNjg0OWJmNTIxZjE5MGYwYTkyYzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.qb4mx4iM014XVXGXh1s2kfx6loE81ZPVMsHbXu15sLI")
-				    .method("GET", HttpRequest.BodyPublishers.noBody())
-				    .build();
+			// 영화 list
+			for(int allPage = 1; allPage <= 500; allPage++) {
+				HttpRequest req = HttpRequest.newBuilder()
+						.uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page="+allPage+"&sort_by=popularity.desc"))
+						.header("accept", "application/json")
+						.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNWE3ZGI2MDE3NGM1NDA4NWQ3NDA0NTM4MzllMzYyNyIsIm5iZiI6MTc0MDQwMDcxMy42NDk5OTk5LCJzdWIiOiI2N2JjNjg0OWJmNTIxZjE5MGYwYTkyYzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.qb4mx4iM014XVXGXh1s2kfx6loE81ZPVMsHbXu15sLI")
+						.method("GET", HttpRequest.BodyPublishers.noBody())
+						.build();
 				HttpResponse<String> rep = HttpClient.newHttpClient().send(req, HttpResponse.BodyHandlers.ofString());
-				System.out.println(rep.body());		
+				System.out.println("API Response: " + rep.body());		
 				
-				// 객체 생성
 				ObjectMapper objectMapper = new ObjectMapper();
 				JsonNode rootNode = objectMapper.readTree(rep.body());
+				JsonNode moviesNode = rootNode.path("results"); 
+				
+				if (moviesNode.isMissingNode() || moviesNode.isNull()) {
+					System.out.println("No movies found in response.");
+					return;
+				}
+				List<MovieDTO> movies = objectMapper.readValue(
+						moviesNode.traverse(), new TypeReference<List<MovieDTO>>() {}
+						);
+				
+				int movieInserted = 0;
+				MovieService movieService = new MovieService(); // 객체 재사용
+				
+				for (MovieDTO movie : movies) {
+					MovieDTO existingMovie = movieService.selectMovieById(movie.getId());
+					if(existingMovie == null) {
+						int result = movieService.insertMovie(movie); 
+						if (result > 0) {  
+							System.out.println("Inserted : "+movie);
+						}  
+					}else {
+						System.out.println("Duplicate movie skipped : "+movie);
+					}
+				}
+	           request.setAttribute("movies", movies);
+			}
 
-	            // "results" 배열을 추출하여 List<MovieDTO>로 변환
-	            List<MovieDTO> movies = objectMapper.readValue(
-	                rootNode.get("results").toString(),new TypeReference<List<MovieDTO>>() {} 
-	            );
-	            
-	            int result = new MovieService().insertMovie(movies.get(1));
-//	            movies.get(1);
+	       // 장르 list
+	       HttpRequest req2 = HttpRequest.newBuilder()
+	            	.uri(URI.create("https://api.themoviedb.org/3/genre/movie/list?language=ko-KR"))
+	            	.header("accept", "application/json")
+	            	.header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNWE3ZGI2MDE3NGM1NDA4NWQ3NDA0NTM4MzllMzYyNyIsIm5iZiI6MTc0MDQwMDcxMy42NDk5OTk5LCJzdWIiOiI2N2JjNjg0OWJmNTIxZjE5MGYwYTkyYzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.qb4mx4iM014XVXGXh1s2kfx6loE81ZPVMsHbXu15sLI")
+	            	.method("GET", HttpRequest.BodyPublishers.noBody())
+	            	.build();
+	           HttpResponse<String> rep2 = HttpClient.newHttpClient().send(req2, HttpResponse.BodyHandlers.ofString());
+	           System.out.println(rep2.body());
+	           
+	           ObjectMapper object = new ObjectMapper();
+	           JsonNode rootNode2 = object.readTree(rep2.body());
+	           JsonNode genresNode = rootNode2.path("genres");
 
-	            // 3. 변환된 영화 리스트 출력
-	            for (MovieDTO movie : movies) {
-	                System.out.println(movie);
-	            }
+	           List<Genre> genres = object.readValue(genresNode.traverse(), new TypeReference<List<Genre>>() {});
 
-	            // 4. 영화 리스트를 request 객체에 저장하고 JSP로 전달
-	            request.setAttribute("movies", movies);
-	            request.getRequestDispatcher("/views/movie/list.jsp").forward(request, response);
+	           int insertGenres = 0;
+	           for(int i = 0; i < genres.size(); i++) {
+	        	   int result = new MovieService().insertGenre(genres.get(i));
+	        	   if(result > 0) {
+	        		   insertGenres++;
+	        	   }
+	           }
+	           request.setAttribute("genres", genres);	           
 
+	           // 배우 list
+	           for(int currentPage = 1; currentPage <= 500; currentPage++) {  
+	        	   HttpRequest req3 = HttpRequest.newBuilder()
+	        			   .uri(URI.create("https://api.themoviedb.org/3/person/popular?language=ko-KR&page="+currentPage))
+	        			   .header("accept", "application/json")
+	        			   .header("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyNWE3ZGI2MDE3NGM1NDA4NWQ3NDA0NTM4MzllMzYyNyIsIm5iZiI6MTc0MDQwMDcxMy42NDk5OTk5LCJzdWIiOiI2N2JjNjg0OWJmNTIxZjE5MGYwYTkyYzYiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.qb4mx4iM014XVXGXh1s2kfx6loE81ZPVMsHbXu15sLI")
+	        			   .method("GET", HttpRequest.BodyPublishers.noBody())
+	        			   .build();
+	        	   HttpResponse<String> rep3 = HttpClient.newHttpClient().send(req3, HttpResponse.BodyHandlers.ofString());
+	        	   System.out.println(rep3.body());
+	        	   
+	        	   ObjectMapper obj = new ObjectMapper();
+	        	   JsonNode rootNode3 = obj.readTree(rep3.body());
+	        	   JsonNode actorsNode = rootNode3.path("results");
+	        	   
+	        	   List<Actor> actors = obj.readValue(actorsNode.traverse(), new TypeReference<List<Actor>>() {});
+	        	   
+	        	   int insertActors = 0;
+	        	   for(int i = 0; i < actors.size(); i++) {
+	        		   int result = new MovieService().insertActor(actors.get(i));
+	        		   if(result >0) {
+	        			   insertActors++;
+	        		   }
+	        	   }
+	        	   request.setAttribute("actors", actors);
+	           }
+	           request.getRequestDispatcher("/views/movie/list.jsp").forward(request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
