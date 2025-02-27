@@ -21,6 +21,20 @@
 		<result property="qnaBoardNo" column="qna_board_no"/>
 	</resultMap>
 	
+	<select id="selectQnaCount" resultType="int">
+		SELECT COUNT(qna_board_no)
+		FROM `qna_board`
+	</select>
+	
+	<select id="selectQnaAll" resultMap="qnaMap">
+		SELECT *
+		FROM qna_board qb
+		LEFT JOIN response_board rb
+		ON qb.qna_board_no = rb.qna_board_no
+		ORDER BY rb.response_no IS NULL DESC, qb.qna_board_no ASC;
+
+	</select>
+	
 	<insert id="insertResponse" parameterType="map">
 		INSERT INTO `response_board`(response_content ,qna_board_no)
 		VALUES (#{responseContent} ,#{qnaBoardNo})
