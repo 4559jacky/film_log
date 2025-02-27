@@ -10,12 +10,39 @@
 		<result property="title" column="title"/>
 		<result property="content" column="content"/>
 		<result property="memberNo" column="member_no"/>
+		<association property="qnaResponse" resultMap="qnaResponseMap"/>
 	</resultMap>
 	
+	<resultMap type="qnaResponse" id="qnaResponseMap">
+		<result property="responseNo" column="response_no"/>
+		<result property="responseContent" column="response_content"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="modDate" column="mod_date"/>
+		<result property="qnaBoardNo" column="qna_board_no"/>
+	</resultMap>
+	
+	<insert id="insertResponse" parameterType="map">
+		INSERT INTO `response_board`(response_content ,qna_board_no)
+		VALUES (#{responseContent} ,#{qnaBoardNo})
+	</insert>
+	
+	<delete id="deleteResponse" parameterType="_int">
+		DELETE FROM `response_board`
+		WHERE response_no = #{responseNo}
+	</delete>
+	
+	<update id="updateResponse" parameterType="qnaResponse">
+		UPDATE `response_board`
+		SET response_content = #{responseContent}
+		WHERE response_no = #{responseNo}
+	</update>
+	
 	<select id="selectOneQna" resultMap="qnaMap" parameterType="_int">
-		SELECT *
-		FROM `qna_board`
-		WHERE qna_board_no = #{qnaBoardNo}
+		SELECT qb.*, rb.response_no, rb.response_content, rb.reg_date, rb.mod_date, rb.qna_board_no
+    	FROM qna_board qb
+    	LEFT JOIN response_board rb
+    	ON qb.qna_board_no = rb.qna_board_no
+    	WHERE qb.qna_board_no = #{qnaBoardNo}
 	</select>
 	
 	<insert id="insertQna" parameterType="qna"

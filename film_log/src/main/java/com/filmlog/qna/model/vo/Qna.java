@@ -23,4 +23,5 @@ public class Qna {
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 	private int memberNo;
+	private QnaResponse qnaResponse;
 }
