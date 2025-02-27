@@ -1,7 +1,5 @@
 package com.filmlog.movie.model.vo;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;

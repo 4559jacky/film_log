@@ -9,20 +9,21 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@ToString
 public class Member {
 	private int memberNo;
 	private String memberId;
 	private String memberPwd;
 	private String memberName;
 	private String memberNickname;
-	private String memberBirth;
-	private String memberPhone;
-	private String memberGender;
+	private String memberEmail;
 	private String memberAddr;
+	private String memberPhone;
+	private String memberBirth;
+	private String memberGender;
 	private String adminWhether;
 	
 	public Member(String memberId, String memberPwd) {
@@ -31,18 +32,18 @@ public class Member {
 		this.memberPwd = memberPwd;
 	}
 	
-	public Member(String memberId, String memberPwd, String memberName, String memberNickname, String memberBirth,
-			String memberPhone, String memberGender, String memberAddr, String adminWhether) {
+	public Member(String memberId, String memberPwd, String memberName, String memberNickname, String memberEmail		,
+			String memberAddr, String memberPhone, String memberBirth, String memberGender) {
 		super();
 		this.memberId = memberId;
 		this.memberPwd = memberPwd;
 		this.memberName = memberName;
 		this.memberNickname = memberNickname;
-		this.memberBirth = memberBirth;
-		this.memberPhone = memberPhone;
-		this.memberGender = memberGender;
+		this.memberEmail = memberEmail;
 		this.memberAddr = memberAddr;
-		this.adminWhether = adminWhether;
+		this.memberPhone = memberPhone;
+		this.memberBirth = memberBirth;
+		this.memberGender = memberGender;
 	}
 	
 	

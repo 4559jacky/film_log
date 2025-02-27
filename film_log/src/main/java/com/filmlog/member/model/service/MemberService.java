@@ -3,6 +3,7 @@ package com.filmlog.member.model.service;
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -35,14 +36,6 @@ public class MemberService {
 		session.close();
 		return result;
 	}
-	
-	// 회원가입
-	public int InsertMember(Member mem) {
-		SqlSession session = getSqlSession();
-		int result = memberDao.InsertMember(session, mem);
-		session.close();
-		return result;
-	}
 
 	public Member selectMemberOne(Member member) {
 		SqlSession session = getSqlSession();
@@ -58,5 +51,27 @@ public class MemberService {
 		session.close();
 		return member;
 	}
+	
+	// 회원가입
+		public int InsertMember(Member mem) {
+			SqlSession session = getSqlSession();
+			int result = memberDao.InsertMember(session, mem);
+			session.close();
+			return result;
+		}
+	
+	// 사용자 관심 장르
+	public int InsertMemberInterestGenre(Map<String, Integer> paramMap) {
+		SqlSession session = getSqlSession();
+		int result = memberDao.InsertMemberInterestGenre(session, paramMap);
+		session.close();
+		return result;
+	}
+
+	/*
+	 * public int selectGenreById(int genreId) { SqlSession session =
+	 * getSqlSession(); int result = memberDao.selectGenreById(session, genreId);
+	 * session.close(); return result; }
+	 */
 	
 }
