@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="com.filmlog.member.model.vo.Member" alias="member"/>
 		<typeAlias type="com.filmlog.faq.model.vo.Faq" alias="faq"/>
 		<typeAlias type="com.filmlog.qna.model.vo.Qna" alias="qna"/>
+		<typeAlias type="com.filmlog.qna.model.vo.QnaResponse" alias="qnaResponse"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">

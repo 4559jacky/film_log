@@ -2,12 +2,33 @@ package com.filmlog.qna.model.service;
 
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.qna.model.dao.QnaDao;
 import com.filmlog.qna.model.vo.Qna;
+import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaService {
+	
+	public int insertResponse(Map<String, Object> map) {
+		SqlSession session = getSqlSession();
+		int result = new QnaDao().insertResponse(session, map);
+		return result;
+	}
+	
+	public int deleteResponse(int responseNo) {
+		SqlSession session = getSqlSession();
+		int result = new QnaDao().deleteResponse(session, responseNo);
+		return result;
+	}
+	
+	public int updateResponse(QnaResponse qnaResponse) {
+		SqlSession session = getSqlSession();
+		int result = new QnaDao().updateResponse(session, qnaResponse);
+		return result;
+	}
 	
 	public int deleteQna(int qnaBoardNo) {
 		SqlSession session = getSqlSession();

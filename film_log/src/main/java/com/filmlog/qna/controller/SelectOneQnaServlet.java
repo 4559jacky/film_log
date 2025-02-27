@@ -45,10 +45,9 @@ public class SelectOneQnaServlet extends HttpServlet {
 			request.setAttribute("qna", qna);
 			request.setAttribute("member",member);
 			request.setAttribute("qnaType", qnaType);
+			request.setAttribute("qnaResponse", qna.getQnaResponse());
 			view.forward(request, response);
 		}
-// 답글 작업할 것
-//		QnaResponse qnaResponse = new QnaResponseService().selectOneQnaResponse(qnaResponse.getQnaBoardNo());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
