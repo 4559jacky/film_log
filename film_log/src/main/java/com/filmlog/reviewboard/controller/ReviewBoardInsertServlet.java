@@ -36,6 +36,8 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 		ReviewBoard board = new ReviewBoard();
 		ReviewBoardImg img = new ReviewBoardImg();
 		
+		System.out.println("InsertServlet");
+		
 		String path = "C:\\upload\\reviewBoard";
 		File dir = new File(path);
 		if(!dir.exists()) {
@@ -55,6 +57,7 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 				if(fileItem.isFormField()) {
 					switch(fileItem.getFieldName()) {
 						case "movie_no" :
+							System.out.println("영화 번호 : "+fileItem.getString("utf-8"));
 							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
 							board.setReviewBoardTitle(fileItem.getString("utf-8")); break;
