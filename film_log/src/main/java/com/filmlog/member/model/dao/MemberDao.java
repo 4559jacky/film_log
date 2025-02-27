@@ -1,6 +1,7 @@
 package com.filmlog.member.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -22,7 +23,9 @@ public class MemberDao {
 	}
 
 	public int InsertMember(SqlSession session, Member mem) {
-		return session.insert("memberMapper.insertMemberOne", mem);
+		int result = session.insert("memberMapper.insertMemberOne", mem);
+		result = mem.getMemberNo();
+		return result;
 	}
 	
 	// 로그인
@@ -34,6 +37,14 @@ public class MemberDao {
 	public Member selectMemberByNickname(SqlSession session, String memberNickname) {
 		return session.selectOne("memberMapper.selectMemberByNickname",memberNickname);
 	}
+
+	public int InsertMemberInterestGenre(SqlSession session, Map<String, Integer> paramMap) {
+		return session.insert("memberMapper.insertMemberInterestGenreOne",paramMap);
+	}
+
+	/*
+	 * public int selectGenreById(SqlSession session, int genreId) { return 0; }
+	 */
 
 }
 

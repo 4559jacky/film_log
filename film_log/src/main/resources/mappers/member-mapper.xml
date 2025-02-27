@@ -9,6 +9,7 @@
 		<result property="memberPwd" column="membe_pwd"/>
 		<result property="memberName" column="member_name"/>
 		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
 		<result property="memberBirth" column="member_birth"/>
 		<result property="memberGender" column="member_gender"/>
 		<result property="memberPhone" column="member_phone"/>
@@ -44,13 +45,20 @@
 		WHERE member_id = #{member_id}
 	</select>
 	
-	<insert id="insertMemberOne" parameterType="member">
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
 		INSERT INTO `member`(
-			member_id ,member_pwd ,member_name ,member_nickname ,member_birth
-			,member_gender ,member_phone ,member_addr ,admin_whether)
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_addr ,member_phone ,member_birth ,member_gender)
 		VALUE(
-			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberBirth}
-			,#{memberGender} ,#{memberPhone} ,#{memberAddr} ,#{adminWhether})
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberAddr} ,#{memberPhone} ,#{memberBirth} ,#{memberGender})
 	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUE (#{genreId} ,#{memberNo})
+	</insert>
+	
 	
 </mapper>

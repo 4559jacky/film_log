@@ -33,7 +33,10 @@ public class DuplicateNicknameCheckServlet extends HttpServlet {
 		if(member != null) {
 			obj.put("res_code", "500");
 			obj.put("res_msg", "중복된 닉네임입니다.");
+			System.out.println(member.getMemberName());
 		}
+		
+		
 		
 		response.setContentType("application/json; charset=utf-8");
 		response.getWriter().print(obj);
