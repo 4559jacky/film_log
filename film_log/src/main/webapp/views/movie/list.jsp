@@ -53,7 +53,6 @@
                 <td>${movie.releaseDate}</td>
                 <td>${movie.voteCount }</td>
                 <td>${movie.voteAverage }</td>
-                <td>${movie.genreIds }</td>
                 <td>${movie.posterPath }</td>
             </tr>
         </c:forEach>

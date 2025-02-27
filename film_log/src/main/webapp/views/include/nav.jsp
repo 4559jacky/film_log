@@ -39,6 +39,9 @@
 		        </li>
         	</c:when>
         	<c:when test="${member.adminWhether == 'T' }">
+        		<li class="nav-item">
+		          <a class="nav-link" href="/adminPass">관리자 페이지</a>
+		        </li>
         		 <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             관리자 메뉴

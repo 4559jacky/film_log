@@ -18,13 +18,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MovieDTO {
+public class Genre {
 	private int id;
-	private String title;
-	private String overview;
-	private String releaseDate;
-	private int voteCount;
-	private Number voteAverage;
-	private String posterPath;
-
+	private String name;
 }

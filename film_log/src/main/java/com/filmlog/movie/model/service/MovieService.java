@@ -10,6 +10,8 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.movie.model.dao.MovieDao;
+import com.filmlog.movie.model.vo.Actor;
+import com.filmlog.movie.model.vo.Genre;
 import com.filmlog.movie.model.vo.Movie;
 import com.filmlog.movie.model.vo.MovieDTO;
 
@@ -22,20 +24,43 @@ public class MovieService {
 //		session.close();
 //		return resultList;
 //	}
-	
-	// 영화 추가
-	public int insertMovie(MovieDTO movie) {
+	// 배우 추가
+	public int insertActor(Actor actor) {
 		SqlSession session = getSqlSession();
-		int result = new MovieDao().insertMovie(session,movie);
+		int result = new MovieDao().insertActor(session,actor);
 		session.close();
 		return result;
-	} 
-	// API
-	public int insertMovieApi(MovieDTO movie){
-		SqlSession session = getSqlSession();
-		int resultList = new MovieDao().insertMovieApi(session,movie);
-		session.close();
-		return resultList;
 	}
+	// 장르 추가
+	public int insertGenre(Genre genre) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().insertGenre(session,genre);
+		session.close();
+		return result;
+	}
+	// 영화 추가
+	public int insertMovie(MovieDTO movieDTO) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().insertMovie(session,movieDTO);
+		session.close();
+		return result;
+	}
+	// 중복 검사
+	public MovieDTO selectMovieById(int id) {
+		SqlSession session = getSqlSession();
+		MovieDTO result = new MovieDao().selectMovieById(session,id);
+		session.close();
+		return result;
+	}
+
+	// API
+//	public int insertMovieApi(MovieDTO movie){
+//		SqlSession session = getSqlSession();
+//		int resultList = new MovieDao().insertMovieApi(session,movie);
+//		session.close();
+//		return resultList;
+//	}
+
 	
+
 }
