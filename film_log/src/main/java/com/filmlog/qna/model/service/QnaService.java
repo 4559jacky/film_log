@@ -13,15 +13,15 @@ import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaService {
 	
-	public int selectQnaCount(Qna option) {
+	public int selectQnaCount() {
 		SqlSession session = getSqlSession();
-		int result = new QnaDao().selectQnaCount(session, option);
+		int result = new QnaDao().selectQnaCount(session);
 		return result;
 	}
 	
-	public List<Qna> selectQnaAll() {
+	public List<Qna> selectQnaAll(Qna option) {
 		SqlSession session = getSqlSession();
-		List<Qna> qnaList = new QnaDao().selectQnaAll(session);
+		List<Qna> qnaList = new QnaDao().selectQnaAll(session, option);
 		return qnaList;
 	}
 	

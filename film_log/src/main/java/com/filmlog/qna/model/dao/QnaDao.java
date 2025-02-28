@@ -10,12 +10,12 @@ import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaDao {
 	
-	public int selectQnaCount(SqlSession session, Qna option) {
-		return session.selectOne("qnaMapper.selectQnaCount", option);
+	public int selectQnaCount(SqlSession session) {
+		return session.selectOne("qnaMapper.selectQnaCount");
 	}
 	
-	public List<Qna> selectQnaAll(SqlSession session) {
-		return session.selectList("qnaMapper.selectQnaAll");
+	public List<Qna> selectQnaAll(SqlSession session, Qna option) {
+		return session.selectList("qnaMapper.selectQnaAll", option);
 	}
 	
 	public int insertResponse(SqlSession session, Map<String, Object> map) {

@@ -1,4 +1,4 @@
-package com.filmlog.member.admin.controller;
+package com.filmlog.member.admin.controllor;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,10 +21,21 @@ public class SelectQnaListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		List<Qna> qnaList = new QnaService().selectQnaAll();
+		int nowPage = 1;
+	    if (request.getParameter("nowPage") != null) {
+	        nowPage = Integer.parseInt(request.getParameter("nowPage"));
+	    }
 		
+		Qna option = new Qna();
+		option.setNowPage(nowPage);
+		
+		int totalQna = new QnaService().selectQnaCount();
+		option.setTotalData(totalQna);
+		
+		List<Qna> qnaList = new QnaService().selectQnaAll(option);
 		RequestDispatcher view = request.getRequestDispatcher("/views/member/admin/qnaList.jsp");
 		request.setAttribute("qnaList", qnaList);
+		request.setAttribute("paging", option);
 		view.forward(request, response);
 	}
 

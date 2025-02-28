@@ -10,6 +10,8 @@
 		<result property="title" column="title"/>
 		<result property="content" column="content"/>
 		<result property="memberNo" column="member_no"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="modDate" column="mod_date"/>
 		<association property="qnaResponse" resultMap="qnaResponseMap"/>
 	</resultMap>
 	
@@ -31,8 +33,8 @@
 		FROM qna_board qb
 		LEFT JOIN response_board rb
 		ON qb.qna_board_no = rb.qna_board_no
-		ORDER BY rb.response_no IS NULL DESC, qb.qna_board_no ASC;
-
+		ORDER BY rb.response_no IS NULL DESC, qb.qna_board_no ASC
+		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
 	
 	<insert id="insertResponse" parameterType="map">
