@@ -42,6 +42,10 @@ public class MemberDao {
 		return session.insert("memberMapper.insertMemberInterestGenreOne",paramMap);
 	}
 
+	public int UpdateMemberPwd(SqlSession session, Member member) {
+		return session.update("memberMapper.updateMemberPwd",member);
+	}
+
 	/*
 	 * public int selectGenreById(SqlSession session, int genreId) { return 0; }
 	 */

@@ -1,19 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="/views/include/nav.jsp" %>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
 <script src="<%=request.getContextPath()%>/resources/js/jquery-3.7.1.js"></script>
-</head>
-<body class="joinBody body">
-	
-
-  <style>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<style>
     .joinBody {
       min-height: 100vh;
 
@@ -127,16 +123,16 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	              <label for="memberPwd">비밀번호</label>
 	              <input type="password" class="form-control" name="member_pwd" id="memberPwd" placeholder="비밀번호" required>
 	              <div class="invalid-feedback">
-	                형식에 맞지않는 비밀번호 입니다.(10자이상 18자이내)
+	                형식에 맞지않는 비밀번호 입니다.(8자이상 18자이내)
 	              </div>
 	            </div>
-	          </div>
 	          <div class="mb-3">
 	            <label for="memberPwdCheck">비밀번호 확인</label>
 	            <input type="password" class="form-control" name="member_pwd_check" id="memberPwdCheck" placeholder="비밀번호 확인" required>
 	            <div class="invalid-feedback">
 	              비밀번호와 일치하지 않습니다.
 	            </div>
+	          </div>
 	          </div>
 	          <button class="btn btn-primary btn-lg btn-block btn-next2" type="button">다음</button>
 			<button class="btn btn-secondary btn-lg btn-block btn-prev2" type="button">이전</button>

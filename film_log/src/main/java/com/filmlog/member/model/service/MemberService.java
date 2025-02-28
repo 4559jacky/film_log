@@ -68,6 +68,13 @@ public class MemberService {
 		return result;
 	}
 
+	public int updateMemberPwd(Member member) {
+		SqlSession session = getSqlSession();
+		int result = memberDao.UpdateMemberPwd(session, member);
+		session.close();
+		return result;
+	}
+
 	/*
 	 * public int selectGenreById(int genreId) { SqlSession session =
 	 * getSqlSession(); int result = memberDao.selectGenreById(session, genreId);
