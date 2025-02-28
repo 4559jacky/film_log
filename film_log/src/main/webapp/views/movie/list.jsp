@@ -33,7 +33,9 @@
 				<button onclick="location.href='/movieCreate'"></button>
 		</fieldset>
 	</form>
-	<button type="submit" onclick="location.href='/movieList'">테스트</button>
+	<button type="submit" onclick="location.href='/movieList'">테스트</button><br>
+	<a href="/movieAPI">영화 API 추가하기</a>
+	<a href="/movieCastAndCrewAPI">감독 및 배우 API 추가하기</a>
 	<script>
 		const filterType = document.getElementById('filter_type')
 		filterType.onchange = function(){
