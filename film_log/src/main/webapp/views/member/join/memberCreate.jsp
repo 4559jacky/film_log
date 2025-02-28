@@ -125,9 +125,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	            </div>
 	            <div class="mb-3">
 	              <label for="memberPwd">비밀번호</label>
-	              <form class="password-form">
 	              <input type="password" class="form-control" name="member_pwd" id="memberPwd" placeholder="비밀번호" required>
-	              </form>
 	              <div class="invalid-feedback">
 	                형식에 맞지않는 비밀번호 입니다.(10자이상 18자이내)
 	              </div>
@@ -433,18 +431,11 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	                selectedOptions.push($(this).val());
 	            });
 	            
-	            console.log(name);
-	            console.log(nickname);
-	            console.log(email);
-	            console.log(address);
-	            console.log(phone);
-	            console.log(birth);
-	            console.log(gender);
-	            console.log(id);
-	            console.log(pwd);
+	            console.log("입력된 데이터 확인:");
+	            console.log(name, nickname, email, address, phone, birth, gender, id, pwd);
 	            console.log("선택된 관심사:", selectedOptions);
 	            
-	            const sendData = new FormData(form.get(0));
+	            let sendData = new FormData(form.get(0));
 
 	            sendData.forEach((value, key) => {
 	                console.log(key, value);
@@ -460,33 +451,45 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	                alert('개인정보 수집 및 이용에 동의해주세요.');
 	                personalAgree.classList.add("is-invalid");
 	            } else {
-	                $.ajax({
-			            url: "/memberCreate",
-			            type : 'post',
-						// 파일데이터를 보내기 위해 추가해야하는 속성들
-						// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
-						enctype : 'multipart/form-data',
-						cache : false,
-						async : false,
-						contentType : false,
-						processData : false,
-						data : sendData,
-			            dataType: 'JSON',
-			            success: function (data) {
-			            	alert(data.res_msg);
-			            	if(data.res_code == '200') {
-		            			location.href = "/memberLoginPass";
-		            		} else {
-		            			event.preventDefault();
-		    		            event.stopPropagation();
-		            		}
-			            }
-			        });
+	            	$.ajax({
+	            		url : "/encryptPassword",
+						type : 'post',
+						data : {
+							"member_pwd" : pwd
+						},
+						dataType : 'JSON',
+						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+						success: function (response) {
+			                console.log("암호화된 비밀번호:", response.member_pwd);
+			                sendData.set("member_pwd", response.member_pwd);
+			                
+			                $.ajax({
+					            url: "/memberCreate",
+					            type : 'post',
+								// 파일데이터를 보내기 위해 추가해야하는 속성들
+								// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
+								enctype : 'multipart/form-data',
+								cache : false,
+								async : false,
+								contentType : false,
+								processData : false,
+								data : sendData,
+					            dataType: 'JSON',
+					            success: function (data) {
+					            	alert(data.res_msg);
+					            	if(data.res_code == '200') {
+				            			location.href = "/memberLoginPass";
+				            		} else {
+				            			event.preventDefault();
+				    		            event.stopPropagation();
+				            		}
+					            }
+					        });
+	            		}
+	            	});
 	            }
-
-
-           });
-  	});
+           	})
+  		});
 	</script>
 	
 </body>
