@@ -39,28 +39,43 @@
 		        </li>
         	</c:when>
         	<c:when test="${member.adminWhether == 'T' }">
-        		<li class="nav-item">
-		          <a class="nav-link" href="/adminPass">관리자 페이지</a>
-		        </li>
         		 <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            관리자 메뉴
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="/qnaList">1:1 문의 목록 조회</a></li>
-            <li><a class="dropdown-item" href="#">회원 목록 조회</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="selectMovieList">전체 영화 목록 조회</a></li>
-            <li><a class="dropdown-item" href="#">영화 추가</a></li>
-            <li><a class="dropdown-item" href="#">영화 수정</a></li>
-            <li><a class="dropdown-item" href="#">영화 삭제</a></li>
-          </ul>
-        </li>
+		          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+		            관리자 메뉴
+		          </a>
+		          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+		            <li><a class="dropdown-item" href="/qnaList">1:1 문의 목록 조회</a></li>
+		            <li><a class="dropdown-item" href="#">회원 목록 조회</a></li>
+		            <li><hr class="dropdown-divider"></li>
+		            <li><a class="dropdown-item" href="selectMovieList">전체 영화 목록 조회</a></li>
+		            <li><a class="dropdown-item" href="#">영화 추가</a></li>
+		            <li><a class="dropdown-item" href="#">영화 수정</a></li>
+		            <li><a class="dropdown-item" href="#">영화 삭제</a></li>
+		            <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>
+		          </ul>
+		        </li>
         	</c:when>
         	<c:when test="${member.adminWhether == 'F' }">
-        		<li class="nav-item">
-		          <a class="nav-link" href="/myPass">마이 페이지</a>
-		        </li>
+        		<li class="nav-item dropdown">
+				  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMyMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				    My 메뉴
+				  </a>
+				  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMyMenu">
+				    <li><a class="dropdown-item" href="#">대시보드</a></li>
+				    <li><a class="dropdown-item" href="#">내가 쓴 리뷰</a></li>
+				    <li><a class="dropdown-item" href="#">내가 쓴 게시물</a></li>
+				    <li><a class="dropdown-item" href="#">영화 관람 기록하기</a></li>
+				    <li><hr class="dropdown-divider"></li>
+				    <li><a class="dropdown-item" href="#">좋아요한 리뷰</a></li>
+				    <li><a class="dropdown-item" href="#">좋아요한 게시글</a></li>
+				    <li><a class="dropdown-item" href="#">좋아요한 영화</a></li>
+				    <li><hr class="dropdown-divider"></li>
+				    <li><a class="dropdown-item" href="#">비밀번호 변경</a></li>
+				    <li><a class="dropdown-item" href="#">개인정보 수정</a></li>
+				    <li><a class="dropdown-item" href="/myQnaList">문의 내역</a></li>
+				    <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>
+				  </ul>
+				</li>
         	</c:when>
         </c:choose>
       </ul>

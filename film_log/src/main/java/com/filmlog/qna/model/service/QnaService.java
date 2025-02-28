@@ -7,11 +7,18 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.qna.model.dao.QnaDao;
 import com.filmlog.qna.model.vo.Qna;
 import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaService {
+	
+	public int selectMyQnaCount(Member member) {
+		SqlSession session = getSqlSession();
+		int result = new QnaDao().selectMyQnaCount(session, member);
+		return result;
+	}
 	
 	public int selectQnaCount(Qna option) {
 		SqlSession session = getSqlSession();
@@ -19,9 +26,15 @@ public class QnaService {
 		return result;
 	}
 	
-	public List<Qna> selectQnaAll() {
+	public List<Qna> selectMyQnaAll(Qna option) {
 		SqlSession session = getSqlSession();
-		List<Qna> qnaList = new QnaDao().selectQnaAll(session);
+		List<Qna> qnaList = new QnaDao().selectMyQnaAll(session, option);
+		return qnaList;
+	}
+	
+	public List<Qna> selectQnaAll(Qna option) {
+		SqlSession session = getSqlSession();
+		List<Qna> qnaList = new QnaDao().selectQnaAll(session, option);
 		return qnaList;
 	}
 	

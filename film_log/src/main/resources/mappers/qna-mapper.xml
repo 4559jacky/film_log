@@ -10,6 +10,9 @@
 		<result property="title" column="title"/>
 		<result property="content" column="content"/>
 		<result property="memberNo" column="member_no"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="modDate" column="mod_date"/>
 		<association property="qnaResponse" resultMap="qnaResponseMap"/>
 	</resultMap>
 	
@@ -21,19 +24,74 @@
 		<result property="qnaBoardNo" column="qna_board_no"/>
 	</resultMap>
 	
-	<select id="selectQnaCount" resultType="int">
+	<select id="selectMyQnaCount" resultType="int" parameterType="member">
 		SELECT COUNT(qna_board_no)
 		FROM `qna_board`
+		WHERE member_no = #{memberNo}
 	</select>
 	
-	<select id="selectQnaAll" resultMap="qnaMap">
+	<select id="selectQnaCount" resultType="int" parameterType="qna">
+		SELECT COUNT(qb.qna_board_no)
+		FROM `qna_board` qb
+		<if test="isAnswer != null and isAnswer == 1">
+        	INNER JOIN `response_board` rb ON qb.qna_board_no = rb.qna_board_no
+    	</if>
+    	<if test="isAnswer != null and isAnswer == 2">
+        	LEFT JOIN `response_board` rb ON qb.qna_board_no = rb.qna_board_no
+    	</if>
+		<where>
+	        <if test="title != null and title.equals('') == false">
+	            AND title LIKE CONCAT('%', #{title}, '%')
+	        </if>
+	        <if test="qnaType != null and qnaType == 1">
+        		AND qna_type = #{qnaType}
+    		</if>
+    		<if test="qnaType != null and qnaType == 2">
+        		AND qna_type = #{qnaType}
+    		</if>
+    		<if test="isAnswer != null and isAnswer == 2">
+            	AND rb.qna_board_no IS NULL
+        	</if>
+	    </where>
+	</select>
+	
+	<select id="selectMyQnaAll" resultMap="qnaMap" parameterType="member">
 		SELECT *
 		FROM qna_board qb
 		LEFT JOIN response_board rb
 		ON qb.qna_board_no = rb.qna_board_no
-		ORDER BY rb.response_no IS NULL DESC, qb.qna_board_no ASC;
-
+		WHERE member_no = ${memberNo}
+		ORDER BY rb.response_no IS NOT NULL DESC, qb.qna_board_no ASC
+		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
+	
+	<select id="selectQnaAll" resultMap="qnaMap" parameterType="qna">
+	    SELECT *
+	    FROM qna_board qb
+	    <if test="isAnswer == 0 or isAnswer == 2">
+	        LEFT JOIN response_board rb ON qb.qna_board_no = rb.qna_board_no
+	    </if>
+	    <if test="isAnswer == 1">
+	        INNER JOIN response_board rb ON qb.qna_board_no = rb.qna_board_no
+	    </if>
+	    <where>
+	        <if test="title != null and title.equals('') == false">
+	            AND qb.title LIKE CONCAT('%', #{title}, '%')
+	        </if>
+	        <if test="qnaType != null and qnaType == 1">
+	            AND qb.qna_type = 1
+	        </if>
+	        <if test="qnaType != null and qnaType == 2">
+	            AND qb.qna_type = 2
+	        </if>
+	        <if test="isAnswer == 2">
+	            AND rb.qna_board_no IS NULL
+	        </if>
+	    </where>
+	    ORDER BY rb.response_no IS NULL DESC, qb.qna_board_no ASC
+	    LIMIT #{limitPageNo}, #{numPerPage}
+	</select>
+
 	
 	<insert id="insertResponse" parameterType="map">
 		INSERT INTO `response_board`(response_content ,qna_board_no)
@@ -52,10 +110,12 @@
 	</update>
 	
 	<select id="selectOneQna" resultMap="qnaMap" parameterType="_int">
-		SELECT qb.*, rb.response_no, rb.response_content, rb.reg_date, rb.mod_date, rb.qna_board_no
+		SELECT qb.*, rb.response_no, rb.response_content, rb.reg_date, rb.mod_date, rb.qna_board_no, m.member_nickname
     	FROM qna_board qb
     	LEFT JOIN response_board rb
     	ON qb.qna_board_no = rb.qna_board_no
+    	JOIN member m
+    	ON m.member_no = qb.member_no
     	WHERE qb.qna_board_no = #{qnaBoardNo}
 	</select>
 	

@@ -20,10 +20,13 @@ import lombok.ToString;
 public class Qna extends Paging {
 	private int qnaBoardNo;
 	private int qnaType;
+	private String qnaTypeStr;
 	private String title;
 	private String content;
 	private LocalDateTime regDate;
 	private LocalDateTime modDate;
 	private int memberNo;
+	private String memberNickname;
 	private QnaResponse qnaResponse;
+	private int isAnswer;
 }

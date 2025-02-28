@@ -22,6 +22,7 @@
 	<input id="qna_board_no" type="hidden" value="${qna.qnaBoardNo}">
 	<div class="container-sm">
 		<p class="fs-6">${qnaType }</p>
+		<p class="fs-6">${qna.memberNickname }</p>
 	</div>
 	<br>
 	<div id="qna_title" class="container-sm">
@@ -35,7 +36,7 @@
 	<br>
 	<br>
 	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-	<c:if test="${qna.memberNo == member.memberNo}">
+	<c:if test="${qna.memberNo == member.memberNo && qnaResponse.responseNo == 0}">
 		<button type="button" class="btn btn-secondary" onclick="location.href='/updateQnaPass?qna_board_no=${qna.qnaBoardNo}'">수정</button>
 		<button type="button" class="btn btn-light" onclick="deleteQna(${qna.qnaBoardNo});">삭제</button>
 	</c:if>
@@ -200,7 +201,7 @@
 				success : function(data) {
 					alert(data.res_msg);
 					if(data.res_code == "200") {
-						location.href="/";
+						location.href="/myQnaList";
 						// 나중에 마이페이지 내 문의 내역 보기로 이동
 					}
 				}

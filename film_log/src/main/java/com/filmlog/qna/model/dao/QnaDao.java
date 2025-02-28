@@ -5,17 +5,26 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.qna.model.vo.Qna;
 import com.filmlog.qna.model.vo.QnaResponse;
 
 public class QnaDao {
 	
+	public int selectMyQnaCount(SqlSession session, Member member) {
+		return session.selectOne("qnaMapper.selectMyQnaCount", member);
+	}
+	
 	public int selectQnaCount(SqlSession session, Qna option) {
 		return session.selectOne("qnaMapper.selectQnaCount", option);
 	}
 	
-	public List<Qna> selectQnaAll(SqlSession session) {
-		return session.selectList("qnaMapper.selectQnaAll");
+	public List<Qna> selectMyQnaAll(SqlSession session, Qna option) {
+		return session.selectList("qnaMapper.selectMyQnaAll", option);
+	}
+	
+	public List<Qna> selectQnaAll(SqlSession session, Qna option) {
+		return session.selectList("qnaMapper.selectQnaAll", option);
 	}
 	
 	public int insertResponse(SqlSession session, Map<String, Object> map) {
