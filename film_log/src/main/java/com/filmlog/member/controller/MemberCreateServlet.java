@@ -62,6 +62,7 @@ public class MemberCreateServlet extends HttpServlet {
 //				cnt++;
 //			}
 //		}
+		System.out.println("여기까진 들어옴");
 		
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
