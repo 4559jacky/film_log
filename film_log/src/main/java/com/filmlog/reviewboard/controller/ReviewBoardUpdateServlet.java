@@ -20,13 +20,13 @@ import com.filmlog.reviewboard.model.service.ReviewBoardService;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
-
-@WebServlet("/reviewBoardInsert")
-public class ReviewBoardInsertServlet extends HttpServlet {
+@SuppressWarnings("unused")
+@WebServlet("/reviewBoardUpdate")
+public class ReviewBoardUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-   
-    public ReviewBoardInsertServlet() {
+    
+    public ReviewBoardUpdateServlet() {
         super();
     }
 
@@ -35,6 +35,8 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ReviewBoard board = new ReviewBoard();
 		ReviewBoardImg img = null;
+		
+		
 		
 		String path = "C:\\upload\\reviewBoard";
 		File dir = new File(path);
@@ -54,8 +56,10 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 				FileItem fileItem = items.get(i);
 				if(fileItem.isFormField()) {
 					switch(fileItem.getFieldName()) {
+						case "img_no" :
+							System.out.println("이미지! : "+fileItem.getString("utf-8"));
+							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "movie_no" :
-							System.out.println("영화 번호 : "+fileItem.getString("utf-8"));
 							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
 							board.setReviewBoardTitle(fileItem.getString("utf-8")); break;
@@ -87,15 +91,24 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 			int result = 0;
 			
 			
-			result = new ReviewBoardService().insertReviewBoard(board,img);
+//		if(!보드에있는img 게터 써서.equals("0")) {
+//			System.out.println("기존 이미지 ㅇㅇ");
+//			System.out.println(imgNo);
+//			// 원래 이미지 정보 가지고 파일 경로 조회해서 파일 삭제
+//			// 제대로 들어오는지 판단하고 이미지 있을 때 컴에서 지우고 데베에서 딜리트
+//			// 그 다음에 업데이트 해보쟝 ㅎㅎ
+//		}else {
+//			System.out.println("기존 이미지 ㄴ ㄴ ");
+//		}
+			result = new ReviewBoardService().updateReviewBoard(board,img);
 			
 			JSONObject obj = new JSONObject();
 			if(result>0) {
 				obj.put("res_code", "200");
-				obj.put("res_msg", "게시글 등록이 완료되었습니다.");
+				obj.put("res_msg", "게시글 수정이 완료되었습니다.");
 			}else {
 				obj.put("res_code", "500");
-				obj.put("res_msg", "게시글 등록 중 오류가 발생하였습니다.");
+				obj.put("res_msg", "게시글 수정 중 오류가 발생하였습니다.");
 				if(img!= null) {
 					String deletePath = img.getImgPath();
 					File deleteFile = new File(deletePath);
@@ -111,14 +124,9 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 		}catch(Exception e ) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		
 	}
 
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

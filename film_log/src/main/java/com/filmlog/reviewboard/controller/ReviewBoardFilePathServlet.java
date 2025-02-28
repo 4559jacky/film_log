@@ -24,9 +24,7 @@ public class ReviewBoardFilePathServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int imgNo = Integer.parseInt(request.getParameter("img_no"));
-		System.out.println("1231231123"+imgNo);
 		ReviewBoardImg img = new ReviewBoardService().selectImgOne(imgNo);
-		System.out.println("12312312321" + img);
 		String filePath = img.getImgPath();
 		if(filePath ==null || filePath.trim().equals("")) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);

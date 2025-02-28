@@ -52,7 +52,7 @@
 		FROM `review_board` r
 		JOIN `member` m
 		ON r.member_no = m.member_no
-		JOIN `review_board_img` i
+		LEFT JOIN `review_board_img` i
 		ON r.review_board_no = i.review_board_no
 		JOIN `movie` v
 		ON r.movie_no = v.movie_no
@@ -67,6 +67,15 @@
 	
 	<delete id="deleteReviewBoard" parameterType="int">
 		DELETE FROM `review_board`
+		WHERE review_board_no = #{reviewBoardNo}
+	</delete>
+	
+	<update id="updateReviewBoard" parameterType="reviewBoard">
+		UPDATE `review_board` SET review_board_no = #{reviewBoardNo}
+	</update>
+	
+	<delete id="deleteReviewBoardImg" parameterType="reviewBoardImg">
+		DELETE FROM `review_board_img`
 		WHERE review_board_no = #{reviewBoardNo}
 	</delete>
 	
