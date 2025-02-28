@@ -1,6 +1,7 @@
 package com.filmlog.movie.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,13 +21,22 @@ public class MovieDao {
 	public int insertGenre(SqlSession session, Genre genre) {
 		return session.insert("movieMapper.insertGenre",genre);
 	}
-	// 영화 추가
-	public int insertMovie(SqlSession session, MovieDTO movieDTO) {
-		return session.insert("movieMapper.insertMovie", movieDTO);
+	// 영화 추가(20개씩)
+//	public int insertMovie(SqlSession session, List<MovieDTO> movies) {
+//		return session.insert("movieMapper.insertMovieAll", movies);
+//	}
+	// 영화 추가(1개씩)
+	public int insertMovie(SqlSession session, MovieDTO movie) {
+		return session.insert("movieMapper.insertMovie", movie);
 	}
+	
 	// 중복 검사
 	public MovieDTO selectMovieById(SqlSession session,int id) {
 		return session.selectOne("movieMapper.selectMovieById",id);
+	}
+	// 영화 장르 추가 매핑
+	public int insertMovieGenre(SqlSession session, Map<String,Object> paramMap) {
+		return session.insert("movieMapper.insertMovieGenre",paramMap);
 	}
 
 	

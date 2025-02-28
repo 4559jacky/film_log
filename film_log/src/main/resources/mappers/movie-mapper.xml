@@ -16,6 +16,17 @@
 			<result property="genreNo" column="genre_no"/>
 			<result property="movieAddressUrl" column="movie_address_url"/>	
 	</resultMap> -->
+	<resultMap type="movieDto" id="movieMap">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="originalTitle" column="original_title"/>
+		<result property="overview" column="overview"/>
+		<result property="rumtime" column="runtime"/>
+		<result property="releaseDate" column="release_date"/>	
+		<result property="voteAverage" column="vote_average"/>
+		<result property="posterPath" column="poster_path"/>
+		<result property="adult" column="adult"/>
+	</resultMap>
 	
 	<!-- 배우 추가 -->
 	<insert id="insertActor" parameterType="actor">
@@ -29,10 +40,28 @@
 		VALUES (#{id},#{name})
 	</insert>
 	
-	<!-- API로 받아온 영화 추가 -->
-	<insert id="insertMovie" parameterType="movie">
-		INSERT IGNORE INTO `movie_dto` (id, title, overview, release_date, vote_count, vote_average, poster_path)
-		VALUES (#{id},#{title},#{overview},#{releaseDate},#{voteCount},#{voteAverage},#{posterPath})
+	<!-- API로 받아온 영화 추가(반복문) -->
+	<!-- <insert id="insertMovieAll" parameterType="java.util.List">
+		INSERT IGNORE INTO `movie_dto` (id, title, original_title, overview, runtime, release_date, vote_average, poster_path, adult)
+		VALUES
+		<foreach collection="list" item="movie" separator=",">
+		(#{movie.id}, #{movie.title}, #{movie.originalTitle}, #{movie.overview}, #{movie.runtime}, #{movie.releaseDate}, #{movie.voteAverage}, #{movie.posterPath}, #{movie.adult})
+		</foreach>
+	</insert> -->
+	
+	<!-- API로 받아온 영화 추가(하나씩) -->
+	<insert id="insertMovie" parameterType="movieDto">
+		INSERT IGNORE INTO `movie_dto` (id, title, original_title, overview, runtime, release_date, vote_average, poster_path, adult)
+		VALUES
+		(#{id}, #{title}, #{originalTitle}, #{overview}, #{runtime}, #{releaseDate}, #{voteAverage}, #{posterPath}, #{adult})
+	</insert>
+	
+	<insert id="insertMovieGenre" parameterType="map">
+	    INSERT INTO `movie_genre` (movie_id, genre_id)
+	    VALUES
+	    <foreach collection="list" item="genre" separator=",">
+	        (#{movieId}, #{genre})
+	    </foreach>
 	</insert>
 	
 	<!-- 중복 검사 -->
