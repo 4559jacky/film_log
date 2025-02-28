@@ -31,6 +31,7 @@ public class ChangePwdServlet extends HttpServlet {
 		member.setMemberId(memberId);
 		member.setMemberPwd(memberPwd);
 		
+		
 		int result = memberService.updateMemberPwd(member);
 
 		
