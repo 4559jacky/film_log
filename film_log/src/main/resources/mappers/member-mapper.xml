@@ -17,11 +17,29 @@
 		<result property="adminWhether" column="admin_whether"/>
 	</resultMap>
 	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
 	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
 		SELECT *
 		FROM `member`
-		WHERE member_id = #{memberId}
-		AND member_pwd = #{memberPwd}
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
 	</select>
 	
 	<select id="memberList" resultMap="memberMap">
