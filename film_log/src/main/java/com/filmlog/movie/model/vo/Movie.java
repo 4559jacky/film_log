@@ -21,7 +21,7 @@ public class Movie {
 	private String moviePlot;
 	private String movieDirector;
 	private String movieActor;
-	private Date releaseDate;
+	private String releaseDate;
 	private Date closeDate;
 	private int runTime;
 	private float rating;

@@ -29,7 +29,7 @@
 		VALUES (#{id},#{name})
 	</insert>
 	
-	<!-- 영화 추가 -->
+	<!-- API로 받아온 영화 추가 -->
 	<insert id="insertMovie" parameterType="movie">
 		INSERT IGNORE INTO `movie_dto` (id, title, overview, release_date, vote_count, vote_average, poster_path)
 		VALUES (#{id},#{title},#{overview},#{releaseDate},#{voteCount},#{voteAverage},#{posterPath})
