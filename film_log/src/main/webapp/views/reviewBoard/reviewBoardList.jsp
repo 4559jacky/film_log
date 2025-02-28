@@ -19,8 +19,10 @@
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
+	<%@ include file="/views/include/nav.jsp" %>
     <div class="container mt-5">
-        <h2 class="text-center">리뷰 게시판</h2>
+        <h2 class="text-center">리뷰 게시판</h2><br><br>
+        <hr class="my-2" id="hr"><br><br>
         
         <div class="d-flex justify-content-between my-3 review_board_list">
             <div class="input-group w-50">
@@ -47,7 +49,6 @@
                 <tr>
                     <th>게시글 번호</th>
                     <th>제목</th>
-                    <th>조회수</th>
                     <th>작성자</th>
                     <th>게시일</th>
                     <th>조회수</th>
@@ -60,7 +61,6 @@
 						<tr data-board-no="${r.reviewBoardNo}">
 							<td>${((paging.nowPage-1)*paging.numPerPage)+(vs.index+1)}</td>
 							<td>${r.reviewBoardTitle }</td>
-							<td>${r.reviewBoardContent }</td>
 							<td>${r.memberNickname }</td>
 							<fmt:parseDate value="${r.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
 							<td>
@@ -72,7 +72,7 @@
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<td colspan="6">게시글이 없습니다.</td>
+						<td colspan="5">게시글이 없습니다.</td>
 					</tr>
 				</c:otherwise>
 			</c:choose>

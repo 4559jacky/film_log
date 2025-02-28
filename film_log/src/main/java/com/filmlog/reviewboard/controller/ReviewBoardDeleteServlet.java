@@ -1,11 +1,14 @@
 package com.filmlog.reviewboard.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.simple.JSONObject;
 
 import com.filmlog.reviewboard.model.service.ReviewBoardService;
 
@@ -20,13 +23,22 @@ public class ReviewBoardDeleteServlet extends HttpServlet {
     }
 
 	
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String temp = request.getParameter("review_board_no");
-		System.out.println("dddddddddd"+temp);
+		String temp = request.getParameter("reviewBoardNo");
 		int reviewBoardNo = 0;
 		if(temp !=null) reviewBoardNo = Integer.parseInt(temp);
 		int result = new ReviewBoardService().deleteReviewBoard(reviewBoardNo);
-		System.out.println(result);
+		
+		JSONObject obj = new JSONObject();
+		obj.put("res_code", "500");
+		obj.put("res_msg", "게시글 삭제에 실패하였습니다.");
+		if(result>0) {
+			obj.put("res_code", "200");
+			obj.put("res_msg", "게시글 삭제를 성공하였습니다.");
+		}
+		response.setContentType("application/json; charset=utf-8");
+		response.getWriter().print(obj);
 	}
 
 

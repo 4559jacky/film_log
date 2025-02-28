@@ -50,4 +50,14 @@ public class ReviewBoardDao {
 		return result;
 	}
 	
+	// 게시글  수정
+	public int updateReviewBoard(ReviewBoard board, SqlSession session) {
+		return session.insert("reviewboardMapper.updateReviewBoard",board);
+	}
+	
+	// 게시글 이미지 삭제
+	public int deleteReviewBoardImg(ReviewBoardImg img, SqlSession session) {
+		return session.insert("reviewboardMapper.deleteReviewBoardImg",img);
+	}
+	
 }
