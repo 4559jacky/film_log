@@ -1,4 +1,4 @@
-package com.filmlog.movie.controller;
+package com.filmlog.movie.controller.api;
 
 import java.io.IOException;
 import java.net.URI;
