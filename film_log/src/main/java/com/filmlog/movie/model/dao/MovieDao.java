@@ -38,7 +38,21 @@ public class MovieDao {
 	public int insertMovieGenre(SqlSession session, Map<String,Object> paramMap) {
 		return session.insert("movieMapper.insertMovieGenre",paramMap);
 	}
-
+	
+	// 전체 movie 가져오기
+	public List<MovieDTO> selectMovieAll(SqlSession session) {
+		return session.selectList("movieMapper.selectMovieAll");
+	}
+	
+	// 배우 추가 (트랜잭션)
+	public int insertActorAll(SqlSession session, List<Actor> actors) {
+		return session.insert("movieMapper.insertActorAll",actors);
+	}
+	
+	// 영화별 배우 매핑
+	public int insertMovieActor(SqlSession session, Map<String, Object> paramMap) {
+		return session.insert("movieMapper.insertMovieActor",paramMap);
+	}
 	
 	// API
 //	public int insertMovieApi(SqlSession session, MovieDTO movie) {
