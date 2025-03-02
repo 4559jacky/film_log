@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberImg;
 
 public class MemberDao {
 	// 데이터베이스 테스트 회원 데이터 가져오기.
@@ -37,13 +38,42 @@ public class MemberDao {
 	public Member selectMemberByNickname(SqlSession session, String memberNickname) {
 		return session.selectOne("memberMapper.selectMemberByNickname",memberNickname);
 	}
-
-	public int InsertMemberInterestGenre(SqlSession session, Map<String, Integer> paramMap) {
+	
+	
+	public int InsertMemberInterestGenre(SqlSession session, Map<String, Object> paramMap) {
 		return session.insert("memberMapper.insertMemberInterestGenreOne",paramMap);
 	}
+	
+	
+//	public int InsertMemberInterestGenre(SqlSession session, Map<String, Integer> paramMap) {
+//		return session.insert("memberMapper.insertMemberInterestGenreOne",paramMap);
+//	}
 
 	public int UpdateMemberPwd(SqlSession session, Member member) {
 		return session.update("memberMapper.updateMemberPwd",member);
+	}
+
+	public MemberImg selectMemberImgOne(SqlSession session, int memberImgNo) {
+		return session.selectOne("memberMapper.selectMemberImgOne",memberImgNo);
+	}
+	
+	// 사용자 아이디로 관심 장르 가져오기
+	public List<Integer> selectMemberInterestGenreAll(SqlSession session, int memberId) {
+		return session.selectList("memberMapper.selectMemberInterestGenreAll",memberId);
+	}
+
+	public int updateMemberInfo(SqlSession session, Member member) {
+		return session.update("memberMapper.updateMemberOne",member);
+	}
+
+	public int updateMemberImg(SqlSession session, MemberImg memberImg) {
+//		int result = session.delete
+//		return session.insert;
+		return 0;
+	}
+
+	public int insertMemberImg(SqlSession session, MemberImg mi) {
+		return session.insert("memberMapper.insertMemberImg",mi);
 	}
 
 	/*
