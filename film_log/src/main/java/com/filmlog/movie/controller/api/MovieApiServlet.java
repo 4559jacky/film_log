@@ -80,6 +80,7 @@ public class MovieApiServlet extends HttpServlet {
 				    movies.add(newMovie);
 				}
 				
+				// 영화 리스트를 저장
 //				int resultMovieAll = movieService.insertMovieAll(movies);
 
 				
