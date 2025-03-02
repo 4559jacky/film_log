@@ -138,6 +138,26 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			<button class="btn btn-secondary btn-lg btn-block btn-prev2" type="button">이전</button>
 			</div>
 			<div id="join3" class="join3">
+				<div class="row">
+	            <div class="col-md-6 mb-3">
+	              <label for="memberImg">프로필 이미지 추가</label>
+	              <!-- <input type="text" class="form-control" name="member_id" id="memberId" placeholder="아이디" value="" required> -->
+	              <svg id="" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-file-image" viewBox="0 0 16 16">
+					  <path d="M8.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+					  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12z"/>
+					</svg>
+					<div class="invalid-feedback id-error">
+	                형식에 맞지않는 파일입니다.(png만 가능)
+	              </div>
+	            </div>
+	            <div class="mb-3">
+	              <input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br>
+	            </div>
+	          </div>
+	          <button class="btn btn-primary btn-lg btn-block btn-next3" type="button">다음</button>
+			<button class="btn btn-secondary btn-lg btn-block btn-prev3" type="button">이전</button>
+			</div>
+			<div id="join4" class="join4">
 			    <p>관심사를 선택하세요(필수선택 X)</p>
 			    <label><input type="checkbox" name="interest" value="10749"> 로맨스</label>
 			    <label><input type="checkbox" name="interest" value="28"> 액션</label>
@@ -162,7 +182,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				<label><input type="checkbox" name="interest" value="10751"> 가족</label>
 				<br>
 				<br>
-			    <button class="btn btn-secondary btn-lg btn-block btn-prev3" type="button">이전</button>
+			    <button class="btn btn-secondary btn-lg btn-block btn-prev4" type="button">이전</button>
 			    <hr class="mb-4">
 	            <div class="mb-4"></div>
 	              <div class="custom-control custom-checkbox">
@@ -181,7 +201,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		// 버튼을 활용하여 페이지 전환 기능
 		$(document).ready(function () {
 			// div 숨기기
-			$("#join2, #join3").hide();
+			$("#join2, #join3, #join4").hide();
 			
 			/* 정규식 무시하고 다음으로 이동 */
 			/* $(".btn-next1").click(function () {
@@ -390,6 +410,40 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        }
 		    });
 		    
+		    $(".btn-next3").click(function (event) { 
+		        let form = $('.validation-form');
+		        let memberImg = form.find("input[name='member_img']").val();
+
+		        let isValid = true; // 전체 유효성 체크용 변수
+
+		        if (!memberImg) {
+					let confirmImg = confirm('프로필이미지 수정을 패스하시겠습니까?');
+					if(confirmImg == true) {
+						$("#join3").hide();
+				        $("#join4").show();
+					} else {
+						event.preventDefault();
+			            event.stopPropagation();
+			            memberImg.focus();
+					}
+				} else if(memberImg) {
+					const val = memberImg;
+					const idx = val.lastIndexOf('.');
+					const type = val.substring(idx+1, val.length);
+					if(type == 'png') {
+						$("#join3").hide();
+				        $("#join4").show();
+				        form.find("input[name='member_img']").removeClass("is-invalid").addClass("is-valid");
+					} else {
+						event.preventDefault();
+			            event.stopPropagation();
+						alert('png 파일만 선택할 수 있습니다.');
+						form.find("input[name='member_img']").addClass("is-invalid").removeClass("is-valid");
+						memberImg = '';
+					}
+				}
+		    });
+		    
 		    ///////////////////////////
 		    
 		    $(".btn-prev2").click(function () {
@@ -401,6 +455,12 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        $("#join3").hide();
 		        $("#join2").show();
 		    });
+		    
+		    $(".btn-prev4").click(function () {
+		        $("#join4").hide();
+		        $("#join3").show();
+		    });
+		    
 		 });
 		
 		//////////////////////////////////////////////////////////////
