@@ -68,15 +68,20 @@ public class MovieApiServlet extends HttpServlet {
 				    
 				    MovieDTO newMovie = fetchMovieDetails(movie.getId());
 
-				    // 한 영화의 정보 + 해당 영화의 장르 리스트를 DB에 저장
-//				    result = movieService.insertMovieAndGenre(newMovie, newMovie.getId(), genreList);
-				    result = movieService.insertMovie(newMovie);
-				    if(result > 0) {
-				    	movieService.insertMovieGenre(newMovie.getId(), genreList);
-				    }
+				    // 한 영화의 정보 + 해당 영화의 장르 리스트를 DB에 저장 -> 트랜잭션 O
+				    result = movieService.insertMovieAndGenre(newMovie, newMovie.getId(), genreList);
+				    
+				    // 한 영화의 정보 + 해당 영화의 장르 리스트를 DB에 저장 -> 트랜잭션 X
+//				    result = movieService.insertMovie(newMovie);
+//				    if(result > 0) {
+//				    	movieService.insertMovieGenre(newMovie.getId(), genreList);
+//				    }
 
 				    movies.add(newMovie);
 				}
+				
+//				int resultMovieAll = movieService.insertMovieAll(movies);
+
 				
 				// 영화 20개씩 추가(movie-mapper에서 반복문)
 //				int resultEnd = 0;
