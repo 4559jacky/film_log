@@ -14,12 +14,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.filmlog.movie.model.service.MovieService;
 import com.filmlog.movie.model.vo.Actor;
-import com.filmlog.movie.model.vo.Genre;
+import com.filmlog.movie.model.vo.Director;
 import com.filmlog.movie.model.vo.MovieDTO;
 
 @WebServlet("/movieCastAndCrewAPI")
@@ -49,9 +48,10 @@ public class CastAndCrewApiServlet extends HttpServlet {
 			    HttpResponse<String> rep3 = HttpClient.newHttpClient().send(req3, HttpResponse.BodyHandlers.ofString());
 			    System.out.println(rep3.body());
 			   
-			    ObjectMapper obj = new ObjectMapper();
-			    JsonNode rootNode3 = obj.readTree(rep3.body());
-			    JsonNode actorsNode = rootNode3.path("cast");
+			    // 배우 데이터베이스에 저장하기
+			    ObjectMapper obj1 = new ObjectMapper();
+			    JsonNode rootNode1 = obj1.readTree(rep3.body());
+			    JsonNode actorsNode = rootNode1.path("cast");
 			    
 			    if (actorsNode.isMissingNode() || actorsNode.isNull()) {
 					System.out.println("No actor found in response.");
@@ -60,24 +60,38 @@ public class CastAndCrewApiServlet extends HttpServlet {
 			   
 			    List<Actor> actors = new ArrayList<Actor>();
 			    
-			    int result = 0;
 			    for(JsonNode node : actorsNode) {
-			    	Actor actor = obj.treeToValue(node, Actor.class);
+			    	Actor actor = obj1.treeToValue(node, Actor.class);
 			    	actors.add(actor);
 			    }
 			    
-			    result = movieService.insertActorAll(actors, movieId);
+			    movieService.insertActorAll(actors, movieId);
+			    
+			    
+			    // 감독 데이터베이스에 저장하기
+			    ObjectMapper obj2 = new ObjectMapper();
+			    JsonNode rootNode2 = obj2.readTree(rep3.body());
+			    JsonNode directorNode = rootNode2.path("crew");
+			    
+			    if (directorNode.isMissingNode() || directorNode.isNull()) {
+					System.out.println("No director found in response.");
+					return;
+				}
+			   
+			    Director director = null;
+			    
+			    for(JsonNode node : directorNode) {
+			    	JsonNode jobNode = node.path("job");
+			    	String job = jobNode.asText();
+			    	if(job.equals("Director")) {
+			    		director = obj2.treeToValue(node, Director.class);
+			    	}
+			    }
+			    
+			    int result = movieService.insertDirectorOne(director, movieId);
+			    
 
-			    		
-//			    obj.readValue(actorsNode.traverse(), new TypeReference<List<Actor>>() {});
-
-//			    for(int j = 0; j < actors.size(); j++) {
-//				    result = new MovieService().insertActor(actors.get(j));
-//			    }
-//			    request.setAttribute("actors", actors);
 	            }
-
-			
 	            request.getRequestDispatcher("/views/movie/list.jsp").forward(request, response);
 		}catch(Exception e) {
 			e.printStackTrace();
