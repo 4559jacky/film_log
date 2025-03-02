@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.filmlog.movie.model.vo.Actor;
+import com.filmlog.movie.model.vo.Director;
 import com.filmlog.movie.model.vo.Genre;
 import com.filmlog.movie.model.vo.MovieDTO;
 
@@ -52,6 +53,14 @@ public class MovieDao {
 	// 영화별 배우 매핑
 	public int insertMovieActor(SqlSession session, Map<String, Object> paramMap) {
 		return session.insert("movieMapper.insertMovieActor",paramMap);
+	}
+	public int insertDirectorOne(SqlSession session, Director director) {
+		return session.insert("movieMapper.insertDirectorOne",director);
+	}
+	
+	// 영화별 배우 매핑
+	public int insertMovieDirector(SqlSession session, Map<String, Integer> paramMap) {
+		return session.insert("movieMapper.insertMovieDirector",paramMap);
 	}
 	
 	// API
