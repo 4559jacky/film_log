@@ -63,18 +63,18 @@ public class MemberService {
 //	}
 	
 	// 회원가입 트랜잭션 O
-	public int InsertMember(Member m, List<String> genreList, MemberImg mi) {
+	public int insertMember(Member m, List<String> genreList, MemberImg mi) {
 		SqlSession session = getSqlSession(false);
 		int result1 = 0;
 		int result2 = 0;
 		int result3 = 0;
 		
 		try {
-			result1 = memberDao.InsertMember(session, m);
+			result1 = memberDao.insertMember(session, m);
 			Map<String,Object> paramMap = new HashMap<>();
 			paramMap.put("memberNo", result1);
 			paramMap.put("list", genreList);
-			result2 = memberDao.InsertMemberInterestGenre(session, paramMap);
+			result2 = memberDao.insertMemberInterestGenre(session, paramMap);
 			mi.setMemberNo(result1);
 			result3 = memberDao.insertMemberImg(session, mi);
 			
@@ -125,21 +125,32 @@ public class MemberService {
 	}
 	
 	// 사용자 관심 장르 가져오기
-	public List<Integer> selectMemberInterestGenreAll(int memberId) {
+	public List<Integer> selectMemberInterestGenreAll(int memberNo) {
 		SqlSession session = getSqlSession();
-		List<Integer> genres = memberDao.selectMemberInterestGenreAll(session, memberId);
+		List<Integer> genres = memberDao.selectMemberInterestGenreAll(session, memberNo);
 		session.close();
 		return genres;
 	}
-
-	public int updateMemberInfo(Member member, MemberImg memberImg) {
+	
+	// 이미지가 있을 때 사용자정보 업데이트
+	public int updateMemberInfo(Member member, MemberImg memberImg, List<String> genreList) {
 		SqlSession session = getSqlSession(false);
 		int result1 = 0;
 	    int result2 = 0;
+	    int result3 = 0;
+	    int result4 = 0;
+	    int result5 = 0;
 	    try {
 	    	result1 = memberDao.updateMemberInfo(session, member);
-	    	result2 = memberDao.updateMemberImg(session,memberImg);
-	    	if (result1 > 0 && result2 > 0) {
+	    	result2 = memberDao.deleteMemberImg(session, member.getMemberNo());
+	    	result3 = memberDao.insertMemberImg(session,memberImg);
+	    	result4 = memberDao.deleteMemberInterestGenre(session,member.getMemberNo());
+	    	Map<String,Object> paramMap = new HashMap<String,Object>();
+	    	paramMap.put("memberNo", member.getMemberNo());
+			paramMap.put("list", genreList);
+	    	result5 = memberDao.insertMemberInterestGenre(session, paramMap);
+	    	
+	    	if (result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0 && result5 > 0) {
 	            session.commit();
 	        } else {
 	            session.rollback();  // 하나라도 실패하면 롤백
@@ -157,7 +168,48 @@ public class MemberService {
 	        }
 	    }
 	    
-	    return result1 + result2;
+	    return result1 + result2 + result3 + result4 + result5;
+	}
+	
+	public int updateMemberInfo(Member member, List<String> genreList) {
+		SqlSession session = getSqlSession(false);
+		int result1 = 0;
+	    int result2 = 0;
+	    int result3 = 0;
+	    try {
+	    	result1 = memberDao.updateMemberInfo(session, member);
+	    	result2 = memberDao.deleteMemberInterestGenre(session,member.getMemberNo());
+	    	Map<String,Object> paramMap = new HashMap<String,Object>();
+	    	paramMap.put("memberNo", member.getMemberNo());
+			paramMap.put("list", genreList);
+			result3 = memberDao.insertMemberInterestGenre(session, paramMap);
+	    	
+	    	if (result1 > 0 && result2 > 0 && result3 > 0) {
+	            session.commit();
+	        } else {
+	            session.rollback();  // 하나라도 실패하면 롤백
+	            return 0;
+	        }
+	    } catch (Exception e) {
+	        if (session != null) {
+	            session.rollback();  // 예외 발생 시 롤백
+	        }
+	        e.printStackTrace();
+	        return 0;
+	    } finally {
+	        if (session != null) {
+	            session.close();  // 세션 종료
+	        }
+	    }
+	    
+	    return result1 + result2 + result3;
+	}
+
+	public MemberImg selectMemberImg(int memberNo) {
+		SqlSession session = getSqlSession();
+		MemberImg memberImg = memberDao.selectMemberImg(session, memberNo);
+		session.close();
+		return memberImg;
 	}
 
 	

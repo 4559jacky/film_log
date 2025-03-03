@@ -25,9 +25,9 @@ public class MemberImgUpdatePathServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. 읽어올 파일명 전달받기
-		int memberImgNo = Integer.parseInt(request.getParameter("member_img_no"));
-		MemberImg mi = memberService.selectMemberImgOne(memberImgNo);
-		request.setAttribute("member_img", mi);
+		int memberNo = Integer.parseInt(request.getParameter("member_no"));
+		MemberImg mi = memberService.selectMemberImg(memberNo);
+		request.setAttribute("memberImg", mi);
 		
 		// 2. 해당 파일명이 비어있는지 확인
 		String filePath = mi.getImgPath();

@@ -16,12 +16,46 @@
 		<result property="memberAddr" column="member_addr"/>
 		<result property="adminWhether" column="admin_whether"/>
 	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_addr = #{memberAddr},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
 	
 	<!-- 아이디로 사용자 관심장르 가져오기 -->
-	<select id="selectMemberInterestGenreAll" parameterType="_int">
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
 		SELECT genre_id
 		FROM `member_interest_genre`
-		WHERE member_no = #{memberId}
+		WHERE member_no = #{memberNo}
 	</select>
 	
 	<update id="updateMemberPwd" parameterType="member">

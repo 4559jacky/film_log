@@ -144,8 +144,8 @@ public class MemberCreateServlet extends HttpServlet {
 		System.out.println("회원 : "+m);
 		System.out.println("관심 장르 : "+genreList);
 		System.out.println("회원 이미지 : "+mi);
-		
-		int result = memberService.InsertMember(m, genreList, mi);
+	
+		int result = memberService.insertMember(m, genreList, mi);
 		
 		// 트랜잭션 X
 //		int memberNo = memberService.InsertMember(m); // 멤버 번호를 바로 받아온다. 장르를 저장하기 위해서

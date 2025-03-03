@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ include file="/views/include/nav.jsp" %>
-<%@ page import="" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -44,6 +44,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
         <form class="validation-form" novalidate>
         	<div id="memberInfo1" class="memberInfo1">
 	          <div class="row">
+	          	<input type="hidden" class="form-control" name="member_id" id="memberId" placeholder="아이디" value="${member.memberId}">
 	            <div class="col-md-6 mb-3">
 	              <label for="memberName">이름</label>
 	              <input type="text" class="form-control" name="member_name" id="memberName" placeholder="" value="<c:out value="${member.memberName}"/>" required>
@@ -112,18 +113,16 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			<div id="memberInfo2" class="memberInfo2">
 				<div class="row">
 	            <div class="col-md-6 mb-3">
-	              <label for="memberImg">프로필 이미지 변경</label>
-	              <!-- <input type="text" class="form-control" name="member_id" id="memberId" placeholder="아이디" value="" required> -->
-	              <svg id="" xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-file-image" viewBox="0 0 16 16">
-					  <path d="M8.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
-					  <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v8l-2.083-2.083a.5.5 0 0 0-.76.063L8 11 5.835 9.7a.5.5 0 0 0-.611.076L3 12z"/>
-					</svg>
-					<div class="invalid-feedback id-error">
-	                형식에 맞지않는 파일입니다.(png만 가능)
-	              </div>
+	              	<img src="<%=request.getContextPath()%>/memberImgUpdatePath?member_no=${member.getMemberNo() }" style="width:200px; height:200px; border: 2px solid black; border-radius: 50%; object-fit: cover;">
+					<br><br>
+					<label for="memberImg" style="font-size:20px;"><b>프로필 이미지 변경</b></label><br>
+					<input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br>
+					<div class="invalid-feedback file-error">
+	                	형식에 맞지않는 파일입니다.(png만 가능)
+	              	</div>
 	            </div>
 	            <div class="mb-3">
-	              <input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br>
+	              
 	            </div>
 	          </div>
 	          <button class="btn btn-primary btn-lg btn-block btn-next2" type="button">다음</button>
@@ -131,63 +130,42 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			</div>
 			<div id="memberInfo3" class="memberInfo3">
 			    <p>관심사 수정(필수선택 X)</p>
-			    
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="10749" <c:if test="${10749 == genre}">checked</c:if>> 로맨스</label>
-				</c:forEach>
-				<c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="28" <c:if test="${28 == genre}">checked</c:if>> 액션</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="12" <c:if test="${12 == genre}">checked</c:if>> 어드벤처</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="14" <c:if test="${14 == genre}">checked</c:if>> 판타지</label>
-			    </c:forEach>
-				    <br>
-				<c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="18" <c:if test="${18 == genre}">checked</c:if>> 드라마</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="35" <c:if test="${35 == genre}">checked</c:if>> 코미디</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="53" <c:if test="${53 == genre}">checked</c:if>> 스릴러</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="27" <c:if test="${27 == genre}">checked</c:if>> 공포</label>
-			    </c:forEach>
-				    <br>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="80" <c:if test="${80 == genre}">checked</c:if>> 범죄</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="9648" <c:if test="${9648 == genre}">checked</c:if>> 미스터리</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="16" <c:if test="${16 == genre}">checked</c:if>> 애니메이션</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="10402" <c:if test="${10402 == genre}">checked</c:if>> 뮤지컬</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="878" <c:if test="${878 == genre}">checked</c:if>> SF</label>
-			    </c:forEach>
-				    <br>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="36" <c:if test="${36 == genre}">checked</c:if>> 역사</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="10752" <c:if test="${10752 == genre}">checked</c:if>> 전쟁</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="37" <c:if test="${37 == genre}">checked</c:if>> 서부</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-				    <label><input type="checkbox" name="interest" value="99" <c:if test="${99 == genre}">checked</c:if>> 다큐</label>
-			    </c:forEach>
-			    <c:forEach var="genre" items="${genres }" >
-					<label><input type="checkbox" name="interest" value="10751" <c:if test="${10751 == genre}">checked</c:if>> 가족</label>
+			    <c:set var="allGenres" value="10749,28,12,14,18,35,53,27,80,9648,16,10402,878,36,10752,37,99,10751" />
+
+				<c:forEach var="genre" items="${fn:split(allGenres, ',')}" varStatus="vs">
+				    <c:set var="checked" value="" />
+				    <c:forEach var="userGenre" items="${genres}">
+				        <c:if test="${userGenre == genre}">
+				            <c:set var="checked" value="checked" />
+				        </c:if>
+				    </c:forEach>
+				
+				    <label>
+				        <input type="checkbox" name="interest" value="${genre}" ${checked}>
+				        <c:choose>
+				            <c:when test="${genre == '10749'}"><b>로맨스</b></c:when>
+				            <c:when test="${genre == '28'}"><b>액션</b></c:when>
+				            <c:when test="${genre == '12'}"><b>어드벤처</b></c:when>
+				            <c:when test="${genre == '14'}"><b>판타지</b></c:when>
+				            <c:when test="${genre == '18'}"><b>드라마</b></c:when>
+				            <c:when test="${genre == '35'}"><b>코미디</b></c:when>
+				            <c:when test="${genre == '53'}"><b>스릴러</b></c:when>
+				            <c:when test="${genre == '27'}"><b>공포</b></c:when>
+				            <c:when test="${genre == '80'}"><b>범죄</b></c:when>
+				            <c:when test="${genre == '9648'}"><b>미스터리</b></c:when>
+				            <c:when test="${genre == '16'}"><b>애니메이션</b></c:when>
+				            <c:when test="${genre == '10402'}"><b>뮤지컬</b></c:when>
+				            <c:when test="${genre == '878'}"><b>SF</b></c:when>
+				            <c:when test="${genre == '36'}"><b>역사</b></c:when>
+				            <c:when test="${genre == '10752'}"><b>전쟁</b></c:when>
+				            <c:when test="${genre == '37'}"><b>서부</b></c:when>
+				            <c:when test="${genre == '99'}"><b>다큐</b></c:when>
+				            <c:when test="${genre == '10751'}"><b>가족</b></c:when>
+				        </c:choose>
+				    </label>
+				    <c:if test="${vs.count mod 4 == 0}">
+				        	<br>
+				    </c:if>
 				</c:forEach>
 				<br>
 				<br>
@@ -198,7 +176,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	                <input type="checkbox" class="custom-control-input" name="aggrement" id="aggrement" required>
 	                <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
 	              </div><br>
-	            <button class="btn btn-primary btn-lg btn-block" type="button" id="updateButton">가입 완료</button>
+	            <button class="btn btn-primary btn-lg btn-block" type="button" id="updateButton">개인정보 수정하기</button>
 				</div>
         </form>
       </div>
@@ -375,7 +353,9 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	    
 	    // 두번째 버튼(이미지)
 	    $(".btn-next2").click(function (event) { 
-	        let form = $('.validation-form');
+	    	$("#memberInfo2").hide();
+	        $("#memberInfo3").show();
+	        /* let form = $('.validation-form');
 	        let memberImg = form.find("input[name='member_img']").val();
 
 	        let isValid = true; // 전체 유효성 체크용 변수
@@ -392,7 +372,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				}
 			} else if(memberImg) {
 				
-			}
+			} */
 	    });
 	    
 	    ///////////////////////////
@@ -410,7 +390,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	
 	//////////////////////////////////////////////////////////////
 
-	// 가입완료 버튼
+	// 수정완료 버튼
 	$(document).ready(function () {
         $('#updateButton').click(function(event) {
         	let form = $('.validation-form');
@@ -431,13 +411,38 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
                 alert('개인정보 수집 및 이용에 동의해주세요.');
                 personalAgree.classList.add("is-invalid");
             } else {
-            	const val = memberImg;
-				const idx = val.lastIndexOf('.');
-				const type = val.substring(idx+1, val.length);
-				if(type == 'png') {
-					// form.submit();
-					console.log(val);
-					const sendData = new FormData(form);
+            	if(memberImg) {
+            		const val = memberImg;
+    				const idx = val.lastIndexOf('.');
+    				const type = val.substring(idx+1, val.length);
+    				if(type == 'png') {
+    					// form.submit();
+    					console.log(val);
+    					$.ajax({
+    						url : '/memberInfoChange',
+    						type : 'post',
+    						// 파일데이터를 보내기 위해 추가해야하는 속성들
+    						// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
+    						enctype : 'multipart/form-data',
+    						cache : false,
+    						async : false,
+    						contentType : false,
+    						processData : false,
+    						data : sendData,
+    						dataType : 'JSON',
+    						success : function(data){
+    							alert(data.res_msg);
+    							if(data.res_code == 200) {
+    								location.href="/myPass";
+    							}
+    						}
+    						
+    					})
+    				} else {
+       					alert('이미지 파일만 선택할 수 있습니다.');
+       					memberImg = '';
+                	}
+            	} else {
 					$.ajax({
 						url : '/memberInfoChange',
 						type : 'post',
@@ -458,10 +463,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 						}
 						
 					})
-				} else {
-					alert('이미지 파일만 선택할 수 있습니다.');
-					memberImg = '';
-				}
+            	}
+            	
             }
        	})
 		});

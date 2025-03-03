@@ -1,7 +1,6 @@
 package com.filmlog.member.controller.Pass;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.filmlog.member.model.service.MemberService;
+import com.filmlog.member.model.vo.MemberImg;
 
 @WebServlet("/memberInfoChangePass")
 public class MemberInfoChangePassServlet extends HttpServlet {
@@ -23,13 +23,15 @@ public class MemberInfoChangePassServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int memberId = Integer.parseInt(request.getParameter("memberId"));
+		int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 		
-		List<Integer> genres = memberService.selectMemberInterestGenreAll(memberId);
-		
+		List<Integer> genres = memberService.selectMemberInterestGenreAll(memberNo);
+		MemberImg memberImg = memberService.selectMemberImg(memberNo);
+
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/myInfoChange.jsp");
 		request.setAttribute("genres", genres);
+		request.setAttribute("memberImg", memberImg);
 		view.forward(request, response);
 	}
 
