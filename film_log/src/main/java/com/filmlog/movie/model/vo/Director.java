@@ -17,14 +17,12 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Actor {
+public class Director {
 	private int id;
 	private String name;
 	@JsonProperty("original_name")
 	private String originalName;
-	private int gender;
-	private String character;
+	private String job;
 	@JsonProperty("profile_path")
 	private String profilePath;
-//	private String character;
 }

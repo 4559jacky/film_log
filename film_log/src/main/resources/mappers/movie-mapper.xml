@@ -3,19 +3,24 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="movieMapper">
-	<!-- <resultMap type="movie" id="movieMap">
-			<result property="movieNo" column="movie_no"/>
-			<result property="movieTitle" column="movie_title"/>
-			<result property="moviePlot" column="movie_plot"/>
-			<result property="movieDirector" column="movie_director"/>
-			<result property="movieActor" column="movie_actor"/>
-			<result property="releaseDate" column="release_date"/>	
-			<result property="runTime" column="run_time"/>
-			<result property="rating" column="rating"/>
-			<result property="viewsNum" column="views_num"/>	
-			<result property="genreNo" column="genre_no"/>
-			<result property="movieAddressUrl" column="movie_address_url"/>	
-	</resultMap> -->
+
+	<resultMap type="movieDto" id="movieMap">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="originalTitle" column="original_title"/>
+		<result property="overview" column="overview"/>
+		<result property="runtime" column="runtime"/>
+		<result property="releaseDate" column="release_date"/>	
+		<result property="voteAverage" column="vote_average"/>
+		<result property="posterPath" column="poster_path"/>
+		<result property="adult" column="adult"/>
+	</resultMap>
+	
+	<!-- 전체 영화 조회 -->
+	<select id="selectMovieAll" resultMap="movieMap"  parameterType="movieDto">
+		SELECT *
+		FROM `movie_dto`
+	</select>
 	
 	<!-- 배우 추가 -->
 	<insert id="insertActor" parameterType="actor">
@@ -29,11 +34,61 @@
 		VALUES (#{id},#{name})
 	</insert>
 	
-	<!-- API로 받아온 영화 추가 -->
-	<insert id="insertMovie" parameterType="movie">
-		INSERT IGNORE INTO `movie_dto` (id, title, overview, release_date, vote_count, vote_average, poster_path)
-		VALUES (#{id},#{title},#{overview},#{releaseDate},#{voteCount},#{voteAverage},#{posterPath})
+	<!-- 영화별 장르 매핑 -->
+	<insert id="insertMovieGenre" parameterType="map">
+	    INSERT INTO `movie_genre` (movie_id, genre_id)
+	    VALUES
+	    <foreach collection="list" item="genre" separator=",">
+	        (#{movieId}, #{genre})
+	    </foreach>
 	</insert>
+	
+	<!-- API로 받아온 영화 추가(반복문) -->
+	<!-- <insert id="insertMovieAll" parameterType="java.util.List">
+		INSERT IGNORE INTO `movie_dto` (id, title, original_title, overview, runtime, release_date, vote_average, poster_path, adult)
+		VALUES
+		<foreach collection="list" item="movie" separator=",">
+		(#{movie.id}, #{movie.title}, #{movie.originalTitle}, #{movie.overview}, #{movie.runtime}, #{movie.releaseDate}, #{movie.voteAverage}, #{movie.posterPath}, #{movie.adult})
+		</foreach>2ws
+	</insert> -->
+	
+	<!-- API로 받아온 영화 추가(하나씩) -->
+	<insert id="insertMovie" parameterType="movieDto">
+		INSERT IGNORE INTO `movie_dto` (id, title, original_title, overview, runtime, release_date, vote_average, poster_path, adult)
+		VALUES
+		(#{id}, #{title}, #{originalTitle}, #{overview}, #{runtime}, #{releaseDate}, #{voteAverage}, #{posterPath}, #{adult})
+	</insert>
+	
+	<!-- 배우 추가(반복) -->
+	<insert id="insertActorAll" parameterType="actor">
+		INSERT IGNORE INTO `actor` (id, name, original_name, gender, `character`, profile_path)
+		VALUES
+		<foreach collection="list" item="actor" separator=",">
+		 (#{actor.id}, #{actor.name}, #{actor.originalName}, #{actor.gender}, #{actor.character}, #{actor.profilePath})
+		</foreach>
+	</insert>
+	
+	<!-- 영화, 배우 매핑 -->
+	<insert id="insertMovieActor" parameterType="map">
+		INSERT INTO `movie_actors` (movie_id, actor_id)
+		VALUES
+		<foreach collection="list" item="actor" separator=",">
+			 (#{movieId}, #{actor})
+		</foreach>
+	</insert>
+	
+	<!-- 감독 추가 -->
+	<insert id="insertDirectorOne" parameterType="director">
+		INSERT IGNORE INTO `director` (id, name, original_name, job, profile_path)
+		VALUES (#{id}, #{name}, #{originalName}, #{job}, #{profilePath})
+	</insert>
+	
+	<!-- 영화, 감독 매핑 -->
+	<insert id="insertMovieDirector" parameterType="map">
+		INSERT INTO `movie_director` (movie_id, director_id)
+		VALUES (#{movieId}, #{directorId})
+	</insert>
+	
 	
 	<!-- 중복 검사 -->
 	<select id="selectMovieById" resultType="com.filmlog.movie.model.vo.MovieDTO">
