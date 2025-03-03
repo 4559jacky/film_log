@@ -417,7 +417,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        let isValid = true; // 전체 유효성 체크용 변수
 
 		        if (!memberImg) {
-					let confirmImg = confirm('프로필이미지 수정을 패스하시겠습니까?');
+					let confirmImg = confirm('프로필이미지를 설정하지않으면 기본이미지가 설정됩니다.\n회원가입 이후 수정 가능합니다.');
 					if(confirmImg == true) {
 						$("#join3").hide();
 				        $("#join4").show();
