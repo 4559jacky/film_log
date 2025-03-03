@@ -3,5 +3,136 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="qnaMapper">
+	
+	<resultMap type="qna" id="qnaMap">
+		<result property="qnaBoardNo" column="qna_board_no"/>
+		<result property="qnaType" column="qna_type"/>
+		<result property="title" column="title"/>
+		<result property="content" column="content"/>
+		<result property="memberNo" column="member_no"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="modDate" column="mod_date"/>
+		<association property="qnaResponse" resultMap="qnaResponseMap"/>
+	</resultMap>
+	
+	<resultMap type="qnaResponse" id="qnaResponseMap">
+		<result property="responseNo" column="response_no"/>
+		<result property="responseContent" column="response_content"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="modDate" column="mod_date"/>
+		<result property="qnaBoardNo" column="qna_board_no"/>
+	</resultMap>
+	
+	<select id="selectMyQnaCount" resultType="int" parameterType="member">
+		SELECT COUNT(qna_board_no)
+		FROM `qna_board`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectQnaCount" resultType="int" parameterType="qna">
+		SELECT COUNT(qb.qna_board_no)
+		FROM `qna_board` qb
+		<if test="isAnswer != null and isAnswer == 1">
+        	INNER JOIN `response_board` rb ON qb.qna_board_no = rb.qna_board_no
+    	</if>
+    	<if test="isAnswer != null and isAnswer == 2">
+        	LEFT JOIN `response_board` rb ON qb.qna_board_no = rb.qna_board_no
+    	</if>
+		<where>
+	        <if test="title != null and title.equals('') == false">
+	            AND title LIKE CONCAT('%', #{title}, '%')
+	        </if>
+	        <if test="qnaType != null and qnaType == 1">
+        		AND qna_type = #{qnaType}
+    		</if>
+    		<if test="qnaType != null and qnaType == 2">
+        		AND qna_type = #{qnaType}
+    		</if>
+    		<if test="isAnswer != null and isAnswer == 2">
+            	AND rb.qna_board_no IS NULL
+        	</if>
+	    </where>
+	</select>
+	
+	<select id="selectMyQnaAll" resultMap="qnaMap" parameterType="member">
+		SELECT *
+		FROM qna_board qb
+		LEFT JOIN response_board rb
+		ON qb.qna_board_no = rb.qna_board_no
+		WHERE member_no = ${memberNo}
+		ORDER BY rb.response_no IS NOT NULL DESC, qb.qna_board_no ASC
+		LIMIT #{limitPageNo}, #{numPerPage}
+	</select>
+	
+	<select id="selectQnaAll" resultMap="qnaMap" parameterType="qna">
+	    SELECT *
+	    FROM qna_board qb
+	    <if test="isAnswer == 0 or isAnswer == 2">
+	        LEFT JOIN response_board rb ON qb.qna_board_no = rb.qna_board_no
+	    </if>
+	    <if test="isAnswer == 1">
+	        INNER JOIN response_board rb ON qb.qna_board_no = rb.qna_board_no
+	    </if>
+	    <where>
+	        <if test="title != null and title.equals('') == false">
+	            AND qb.title LIKE CONCAT('%', #{title}, '%')
+	        </if>
+	        <if test="qnaType != null and qnaType == 1">
+	            AND qb.qna_type = 1
+	        </if>
+	        <if test="qnaType != null and qnaType == 2">
+	            AND qb.qna_type = 2
+	        </if>
+	        <if test="isAnswer == 2">
+	            AND rb.qna_board_no IS NULL
+	        </if>
+	    </where>
+	    ORDER BY rb.response_no IS NULL DESC, qb.qna_board_no ASC
+	    LIMIT #{limitPageNo}, #{numPerPage}
+	</select>
 
+	
+	<insert id="insertResponse" parameterType="map">
+		INSERT INTO `response_board`(response_content ,qna_board_no)
+		VALUES (#{responseContent} ,#{qnaBoardNo})
+	</insert>
+	
+	<delete id="deleteResponse" parameterType="_int">
+		DELETE FROM `response_board`
+		WHERE response_no = #{responseNo}
+	</delete>
+	
+	<update id="updateResponse" parameterType="qnaResponse">
+		UPDATE `response_board`
+		SET response_content = #{responseContent}
+		WHERE response_no = #{responseNo}
+	</update>
+	
+	<select id="selectOneQna" resultMap="qnaMap" parameterType="_int">
+		SELECT qb.*, rb.response_no, rb.response_content, rb.reg_date, rb.mod_date, rb.qna_board_no, m.member_nickname
+    	FROM qna_board qb
+    	LEFT JOIN response_board rb
+    	ON qb.qna_board_no = rb.qna_board_no
+    	JOIN member m
+    	ON m.member_no = qb.member_no
+    	WHERE qb.qna_board_no = #{qnaBoardNo}
+	</select>
+	
+	<insert id="insertQna" parameterType="qna"
+	useGeneratedKeys="true" keyProperty="qnaBoardNo">
+		INSERT INTO `qna_board`(qna_type ,title, content ,member_no)
+		VALUES (#{qnaType} ,#{title} ,#{content} ,#{memberNo})
+	</insert>
+	
+	<update id="updateQna" parameterType="qna"
+	useGeneratedKeys="true" keyProperty="qnaBoardNo">
+		UPDATE `qna_board` SET qna_type=#{qnaType} ,title=#{title} ,content=#{content}
+		WHERE qna_board_no = #{qnaBoardNo}
+	</update>
+	
+	<delete id="deleteQna" parameterType="_int">
+		DELETE FROM `qna_board`
+		WHERE qna_board_no = #{qnaBoardNo};
+	</delete>
 </mapper>

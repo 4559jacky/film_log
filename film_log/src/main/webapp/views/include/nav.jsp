@@ -1,68 +1,86 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.filmlog.member.model.vo.Member" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-</head>
-<body>
-	<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light">
+<link href="<c:url value='/resources/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css">
+<script src="<c:url value='/resources/js/jquery-3.7.1.js'/>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<c:set var="member" value="${member}"/>
+<nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light" style="height : 80px;">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
+    <a class="navbar-brand" href="/">필름 로그</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarColor03">
+      <div class="justify-content-center">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="#">Home
+          <a class="nav-link active" href="/">홈
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
+          <a class="nav-link" href="/movieList">영화목록</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
+          <a class="nav-link" href="/reviewBoardList">리뷰게시판</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="#">자유게시판</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Separated link</a>
-          </div>
+        <li class="nav-item">
+          <a class="nav-link" href="/faq">FAQ</a>
         </li>
+        <c:choose>
+        	<c:when test="${empty member}">
+        		<li class="nav-item">
+		          <a class="nav-link" href="/memberLoginPass">로그인</a>
+		        </li>
+        	</c:when>
+        	<c:when test="${member.adminWhether == 'T' }">
+        		 <li class="nav-item dropdown">
+		          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+		            관리자 메뉴
+		          </a>
+		          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+		            <li><a class="dropdown-item" href="/qnaList">1:1 문의 목록 조회</a></li>
+		            <li><a class="dropdown-item" href="#">회원 목록 조회</a></li>
+		            <li><hr class="dropdown-divider"></li>
+		            <li><a class="dropdown-item" href="selectMovieList">전체 영화 목록 조회</a></li>
+		            <li><a class="dropdown-item" href="#">영화 추가</a></li>
+		            <li><a class="dropdown-item" href="#">영화 수정</a></li>
+		            <li><a class="dropdown-item" href="#">영화 삭제</a></li>
+		            <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>
+		          </ul>
+		        </li>
+        	</c:when>
+        	<c:when test="${member.adminWhether == 'F' }">
+        		<li class="nav-item dropdown">
+				  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMyMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+				    My 메뉴
+				  </a>
+				  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMyMenu">
+				    <li><a class="dropdown-item" href="#">대시보드</a></li>
+				    <li><a class="dropdown-item" href="#">내가 쓴 리뷰</a></li>
+				    <li><a class="dropdown-item" href="#">내가 쓴 게시물</a></li>
+				    <li><a class="dropdown-item" href="#">영화 관람 기록하기</a></li>
+				    <li><hr class="dropdown-divider"></li>
+				    <li><a class="dropdown-item" href="#">좋아요한 리뷰</a></li>
+				    <li><a class="dropdown-item" href="#">좋아요한 게시글</a></li>
+				    <li><a class="dropdown-item" href="#">좋아요한 영화</a></li>
+				    <li><hr class="dropdown-divider"></li>
+				    <li><a class="dropdown-item" href="#">비밀번호 변경</a></li>
+				    <li><a class="dropdown-item" id="memberInfo" href="/memberInfoChangePass?memberNo=${member.memberNo}">개인정보 수정</a></li>
+				    <li><a class="dropdown-item" href="/myQnaList">문의 내역</a></li>
+				    <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>
+				  </ul>
+				</li>
+        	</c:when>
+        </c:choose>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-sm-2" type="search" placeholder="Search">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-      </form>
+      </div>
     </div>
   </div>
 </nav>
-	<!-- <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Film Review</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a class="nav-link" href="#">영화 목록</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">리뷰 게시판</a></li>
-      <li class="nav-item"><a class="nav-link" href="#">자유 게시판</a></li>
-      <li class="nav-item"><a class="nav-link btn btn-primary text-white" href="#">로그인</a></li>
-    </ul>
-  </div>
-</nav> -->
-</body>
-</html>
+<script src='<c:url value="/resources/js/bootstrap.min.js"/>'></script>
