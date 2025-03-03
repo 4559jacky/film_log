@@ -55,7 +55,7 @@
                     <span>영화명: ${ReviewBoard.movieTitle}</span> |
                     <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
                     <span>작성일: <fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></span> |
-                    <span>조회수: ${ReviewBoard.views}</span>
+                    <span id="countViews">조회수: ${ReviewBoard.views}</span>
                 </div>
             </div>
             <hr>
@@ -68,12 +68,14 @@
                 </p>
             </div>
             <div class="text-end">
-                <button class="btn btn-custom me-2" id="update_btn" style=" background-color: #d3d3d3; color: #000; border: none;"
-                 data-reviewboardno="${ReviewBoard.reviewBoardNo}">
-                게시글 수정</button>
-                <button class="btn btn-custom" id="delete_btn" style=" background-color: #d3d3d3; color: #000; border: none;"
-                data-reviewboardno="${ReviewBoard.reviewBoardNo}">
-                게시글 삭제</button>
+            	<c:if test="${member.memberNo eq ReviewBoard.reviewBoardWriter}">
+	                <button class="btn btn-custom me-2" id="update_btn" style=" background-color: #d3d3d3; color: #000; border: none;"
+	                 data-reviewboardno="${ReviewBoard.reviewBoardNo}">
+	                게시글 수정</button>
+	                <button class="btn btn-custom" id="delete_btn" style=" background-color: #d3d3d3; color: #000; border: none;"
+	                data-reviewboardno="${ReviewBoard.reviewBoardNo}">
+	                게시글 삭제</button>
+            	</c:if>
             </div>
         </div>
 
@@ -81,12 +83,12 @@
         <div class="comment-box mx-auto p-4" style="max-width: 1400px;">
             <h4 class="mb-3">댓글</h4>
             <!-- 댓글 작성 폼 -->
-            <form id="commentForm" class="mb-4">
+            <form id="comment_form" class="mb-4">
                 <div class="mb-3">
-                    <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요" name="comment_content" required></textarea>
+                    <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요" id="comment" required></textarea>
                 </div>
                 <div class="text-end">
-                    <button type="button" class="btn btn-custom" id="submitComment" style=" background-color: #d3d3d3; color: #000; border: none;">
+                    <button type="button" class="btn btn-custom" id="comment_btn" style=" background-color: #d3d3d3; color: #000; border: none;">
                     댓글 등록</button>
                 </div>
             </form>
@@ -95,15 +97,17 @@
                 <div class="comment-item">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <strong>작성자</strong> <small class="text-muted">작성일</small>
+                        	<span id="commentWriter"><strong></strong></span>
+                        	<span id="commentRegdate"><small class="text-muted"></small></span>   
                         </div>
                     </div>
-                    <p class="mt-2">내용</p>
+                    <p class="mt-2" id="commentContent"></p>
                 </div>
             </div>
         </div>
     </div>
 	<script>
+	// 게시물 삭제
 		$(document).ready(function(){
 			$('#delete_btn').click(function(){
 				if(confirm("정말 게시물을 삭제하시겠습니까?")){
@@ -125,6 +129,32 @@
 			})
 		})
 		
+		// 조회수 증가
+		$(document).ready(function(){
+			const reviewBoardNo = ${ReviewBoard.reviewBoardNo};
+			const views = ${ReviewBoard.views};
+			
+			updateViewCount(reviewBoardNo, views);
+		})
+		
+		function updateViewCount(reviewBoardNo, views){
+			$.ajax({
+				url:"/updateViews",
+				type: "post",
+				contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+				data:{reviewBoardNo : reviewBoardNo,
+					views : views},
+				dataType:"JSON",
+				success:function(data){
+					if(data.res_code === "200") {
+	                    $("#viewCount").text(data.updateViews).trigger("change");
+	                }
+				}
+			})
+		
+		}
+		
+		// 게시물 수정
 		$(document).ready(function(){
 			$('#update_btn').click(function(){
 				const reviewBoardNo = $(this).data('reviewboardno');
@@ -132,67 +162,39 @@
 				location.href='/reviewBoardUpdatePass?reviewBoardNo='+reviewBoardNo;
 			})
 		})
+		
+		// 댓글 등록
+		$(document).ready(function(){
+			
+			$('#comment_btn').click(function(){
+				const reviewBoardNo = "${ReviewBoard.reviewBoardNo}";
+				const memberNo = "${member.memberNo}";
+				const commentContent = $('#comment').val();
+				console.log("reviewBoardNo:"+ reviewBoardNo);
+				console.log("memberNo:" + memberNo);
+				console.log("commentContent:" +commentContent);
+            	if(memberNo){
+        			$.ajax({
+        				url:'/insertReviewComment',
+        				type:'post',
+        				contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+        				data:{reviewBoardNo : reviewBoardNo,
+        					memberNo : memberNo,
+        					commentContent : commentContent},
+        				dataType:'json',
+        				success:function(data){
+        					alert(data.res_msg);
+        					if(data.res_code==200){
+        						$('#comment').val("");
+        					}
+        				}
+        			})		
+            	}else{
+            		if(confirm("로그인 후 작성 가능합니다. 로그인 하시겠습니까?")){
+            			location.href = "/memberLoginPass";       
+            		}	
+            	}
+			})
+		})
 	
 	</script>
-
-
-
-
-<%-- <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>리뷰 게시글 상세 페이지</title>
-</head>
-<body>
-	<%@ include file="/views/include/nav.jsp" %>
-	<div class="review_board_detail">
-		<ul>
-			<c:if test="${not empty ReviewBoard.imgNo}">
-				<li>
-					<img src="<%=request.getContextPath()%>/reviewFilePath?img_no=${ReviewBoard.imgNo}">
-				</li> 
-			</c:if> 
-			<li>
-				<table>
-					<tr>
-						<td>제목</td>
-						<td>${ReviewBoard.reviewBoardTitle} </td>
-					</tr>
-					<tr>
-						<td>내용</td>
-						<td>${ReviewBoard.reviewBoardContent} </td>
-					</tr>
-					<tr>
-						<td>작성자</td>
-						<td>${ReviewBoard.memberNickname} </td>
-					</tr>
-					<tr>
-						<td>영화</td>
-						<td>${ReviewBoard.movieTitle} </td>
-					</tr>
-					<tr>
-						<td>작성일</td>
-						<fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
-						<td><fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/> </td>
-					</tr>
-					<tr>
-						<td>조회수</td>
-						<td>${ReviewBoard.views} </td>
-					</tr>
-					
-				</table>
-			</li>
-		</ul>
-	</div>
-	<div class="buttons">
-		<a href="">수정</a>
-		<a href="<c:url value='/reviewBoardDelete?review_board_no=${ReviewBoard.reviewBoardNo}'/>">삭제</a>			
-	</div>
-</body>
-</html> --%>

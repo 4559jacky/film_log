@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	<typeAliases>
 		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoard" alias="reviewBoard"/>
 		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardImg" alias="reviewBoardImg"/>
+		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardComment" alias="reviewBoardComment"/>
 		<typeAlias type="com.filmlog.movie.model.vo.Movie" alias="movie"/>
 		<typeAlias type="com.filmlog.movie.model.vo.Genre" alias="genre"/>
 		<typeAlias type="com.filmlog.movie.model.vo.Actor" alias="actor"/>

@@ -22,6 +22,14 @@
 		<result property="newImg" column="new_img"/>
 		<result property="imgPath" column="img_path"/>		
 	</resultMap>
+	<resultMap type="reviewBoardComment" id="reviewBoardCommentMap">
+		<result property="reviewBoardCommentNo" column="review_board_comment_no"/>
+		<result property="comment" column="comment"/>
+		<result property="regDate" column="reg_date"/>
+		<result property="modDate" column="mod_date"/>
+		<result property="reviewBoardNo" column="review_board_no"/>
+		<result property="memberNo" column="member_no"/>		
+	</resultMap>
 	
 	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
@@ -78,5 +86,26 @@
 		DELETE FROM `review_board_img`
 		WHERE review_board_no = #{reviewBoardNo}
 	</delete>
+	
+	<update id="updateViews" parameterType="int">
+		UPDATE `review_board` SET views = views+1
+		WHERE review_board_no = #{reviewBoardNo}
+	</update>
+	
+	<select id="selectUpdateViews" parameterType="int" resultType="int">
+	    SELECT views FROM `review_board` WHERE review_board_no = #{reviewBoardNo}
+	</select>
+	
+	<insert id="insertReviewBoardComment" parameterType="map"
+	useGeneratedKeys="true" keyProperty="reviewBoardNo">
+		INSERT INTO `review_board_comment`(review_board_no ,member_no ,comment)
+		VALUES (#{review_board_no}, #{member_no}, #{comment_content})
+	</insert>
+	
+	<select id="selectReviewBoardCommentOne" parameterType="int" resultMap="reviewBoardCommentMap">
+		SELECT *
+		FROM `review_board_comment`
+		WHERE review_board_comment_no = #{reviewBoardCommentNo}
+	</select>
 	
 </mapper>
