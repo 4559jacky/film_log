@@ -2,10 +2,10 @@ package com.filmlog.member.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -114,7 +114,26 @@ public class MemberCreateServlet extends HttpServlet {
 						mi.setImgPath(path+"\\"+newName);
 						
 					} else { // 이미지 추가를 안했을 때 기본 이미지를 넣어준다.
-						return;
+						File defaultImg = new File("C:\\dev\\film_log\\noProfile_img\\profile.png");
+						
+						// 기본이미지가 존재여부
+						if(defaultImg.exists()) {
+							// UUID를 사용하여 새 파일명 생성
+							String uuid = UUID.randomUUID().toString().replace("-", "");
+							String newName = uuid + ".png";
+							
+							File copiedFile = new File(dir, newName);
+							Files.copy(defaultImg.toPath(), copiedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+							
+							mi.setOriName("profile.png"); // 원본 파일명
+				            mi.setNewName(newName); // 새 파일명
+				            mi.setImgPath(path + "\\" + newName); // 저장 경로
+						
+						} else {
+							System.out.println("기본 이미지가 존재하지 않습니다.");
+						}
+						
+						
 					}
 				}
 			}
