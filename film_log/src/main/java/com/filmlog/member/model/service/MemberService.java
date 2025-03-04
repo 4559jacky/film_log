@@ -233,6 +233,13 @@ public class MemberService {
 		session.close();
 		return memberAddress;
 	}
+
+	public Member selectMemberPwdForChangePwd(Member m) {
+		SqlSession session = getSqlSession();
+		Member member = memberDao.selectMemberPwdForChangePwd(session, m);
+		session.close();
+		return member;
+	}
 	
 
 	/*
