@@ -1,37 +1,60 @@
 package com.filmlog.member.admin.controllor;
 
 import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.filmlog.movie.model.service.MovieService;
+import com.filmlog.movie.model.vo.MovieDTO;
+
 @WebServlet("/selectMovieList")
 public class SelectMovieListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public SelectMovieListServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		String nowPage = request.getParameter("nowPage");
+		
+//		int currentPage = 1;
+//		if(nowPage != null && nowPage.trim().isEmpty()) {
+//			try{
+//				currentPage = Integer.parseInt(nowPage);
+//			}catch(Exception e) {
+//				currentPage = 1;
+//			}
+//		}
+		
+		MovieDTO option = new MovieDTO();
+		
+		if(nowPage != null) {
+			option.setNowPage(Integer.parseInt(nowPage));
+		}
+		
+//		option.setNowPage(currentPage);
+		
+		int totalData = new MovieService().selectMovieListCount();
+		option.setTotalData(totalData);
+		
+		List<MovieDTO> resultList = new MovieService().selectMovieList(option);
+		
+		RequestDispatcher view 
+			= request.getRequestDispatcher("/views/member/admin/movieList.jsp");
+		request.setAttribute("resultList", resultList);
+		request.setAttribute("paging", option);
+		view.forward(request, response);
+		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
