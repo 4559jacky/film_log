@@ -47,8 +47,8 @@
 		            <li><a class="dropdown-item" href="/qnaList">1:1 문의 목록 조회</a></li>
 		            <li><a class="dropdown-item" href="#">회원 목록 조회</a></li>
 		            <li><hr class="dropdown-divider"></li>
-		            <li><a class="dropdown-item" href="selectMovieList">전체 영화 목록 조회</a></li>
-		            <li><a class="dropdown-item" href="#">영화 추가</a></li>
+		            <li><a class="dropdown-item" href="/selectMovieList">전체 영화 목록 조회</a></li>
+		            <li><a class="dropdown-item" href="/MovieInsertPass">영화 추가</a></li>
 		            <li><a class="dropdown-item" href="#">영화 수정</a></li>
 		            <li><a class="dropdown-item" href="#">영화 삭제</a></li>
 		            <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>

@@ -27,13 +27,7 @@
 				<input type="text" name="movie_title" placeholder="영화제목을 입력해주세요">
 				<input type="submit" value="검색">
 		</fieldset>
-		<fieldset>
-			<legend>추가하기</legend>
-				<input type="button" id="insertMovie" value="영화 추가">
-				<button onclick="location.href='/movieCreate'"></button>
-		</fieldset>
 	</form>
-	<button type="submit" onclick="location.href='/movieList'">테스트</button><br>
 	<a href="/movieAPI">영화 API 추가하기</a>
 	<a href="/movieCastAndCrewAPI">감독 및 배우 API 추가하기</a>
 	<script>

@@ -1,9 +1,12 @@
 package com.filmlog.movie.model.vo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.filmlog.common.vo.Paging;
+import com.filmlog.reviewboard.model.vo.ReviewBoard;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +22,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MovieDTO {
+
+public class MovieDTO extends Paging{
 	private int id;
     private String title;
 
@@ -42,4 +46,6 @@ public class MovieDTO {
     
     @JsonProperty("genre_ids")
     private List<Integer> genres;
+
+
 }
