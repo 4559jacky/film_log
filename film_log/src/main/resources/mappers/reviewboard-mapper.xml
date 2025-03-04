@@ -135,5 +135,11 @@
 		WHERE review_board_img_no = #{imgNo}
 	</delete>
 	
+	<select id="selectReviewListByMemberNo" parameterType="_int" resultMap="reviewBoardMap">
+		SELECT *
+		FROM `review_board`
+		WHERE member_no = #{memberNo}
+	</select>
+	
 	
 </mapper>

@@ -106,5 +106,9 @@ public class ReviewBoardDao {
 		int result = session.delete("reviewboardMapper.deleteReviewBoardComment",commentNo);
 		return result;
 	}
+
+	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo, SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewListByMemberNo",memberNo);
+	}
 	
 }
