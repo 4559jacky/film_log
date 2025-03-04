@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 public class MemberDao {
@@ -81,6 +82,22 @@ public class MemberDao {
 	// update전 관심장르 삭제
 	public int deleteMemberInterestGenre(SqlSession session, int memberNo) {
 		return session.delete("memberMapper.deleteMemberGenre",memberNo);
+	}
+
+	public int insertMemberAddress(SqlSession session, MemberAddress ma) {
+		return session.insert("memberMapper.insertMemberAddress",ma);
+	}
+
+	public Member selectMemberByPhone(SqlSession session, String memberPhone) {
+		return session.selectOne("memberMapper.selectMemberByPhone",memberPhone);
+	}
+
+	public MemberAddress selectMemberAddress(SqlSession session, int memberNo) {
+		return session.selectOne("memberMapper.selectMemberAddress",memberNo);
+	}
+
+	public int updateMemberAddress(SqlSession session, MemberAddress memberAddress) {
+		return session.update("memberMapper.updateMemberAddress",memberAddress);
 	}
 
 	/*

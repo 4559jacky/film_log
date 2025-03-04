@@ -13,7 +13,6 @@
 		<result property="memberBirth" column="member_birth"/>
 		<result property="memberGender" column="member_gender"/>
 		<result property="memberPhone" column="member_phone"/>
-		<result property="memberAddr" column="member_addr"/>
 		<result property="adminWhether" column="admin_whether"/>
 	</resultMap>
 	<resultMap type="memberImg" id="memberImgMap">
@@ -22,13 +21,45 @@
 		<result property="imgPath" column="img_path"/>
 		<result property="memberNo" column="member_no"/>
 	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
 	
 	<update id="updateMemberOne" parameterType="member">
 		UPDATE `member`
 		SET member_name = #{memberName},
 			member_nickname = #{memberNickname},
 			member_email = #{memberEmail},
-			member_addr = #{memberAddr},
 			member_phone = #{memberPhone},
 			member_birth = #{memberBirth},
 			member_gender = #{memberGender}
@@ -115,10 +146,10 @@
 	useGeneratedKeys="true" keyProperty="memberNo">
 		INSERT INTO `member`(
 			member_id ,member_pwd ,member_name ,member_nickname ,member_email
-			,member_addr ,member_phone ,member_birth ,member_gender)
+			,member_phone ,member_birth ,member_gender)
 		VALUE(
 			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
-			,#{memberAddr} ,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
 	</insert>
 	<insert id="insertMemberInterestGenreOne" parameterType="map">
 		INSERT INTO `member_interest_genre` (genre_id ,member_no)

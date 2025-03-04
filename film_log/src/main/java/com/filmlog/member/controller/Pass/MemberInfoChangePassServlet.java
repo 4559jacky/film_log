@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.filmlog.member.model.service.MemberService;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 @WebServlet("/memberInfoChangePass")
@@ -27,11 +28,13 @@ public class MemberInfoChangePassServlet extends HttpServlet {
 		
 		List<Integer> genres = memberService.selectMemberInterestGenreAll(memberNo);
 		MemberImg memberImg = memberService.selectMemberImg(memberNo);
+		MemberAddress memberAddress = memberService.selectMemberAddress(memberNo);
 
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/myInfoChange.jsp");
 		request.setAttribute("genres", genres);
 		request.setAttribute("memberImg", memberImg);
+		request.setAttribute("memberAddress", memberAddress);
 		view.forward(request, response);
 	}
 
