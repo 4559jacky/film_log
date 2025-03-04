@@ -14,6 +14,7 @@
 		<result property="movieNo" column="movie_no"/>
 		<result property="reviewBoardWriter" column="member_no"/>
 		<result property="imgNo" column="review_board_img_no"/>
+		<result property="oriImg" column="ori_img"/>
 	</resultMap>
 	<resultMap type="reviewBoardImg" id="reviewBoardImgMap">
 		<result property="imgNo" column="review_board_img_no"/>
@@ -28,7 +29,8 @@
 		<result property="regDate" column="reg_date"/>
 		<result property="modDate" column="mod_date"/>
 		<result property="reviewBoardNo" column="review_board_no"/>
-		<result property="memberNo" column="member_no"/>		
+		<result property="memberNo" column="member_no"/>	
+		<result property="commentWriter" column="member_nickname"/>		
 	</resultMap>
 	
 	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
@@ -67,7 +69,7 @@
 		WHERE r.review_board_no = #{reviewBoardNo}
 	</select>
 	
-	<select id="selectImgOne" parameterType="_int" resultMap="reviewBoardImgMap">
+	<select id="selectImgOne" parameterType="int" resultMap="reviewBoardImgMap">
 		SELECT *
 		FROM `review_board_img`
 		WHERE review_board_img_no = #{imgNo}
@@ -78,9 +80,14 @@
 		WHERE review_board_no = #{reviewBoardNo}
 	</delete>
 	
-	<update id="updateReviewBoard" parameterType="reviewBoard">
-		UPDATE `review_board` SET review_board_no = #{reviewBoardNo}
+	<update id="updateReviewBoard" parameterType="reviewBoard" >
+		UPDATE `review_board` 
+		SET review_board_title = #{reviewBoardTitle},
+		review_board_content = #{reviewBoardContent},
+		movie_no = #{movieNo}
+		WHERE review_board_no = #{reviewBoardNo}
 	</update>
+	
 	
 	<delete id="deleteReviewBoardImg" parameterType="reviewBoardImg">
 		DELETE FROM `review_board_img`
@@ -92,20 +99,41 @@
 		WHERE review_board_no = #{reviewBoardNo}
 	</update>
 	
-	<select id="selectUpdateViews" parameterType="int" resultType="int">
+	<select id="selectUpdateViews" parameterType="int" resultType="_int">
 	    SELECT views FROM `review_board` WHERE review_board_no = #{reviewBoardNo}
 	</select>
 	
-	<insert id="insertReviewBoardComment" parameterType="map"
-	useGeneratedKeys="true" keyProperty="reviewBoardNo">
+	<insert id="insertReviewBoardComment" parameterType="reviewBoardComment"
+	useGeneratedKeys="true" keyProperty="reviewBoardCommentNo">
 		INSERT INTO `review_board_comment`(review_board_no ,member_no ,comment)
-		VALUES (#{review_board_no}, #{member_no}, #{comment_content})
+		VALUES (#{reviewBoardNo}, #{memberNo}, #{comment})
 	</insert>
 	
 	<select id="selectReviewBoardCommentOne" parameterType="int" resultMap="reviewBoardCommentMap">
 		SELECT *
-		FROM `review_board_comment`
+		FROM `review_board_comment` c
+		JOIN `member` m
+		ON c.member_no = m.member_no
 		WHERE review_board_comment_no = #{reviewBoardCommentNo}
 	</select>
+	
+	<select id="selectReviewBoardCommentAll" resultMap="reviewBoardCommentMap" parameterType="int">
+		SELECT *
+		FROM `review_board_comment` c
+		JOIN `member` m
+		ON c.member_no = m.member_no
+		WHERE review_board_no = #{reviewBoardNo}
+	</select>
+	
+	<delete id="deleteReviewBoardComment"  parameterType="int">
+		DELETE FROM `review_board_comment`
+		WHERE review_board_comment_no = #{reviewBoardCommentNo}
+	</delete>
+	
+	<delete id="deleteReviewBoardImgOne"  parameterType="int">
+		DELETE FROM `review_board_img`
+		WHERE review_board_img_no = #{imgNo}
+	</delete>
+	
 	
 </mapper>

@@ -54,12 +54,19 @@ public class ReviewBoardDao {
 	
 	// 게시글  수정
 	public int updateReviewBoard(ReviewBoard board, SqlSession session) {
-		return session.insert("reviewboardMapper.updateReviewBoard",board);
+		return session.update("reviewboardMapper.updateReviewBoard",board);
 	}
+	
+	
 	
 	// 게시글 이미지 삭제
 	public int deleteReviewBoardImg(ReviewBoardImg img, SqlSession session) {
 		return session.insert("reviewboardMapper.deleteReviewBoardImg",img);
+	}
+	
+	//  상세 페이지 게시글 이미지 삭제
+	public int deleteReviewBoardImgOne( int imgNo, SqlSession session) {
+		return session.insert("reviewboardMapper.deleteReviewBoardImgOne",imgNo);
 	}
 	
 	// 게시글 조회수 증가 
@@ -76,18 +83,28 @@ public class ReviewBoardDao {
 	}
 	
 	// 댓글 추가
-	public int insertReviewBoardComment(Map<String,Object> map,SqlSession session) {
-		int result = session.insert("reviewboardMapper.insertReviewBoardComment",map);
-		return result;
+	public int insertReviewBoardComment(ReviewBoardComment comment,SqlSession session) {
+		session.insert("reviewboardMapper.insertReviewBoardComment",comment);
+		int CommentNo = comment.getReviewBoardCommentNo();
+		return CommentNo;
 		
 	}
 	
 	// 방금 단 댓글 추가
 	public ReviewBoardComment selectReviewBoardCommentOne(int commentNo,SqlSession session) {
-		ReviewBoardComment comment = session.selectOne("reviewboardMapper.selectReviewBoardCommentOne");
-		return comment;
+		ReviewBoardComment commentOne = session.selectOne("reviewboardMapper.selectReviewBoardCommentOne",commentNo);
+		return commentOne;
 	}
 	
+	// 댓글 전체 목록 출력
+	public  List<ReviewBoardComment> selectReviewBoardCommentAll(int reviewBoardNo, SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewBoardCommentAll",reviewBoardNo);
+	}
 	
+	//댓글 삭제 
+	public int deleteReviewBoardComment(int commentNo, SqlSession session) {
+		int result = session.delete("reviewboardMapper.deleteReviewBoardComment",commentNo);
+		return result;
+	}
 	
 }

@@ -23,6 +23,7 @@ public class ReviewBoardComment {
 	private LocalDateTime modDate;
 	private int reviewBoardNo;
 	private int memberNo;
+	private String commentWriter;
 	
 	
 }

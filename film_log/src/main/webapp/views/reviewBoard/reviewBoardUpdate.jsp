@@ -41,6 +41,15 @@
                 <textarea class="form-control" rows="6" placeholder="내용을 입력하세요" name="review_board_content" style="height: 500px;">${ReviewBoard.reviewBoardContent}  
                 </textarea>
             </div>
+           <c:if test="${not empty ReviewBoard.oriImg and ReviewBoard.oriImg ne '0'}">
+			    <div class="mb-3">
+			        <label class="form-label">기존 사진</label>
+			        <div class="d-flex align-items-center border p-2 rounded" style="max-width: 300px;">
+			            <input type="text" class="form-control me-2" value="${ReviewBoard.oriImg}" readonly>
+			            <button type="button" id="imgDelete_btn" class="btn btn-danger btn-sm" style="background-color: #e9ecef; color: #000; border-color: #ced4da;">X</button>
+			        </div>
+			    </div>
+			</c:if>
             <div class="mb-3">
                 <label class="form-label">사진 추가</label>
                 <div class="border p-3 text-center" style="border-radius: 5px;">
@@ -50,11 +59,12 @@
             </div>
             <input type="hidden" name="review_board_writer" value="<c:out value="${member.memberNo}"/>">
             <div class="text-end">
-            	<input type="button" class="btn btn-custom" value="게시글 수정" id="insertButton"
+            	<input type="button" class="btn btn-custom" value="게시글 수정" id="update_btn"
             	style="background-color: #e9ecef; color: #000; border-color: #ced4da;">
             </div>
  
        		<input type="hidden" name="img_no" value="${ReviewBoard.imgNo}">
+       		<input type="hidden" name="review_board_no" value="${ReviewBoard.reviewBoardNo}">
 
             </form>
         </div>
@@ -63,7 +73,7 @@
 	/* 제목 : 모든 글자 포함 30자 이하,
 	내용 : 모든 글자 포함 1000자 이하, 
 	사진 없을 시 or 다른 경로 추가 */
-		$('#insertButton').click(function(){
+		$('#update_btn').click(function(){
 			let form = document.update_board_form;
 			if($('#select_movie').val()=="0"){
 	        	alert("영화를 선택해주세요.");
@@ -103,6 +113,23 @@
 				}
 			})	
 			
+		})
+		
+		$('#imgDelete_btn').click(function(){
+			const imgNo = "${ReviewBoard.imgNo}";
+			$.ajax({
+				url:'/reviewBoardImgDelete',
+				type: "post",
+				contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+				data:{imgNo : imgNo},
+				dataType:"JSON",
+				success:function(data){
+					alert(data.res_msg);
+					if(data.res_code === "200"){
+						location.reload();
+					}
+				}
+			})	
 		})
 	</script>
     

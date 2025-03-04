@@ -86,7 +86,6 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 			
 			int result = 0;
 			
-			
 			result = new ReviewBoardService().insertReviewBoard(board,img);
 			
 			JSONObject obj = new JSONObject();

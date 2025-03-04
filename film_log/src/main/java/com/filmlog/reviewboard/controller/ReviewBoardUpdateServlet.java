@@ -37,7 +37,6 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 		ReviewBoardImg img = null;
 		
 		
-		
 		String path = "C:\\upload\\reviewBoard";
 		File dir = new File(path);
 		if(!dir.exists()) {
@@ -56,9 +55,7 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 				FileItem fileItem = items.get(i);
 				if(fileItem.isFormField()) {
 					switch(fileItem.getFieldName()) {
-						case "img_no" :
-							System.out.println("이미지! : "+fileItem.getString("utf-8"));
-							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
+							// 0보다 크지 않으면 처음에 이미지 값 없음 
 						case "movie_no" :
 							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
@@ -67,6 +64,8 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 							board.setReviewBoardContent(fileItem.getString("utf-8")); break;
 						case "review_board_writer" :
 							board.setReviewBoardWriter(Integer.parseInt(fileItem.getString("utf-8"))); break;
+						case "review_board_no" :
+							board.setReviewBoardNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
 					}
 				}else {
 					if(fileItem.getSize()>0) {
@@ -84,6 +83,7 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 						img.setOriImg(oriImg);
 						img.setNewImg(newImg);
 						img.setImgPath(path+"\\"+newImg);
+						img.setReviewBoardNo(board.getReviewBoardNo());
 					}
 				}
 			}
@@ -100,6 +100,7 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 //		}else {
 //			System.out.println("기존 이미지 ㄴ ㄴ ");
 //		}
+			
 			result = new ReviewBoardService().updateReviewBoard(board,img);
 			
 			JSONObject obj = new JSONObject();

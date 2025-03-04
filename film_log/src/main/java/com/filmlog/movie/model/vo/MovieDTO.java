@@ -3,6 +3,7 @@ package com.filmlog.movie.model.vo;
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.filmlog.common.vo.Paging;
