@@ -70,7 +70,7 @@
 				    <li><a class="dropdown-item" href="#">좋아요한 게시글</a></li>
 				    <li><a class="dropdown-item" href="#">좋아요한 영화</a></li>
 				    <li><hr class="dropdown-divider"></li>
-				    <li><a class="dropdown-item" href="#">비밀번호 변경</a></li>
+				    <li><a class="dropdown-item" href="/memberPwdChangePass?memberNo=${member.memberNo}">비밀번호 변경</a></li>
 				    <li><a class="dropdown-item" id="memberInfo" href="/memberInfoChangePass?memberNo=${member.memberNo}">개인정보 수정</a></li>
 				    <li><a class="dropdown-item" href="/myQnaList">문의 내역</a></li>
 				    <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>

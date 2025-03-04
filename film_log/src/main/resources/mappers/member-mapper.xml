@@ -29,6 +29,13 @@
 		<result property="memberNo" column="member_no"/>
 	</resultMap>
 	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
 	<update id="updateMemberAddress" parameterType="memberAddress">
 		UPDATE `member_address`
 		SET postcode = #{postcode},

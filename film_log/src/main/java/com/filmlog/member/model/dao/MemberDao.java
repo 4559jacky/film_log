@@ -100,6 +100,10 @@ public class MemberDao {
 		return session.update("memberMapper.updateMemberAddress",memberAddress);
 	}
 
+	public Member selectMemberPwdForChangePwd(SqlSession session, Member m) {
+		return session.selectOne("memberMapper.selectMemberOneByIdAndPwd",m);
+	}
+
 	/*
 	 * public int selectGenreById(SqlSession session, int genreId) { return 0; }
 	 */

@@ -52,57 +52,22 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 </head>
 <body>
 	<div class="container">
-		<div id="addInfo" class="addInfo">
-	    <div class="input-form-backgroud row">
-	      <div class="input-form col-md-12 mx-auto">
-	        <h4 class="mb-3">개인정보 입력</h4><br>
-	        <form class="addInfo-form" novalidate>
-					<div class="row">
-						<div class="mb-3">
-			              <label for="memberId">아이디</label>
-			              <input type="text" class="form-control" name="member_id" id="memberId" placeholder="아이디" value="" required>
-			              <div class="invalid-feedback id-error">
-			                아이디를 입력해주세요.
-			              </div>
-			            </div>
-			            <div class="mb-3">
-			              <label for="memberName">이름</label>
-			              <input type="text" class="form-control" name="member_name" id="memberName" placeholder="이름"
-			              value="" required>
-			              <div class="invalid-feedback id-error">
-			                이름을 입력해주세요. 
-			              </div>
-			            </div>
-			            <div class="mb-3">
-			              <label for="memberPhone">휴대폰 번호</label>
-			              <input type="text" class="form-control" name="member_phone" id="memberPhone" placeholder="ex) 010-1111-1111" required>
-			              <div class="invalid-feedback">
-			                휴대폰번호를 양식에 맞게 입력해주세요.
-			              </div>
-			            </div>
-			            <div class="col-md-6 mb-3">
-						</div>
-						<div class="col-md-6 mb-3 find-account">
-						    <a href="/findIdPass">아이디 찾기</a>
-						</div>
-		          	</div>
-		          	</form>
-				    <hr class="mb-4">
-		            <div class="mb-4"></div>
-		            <button class="btn btn-primary btn-lg btn-block" type="button" id="checkInfo">비밀번호 재설정 하기</button><br>
-		            <button class="btn btn-primary btn-lg btn-block" type="button" id="loginButton">로그인 하러가기</button>
-				</div>
-				</div>
-			</div>
 			<div id="changePwd">
 			    <div class="input-form-backgroud row">
 			      <div class="input-form col-md-12 mx-auto">
 			        <h4 class="mb-3">비밀번호 재설정</h4><br>
 			        <form class="changePwd-form" novalidate>
 					<div class="row">
+						<div class="mb-3">
+			              <label for="nowMemberPwd">현재 비밀번호</label>
+			              <input type="password" class="form-control" name="now_member_pwd" id="nowMemberPwd" placeholder="현재 비밀번호" required>
+			              <div class="invalid-feedback nowMemberPwd-error">
+			                형식에 맞지않는 비밀번호 입니다. (8자이상 18자이내)
+			              </div>
+			            </div>
 			            <div class="mb-3">
 			              <label for="memberPwd">비밀번호</label>
-			              <input type="password" class="form-control" name="member_pwd" id="memberPwd" placeholder="비밀번호" required>
+			              <input type="password" class="form-control" name="member_pwd" id="memberPwd" placeholder="새로운 비밀번호" required>
 			              <div class="invalid-feedback">
 			                형식에 맞지않는 비밀번호 입니다.(8자이상 18자이내)
 			              </div>
@@ -120,81 +85,39 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            <button class="btn btn-primary btn-lg btn-block" type="button" id="changePwdButton">비밀번호 재설정</button>
 		            </form>
 				</div>
-				</div>
-				
-	      
-	    
+			</div>
+
+    	</div>
     </div> 
     <script type="text/javascript">
     	$(document).ready(function(){
-    		$('#changePwd').hide();
+    		let memberId = "<c:out value='${member.memberId}'/>"
+    		console.log("memberId" + memberId);
     		
-    		$('#checkInfo').click(function(){
-    			let form = $('.addInfo-form');
-    			let id = form.find("input[name='member_id']").val();
-        		let name = form.find("input[name='member_name']").val();
-    	        let phone = form.find("input[name='member_phone']").val();
-    	        let isValid = true;
-    	        
-    	        if (!id) {
-        			event.preventDefault();
-    	            event.stopPropagation();
-    				$("#memberId").addClass("is-invalid");
-    				isValid = false;
-    			} else {
-    				$("#memberId").removeClass("is-invalid").addClass("is-valid");
-    			}
-    	        
-        		if (!name || name < 2 || name > 10) {
-        			event.preventDefault();
-    	            event.stopPropagation();
-    				$("#memberName").addClass("is-invalid");
-    				isValid = false;
-    			} else {
-    				$("#memberName").removeClass("is-invalid").addClass("is-valid");
-    			}
-        		if (!phone || !/^\d{3}-\d{4}-\d{4}$/.test(phone)) {
-        			event.preventDefault();
-    	            event.stopPropagation();
-    				$("#memberPhone").addClass("is-invalid");
-    				isValid = false;
-    			} else {
-    				$("#memberPhone").removeClass("is-invalid").addClass("is-valid");
-    			}
-        		
-        		if (isValid) {
-        			$.ajax({
-    					url : "/findMemberForChagnePwd",
-    					type : 'post',
-    					ContentType : "application/x-www-form-urlencoded; charset=UTF-8",
-    					data : {
-    						member_id : id,
-    						member_name : name,
-    						member_phone : phone
-    					},
-    					dataType : "JSON",
-    					success : function(data){
-    						alert(data.res_msg);
-    						if(data.res_code == '200') {
-    							$('#addInfo').hide();
-    							$('#changePwd').show();
-    						} else {
-    							event.preventDefault();
-    				            event.stopPropagation();
-    						}
-    					}
-    				})
-    	        } else {
-    	        	alert('해당하는 회원이 존재하지않습니다. 다시 확인해주세요.');
-    	        }
-        	});
-    		
-    		$('#changePwdButton').click(function(){
+    		$('#changePwdButton').click(async function(){
+    			
     			let form = $('.changePwd-form');
-    			let id = $('.addInfo-form').find("input[name='member_id']").val();
+    			let nowMemberPwd = form.find("input[name='now_member_pwd']").val();
     			let pwd = form.find("input[name='member_pwd']").val();
         		let pwdCheck = form.find("input[name='member_pwd_check']").val();
     	        let isValid = true;
+    	        let nowPwdValid = true;
+
+    			// 비밀번호 길이 검사
+    			if (nowMemberPwd.length < 8 || nowMemberPwd.length > 18) {
+    				form.find("input[name='now_member_pwd']").addClass('is-invalid').removeClass('is-valid');
+		            $('.nowMemberPwd-error').text('비밀번호는 8자이상 18자이내입니다.').show();
+		            isValid = false;
+		        } else {
+		        	nowPwdValid = await checknowMemberPwd(nowMemberPwd, memberId);
+			        if (!nowPwdValid) {
+			        	form.find("input[name='now_member_pwd']").addClass('is-invalid').removeClass('is-valid');
+			        	$('.nowMemberPwd-error').text('비밀번호가 일치하지않습니다.').show();
+			            isValid = false;
+			        }
+		        }
+
+		        console.log("확인후 : "+isValid);
     	        
     	    	// 비밀번호 유효성 검사 (8자 이상 18자 이하)
 		        if (!pwd || pwd.length < 8 || pwd.length > 18) {
@@ -215,21 +138,21 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        } else {
 		            $("#memberPwdCheck").removeClass("is-invalid").addClass("is-valid");
 		        }
-        		
+		        
         		if (isValid) {
         			$.ajax({
     					url : "/changePwd",
     					type : 'post',
     					ContentType : "application/x-www-form-urlencoded; charset=UTF-8",
     					data : {
-    						member_id : id,
+    						member_id : memberId,
     						member_pwd : pwd,
     					},
     					dataType : "JSON",
     					success : function(data){
     						alert(data.res_msg);
     						if(data.res_code == '200') {
-    							location.href = '/memberLoginPass'
+    							location.href = '/myPass'
     						} else {
     							event.preventDefault();
     				            event.stopPropagation();
@@ -237,9 +160,42 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     					}
     				})
     	        } else {
-    	        	alert('해당하는 회원이 존재하지않습니다. 다시 확인해주세요.');
+    	        	alert('정보가 일치하지않습니다.');
     	        }
         	});
+    		
+    		// 비밀번호 일치여부를 Promise 형태로 변경
+		    function checknowMemberPwd(nowMemberPwd, memberId) {
+		        return new Promise((resolve, reject) => {
+		        	console.log(memberId + " : " + nowMemberPwd);
+		            $.ajax({
+		                url: "/checkPwd",
+		                type: 'post',
+		                data: { 
+		                    "member_id": memberId,
+		                    "member_pwd": nowMemberPwd
+		                },
+		                dataType: 'JSON',
+		                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		                success: function (data) {
+		                    if (data.res_code === '200') {
+		                        $("input[name='now_member_pwd']").addClass('is-valid').removeClass('is-invalid');
+		                        $('.now_member_pwd-error').hide();
+		                        resolve(true); // 비밀번호 일치확인
+		                        console.log("비밀번호 맞음");
+		                    } else {
+		                        $("input[name='now_member_pwd']").addClass('is-invalid').removeClass('is-valid');
+		                        $('.now_member_pwd-error').text(data.res_msg).show();
+		                        resolve(false); // 비밀번호 다름
+		                        console.log("비밀번호 틀림");
+		                    }
+		                },
+		                error: function () {
+		                    reject(false);
+		                }
+		            });
+		        });
+		    }
     		
     		
     		
