@@ -30,5 +30,6 @@ public class ReviewBoard extends Paging{
 	private int movieNo;
 	private String movieTitle;
 	private int imgNo;
+	private String oriImg;
 	
 }
