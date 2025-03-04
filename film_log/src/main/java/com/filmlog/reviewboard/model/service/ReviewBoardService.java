@@ -202,5 +202,11 @@ public class ReviewBoardService {
 		session.close();
 		return result;
 	}
+	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardByMemberNo(memberNo,session);
+		session.close();
+		return resultList;
+	}
 	
 }
