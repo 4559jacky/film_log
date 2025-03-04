@@ -1,10 +1,12 @@
 package com.filmlog.reviewboard.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
+import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
 public class ReviewBoardDao {
@@ -59,5 +61,33 @@ public class ReviewBoardDao {
 	public int deleteReviewBoardImg(ReviewBoardImg img, SqlSession session) {
 		return session.insert("reviewboardMapper.deleteReviewBoardImg",img);
 	}
+	
+	// 게시글 조회수 증가 
+	public int updateViews(int reviewBoardNo, SqlSession session) {
+		int result = session.update("reviewboardMapper.updateViews",reviewBoardNo);
+		
+		// 증가된 조회수 가져옴
+		int updateViews=0;
+		if(result>0) {
+			updateViews = session.selectOne("reviewboardMapper.selectUpdateViews",reviewBoardNo);			
+		}
+		
+		return updateViews;
+	}
+	
+	// 댓글 추가
+	public int insertReviewBoardComment(Map<String,Object> map,SqlSession session) {
+		int result = session.insert("reviewboardMapper.insertReviewBoardComment",map);
+		return result;
+		
+	}
+	
+	// 방금 단 댓글 추가
+	public ReviewBoardComment selectReviewBoardCommentOne(int commentNo,SqlSession session) {
+		ReviewBoardComment comment = session.selectOne("reviewboardMapper.selectReviewBoardCommentOne");
+		return comment;
+	}
+	
+	
 	
 }

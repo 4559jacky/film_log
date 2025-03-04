@@ -2,14 +2,15 @@ package com.filmlog.reviewboard.model.service;
 
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.reviewboard.model.dao.ReviewBoardDao;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
+import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
 public class ReviewBoardService {
@@ -100,6 +101,7 @@ public class ReviewBoardService {
 	public int deleteReviewBoard(int reviewBoardNo) {
 		SqlSession session = getSqlSession();
 		int result = new ReviewBoardDao().deleteReviewBoard(reviewBoardNo,session);
+		session.close();
 		return result;
 	}
 	
@@ -152,6 +154,35 @@ public class ReviewBoardService {
 		}
 		return result;
 	}
+	
+	//조회수 증가
+	public int updateViews(int reviewBoardNo) {
+		SqlSession session = getSqlSession();
+		int updateViews = new ReviewBoardDao().updateViews(reviewBoardNo,session);
+		
+		if(updateViews>0) {
+			session.commit();
+		}
+		session.close();
+		
+		return updateViews;
+	}
+	
+	// 댓글 추가
+	public int insertReviewBoardComment(Map<String,Object> map){
+		SqlSession session = getSqlSession();
+		int result = new ReviewBoardDao().insertReviewBoardComment(map,session);
+		session.close();
+		return result;
+		
+	}
 
+	//방금 단 댓글 출력
+	public ReviewBoardComment selectReviewBoardCommentOne(int commentNo) {
+		SqlSession session = getSqlSession();
+		ReviewBoardComment comment = new ReviewBoardDao().selectReviewBoardCommentOne(commentNo,session);
+		session.close();
+		return comment;
+	}
 	
 }
