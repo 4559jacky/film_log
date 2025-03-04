@@ -29,6 +29,11 @@
 		<result property="memberNo" column="member_no"/>
 	</resultMap>
 	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
 	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
 		SELECT *
 		FROM `member`

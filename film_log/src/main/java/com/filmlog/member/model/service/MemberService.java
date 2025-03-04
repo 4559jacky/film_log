@@ -241,6 +241,15 @@ public class MemberService {
 		return member;
 	}
 	
+	
+	// 회원 탈퇴
+	public int deleteMemberById(String memberId) {
+		SqlSession session = getSqlSession();
+		int result = memberDao.deleteMemberById(session, memberId);
+		session.close();
+		return result;
+	}
+	
 
 	/*
 	 * public int selectGenreById(int genreId) { SqlSession session =

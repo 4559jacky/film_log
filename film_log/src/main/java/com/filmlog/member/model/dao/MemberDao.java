@@ -104,6 +104,10 @@ public class MemberDao {
 		return session.selectOne("memberMapper.selectMemberOneByIdAndPwd",m);
 	}
 
+	public int deleteMemberById(SqlSession session, String memberId) {
+		return session.delete("memberMapper.deleteMemberById",memberId);
+	}
+
 	/*
 	 * public int selectGenreById(SqlSession session, int genreId) { return 0; }
 	 */
