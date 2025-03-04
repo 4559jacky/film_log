@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 public class MemberDao {
@@ -23,7 +24,7 @@ public class MemberDao {
 		return session.selectOne("memberMapper.selectMemberById",memberId);
 	}
 
-	public int InsertMember(SqlSession session, Member mem) {
+	public int insertMember(SqlSession session, Member mem) {
 		int result = session.insert("memberMapper.insertMemberOne", mem);
 		result = mem.getMemberNo();
 		return result;
@@ -40,7 +41,7 @@ public class MemberDao {
 	}
 	
 	
-	public int InsertMemberInterestGenre(SqlSession session, Map<String, Object> paramMap) {
+	public int insertMemberInterestGenre(SqlSession session, Map<String, Object> paramMap) {
 		return session.insert("memberMapper.insertMemberInterestGenreOne",paramMap);
 	}
 	
@@ -58,22 +59,45 @@ public class MemberDao {
 	}
 	
 	// 사용자 아이디로 관심 장르 가져오기
-	public List<Integer> selectMemberInterestGenreAll(SqlSession session, int memberId) {
-		return session.selectList("memberMapper.selectMemberInterestGenreAll",memberId);
+	public List<Integer> selectMemberInterestGenreAll(SqlSession session, int memberNo) {
+		return session.selectList("memberMapper.selectMemberInterestGenreAll",memberNo);
 	}
 
 	public int updateMemberInfo(SqlSession session, Member member) {
 		return session.update("memberMapper.updateMemberOne",member);
 	}
 
-	public int updateMemberImg(SqlSession session, MemberImg memberImg) {
-//		int result = session.delete
-//		return session.insert;
-		return 0;
-	}
-
 	public int insertMemberImg(SqlSession session, MemberImg mi) {
 		return session.insert("memberMapper.insertMemberImg",mi);
+	}
+
+	public MemberImg selectMemberImg(SqlSession session, int memberNo) {
+		return session.selectOne("memberMapper.selectMemberImg",memberNo);
+	}
+
+	public int deleteMemberImg(SqlSession session, int memberNo) {
+		return session.delete("memberMapper.deleteMemberImg",memberNo);
+	}
+	
+	// update전 관심장르 삭제
+	public int deleteMemberInterestGenre(SqlSession session, int memberNo) {
+		return session.delete("memberMapper.deleteMemberGenre",memberNo);
+	}
+
+	public int insertMemberAddress(SqlSession session, MemberAddress ma) {
+		return session.insert("memberMapper.insertMemberAddress",ma);
+	}
+
+	public Member selectMemberByPhone(SqlSession session, String memberPhone) {
+		return session.selectOne("memberMapper.selectMemberByPhone",memberPhone);
+	}
+
+	public MemberAddress selectMemberAddress(SqlSession session, int memberNo) {
+		return session.selectOne("memberMapper.selectMemberAddress",memberNo);
+	}
+
+	public int updateMemberAddress(SqlSession session, MemberAddress memberAddress) {
+		return session.update("memberMapper.updateMemberAddress",memberAddress);
 	}
 
 	/*

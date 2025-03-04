@@ -1,4 +1,4 @@
-package com.filmlog.member.controller;
+package com.filmlog.member.controller.duplicate_check;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -12,25 +12,26 @@ import org.json.simple.JSONObject;
 import com.filmlog.member.model.service.MemberService;
 import com.filmlog.member.model.vo.Member;
 
-@WebServlet("/duplicateNicknameCheck")
-public class DuplicateNicknameCheckServlet extends HttpServlet {
+@WebServlet("/duplicateNickNameCheckForInfoChange")
+public class DuplicateNickNameCheckForInfoChangeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	MemberService memberService = new MemberService();
        
-    public DuplicateNicknameCheckServlet() {
+    public DuplicateNickNameCheckForInfoChangeServlet() {
         super();
     }
-    
-    @SuppressWarnings("unchecked")
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	String memberNickname = request.getParameter("member_nickname");
 
+	@SuppressWarnings("unchecked")
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String memberNickname = request.getParameter("member_nickname");
+		String memberId = request.getParameter("member_id");
+		
 		Member member = memberService.selectMemberByNickname(memberNickname);
 		JSONObject obj = new JSONObject();
 		obj.put("res_code", "200");
 		obj.put("res_msg", "사용가능한 닉네임입니다.");
 
-		if(member != null) {
+		if(member != null && !member.getMemberId().equals(memberId)) {
 			obj.put("res_code", "500");
 			obj.put("res_msg", "중복된 닉네임입니다.");
 			System.out.println(member.getMemberName());
@@ -43,7 +44,6 @@ public class DuplicateNicknameCheckServlet extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
 		doGet(request, response);
 	}
 

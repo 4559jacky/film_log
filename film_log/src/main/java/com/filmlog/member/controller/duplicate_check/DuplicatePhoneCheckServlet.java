@@ -1,6 +1,7 @@
-package com.filmlog.member.controller;
+package com.filmlog.member.controller.duplicate_check;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,28 +13,30 @@ import org.json.simple.JSONObject;
 import com.filmlog.member.model.service.MemberService;
 import com.filmlog.member.model.vo.Member;
 
-@WebServlet("/dulicateIdCheck")
-public class DulicateIdCheckServlet extends HttpServlet {
+@WebServlet("/duplicatePhoneCheck")
+public class DuplicatePhoneCheckServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	MemberService memberService = new MemberService();
-       
-    public DulicateIdCheckServlet() {
+	private MemberService memberService = new MemberService();
+
+    public DuplicatePhoneCheckServlet() {
         super();
     }
 
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String memberId = request.getParameter("member_id");
-
-		Member member = memberService.selectMemberById(memberId);
+    	String memberPhone = request.getParameter("member_phone");
+		
+		Member member = memberService.selectMemberByPhone(memberPhone);
 		JSONObject obj = new JSONObject();
 		obj.put("res_code", "200");
-		obj.put("res_msg", "사용가능한 아이디입니다.");
+		obj.put("res_msg", "사용가능한 번호입니다.");
 
 		if(member != null) {
 			obj.put("res_code", "500");
-			obj.put("res_msg", "중복된 아이디입니다.");
+			obj.put("res_msg", "이미 사용중인 번호입니다.");
 		}
+		
+		System.out.println("키보드 테스트");
 		
 		response.setContentType("application/json; charset=utf-8");
 		response.getWriter().print(obj);

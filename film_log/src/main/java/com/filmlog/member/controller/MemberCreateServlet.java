@@ -21,6 +21,7 @@ import org.json.simple.JSONObject;
 
 import com.filmlog.member.model.service.MemberService;
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 @WebServlet(name="memberCreateServlet", urlPatterns="/memberCreate")
@@ -34,7 +35,7 @@ public class MemberCreateServlet extends HttpServlet {
     }
 
 
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unchecked"})
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("여기까진 들어옴");
 		
@@ -42,6 +43,7 @@ public class MemberCreateServlet extends HttpServlet {
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		Member m = new Member();
 		MemberImg mi = new MemberImg();
+		MemberAddress ma = new MemberAddress();
 		
 		String path = "C:\\dev\\film_log\\profile_img";
 		
@@ -74,8 +76,17 @@ public class MemberCreateServlet extends HttpServlet {
 						case "member_email" :
 							m.setMemberEmail(fileItem.getString("utf-8"));
 							break;
-						case "member_address" :
-							m.setMemberAddr(fileItem.getString("utf-8"));
+						case "postcode" :
+							ma.setPostcode(Integer.parseInt(fileItem.getString("utf-8")));
+							break;
+						case "address" :
+							ma.setAddress(fileItem.getString("utf-8"));
+							break;
+						case "detail_address" :
+							ma.setDetailAddress(fileItem.getString("utf-8"));
+							break;
+						case "extra_address" :
+							ma.setExtraAddress(fileItem.getString("utf-8"));
 							break;
 						case "member_phone" :
 							m.setMemberPhone(fileItem.getString("utf-8"));
@@ -144,8 +155,9 @@ public class MemberCreateServlet extends HttpServlet {
 		System.out.println("회원 : "+m);
 		System.out.println("관심 장르 : "+genreList);
 		System.out.println("회원 이미지 : "+mi);
-		
-		int result = memberService.InsertMember(m, genreList, mi);
+		System.out.println("회원 주소 : "+ma);
+	
+		int result = memberService.insertMember(m, genreList, mi, ma);
 		
 		// 트랜잭션 X
 //		int memberNo = memberService.InsertMember(m); // 멤버 번호를 바로 받아온다. 장르를 저장하기 위해서
@@ -166,7 +178,7 @@ public class MemberCreateServlet extends HttpServlet {
 		obj2.put("res_code","500");
 		obj2.put("res_msg", "회원가입에 실패하였습니다.\n정확하지않은 정보가있는지 확인해주세요.");
 		
-		if(result > 0) {
+		if(result >= 4) {
 			obj2.put("res_code","200");
 			obj2.put("res_msg", "회원가입에 성공하였습니다.\n로그인 페이지로 이동합니다.");
 		}
