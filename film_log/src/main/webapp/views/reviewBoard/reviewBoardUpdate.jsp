@@ -74,8 +74,11 @@
 	내용 : 모든 글자 포함 1000자 이하, 
 	사진 없을 시 or 다른 경로 추가 */
 		$('#update_btn').click(function(){
+			
 			let form = document.update_board_form;
-			if($('#select_movie').val()=="0"){
+			const boardno = form.review_board_no.value;
+			console.log(boardno);
+			if($('#select_movie').val()==null){
 	        	alert("영화를 선택해주세요.");
 	        	return;
 	        }
@@ -93,6 +96,7 @@
 					form.review_board_file.value='';
 					}
 			}
+			
 			let sendData = new FormData(form);
 			$.ajax({
 				url:'/reviewBoardUpdate',
@@ -107,9 +111,10 @@
 					alert(data.res_msg);
 					if(data.res_code==200){
 						location.href="/reviewBoardList";
-					}else {
-				           alert("게시글 수정에 실패했습니다.");
-				       }
+					}else{
+						event.preventDefault();
+			            event.stopPropagation();
+					}
 				}
 			})	
 			
