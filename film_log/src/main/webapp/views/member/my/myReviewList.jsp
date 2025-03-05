@@ -30,9 +30,9 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
             <div class="input-group w-50">
                 <select class="form-select" id="searchFilter">
                 	<option value="0">선택</option>
-                    <option value="1">제목</option>
-                    <option value="2">내용</option>
-                    <option value="3">작성자</option>
+                    <option value="title">제목</option>
+                    <option value="movieName">영화 이름</option>
+                    <option value="writer">작성자</option>
                 </select>
                 <input type="text" class="form-control" placeholder="검색어 입력">
                 <button class="btn select_btn">검색</button>
@@ -51,7 +51,6 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	                });
                 </script>
             </div>
-            <button class="btn insert_btn">리뷰 작성</button>
         </div>
         <table class="table table-hover">
             <thead class="table-dark">
