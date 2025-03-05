@@ -1,4 +1,4 @@
-package com.filmlog.member.user;
+package com.filmlog.member.user.controller;
 
 import java.io.IOException;
 import java.util.List;

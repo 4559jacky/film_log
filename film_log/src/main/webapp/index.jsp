@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>메인 페이지</title>
-
+<%-- <script src="<c:url value='/resources/js/jquery-3.7.1.js'/>"></script> --%>
 <link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="/resources/css/include/allpage.css" rel="stylesheet" type="text/css">
 
@@ -17,11 +17,11 @@
 	<br>
 	<div class="container-sm">
 		<div>
-	    <p class="text-center fs-1">추천 영화</p>
-	    <hr class="my-2" id="hr" style="width: 20%; margin: 0 auto; height: 2px; background-color: black;">
+		    <p class="text-center fs-1"><strong>추천 영화</strong></p>
+		    <hr class="my-2" id="hr" style="width: 20%; margin: 0 auto; height: 2px; background-color: black border-top: 2px solid white;">
 		</div>
-	<br>
-	<br>
+		<br>
+		<br>
 	</div>
 	<div class="container-xxl">
         <div class="row row-cols-1 row-cols-md-5 g-5" id="cards-box">
@@ -30,13 +30,22 @@
     </div>
     <br>
     <br>
-	<div class="container-fuild">
-	<div style="background-color : black; color : white;">
+	<div class="container-fulid" style="background-color : black; color : white;">
 		<div>
-	    <p class="text-center fs-1">추천 리뷰</p>
-	    <hr class="my-2" id="hr" style="width: 20%; margin: 0 auto; height: 2px; background-color: black;">
+		<br>
+			<div>
+		    	<p class="text-center fs-1"><strong>추천 리뷰</strong></p>
+		    	<hr class="my-2" id="hr" style="width: 20%; margin: 0 auto; height: 2px; border-top: 2px solid white;">
+			</div>
 		</div>
-	</div>
+		<br>
+		<br>
+		<div class="container-xxl">
+        	<div class="row row-cols-1 row-cols-md-4 g-5" id="review-cards-box">
+			
+        	</div>
+        	<br>
+    	</div>
 	</div>
 	<script>
 		$(function() {
@@ -51,8 +60,6 @@
 				dataType : "JSON",
 				contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
 				success : function(data) {
-					console.log("데이터 :", data.res_data);
-
 					let movieCards = '';
 					data.res_data.forEach(function(movie) {
 					    movieCards += '<div class="col">';
@@ -79,7 +86,7 @@
 
 					$('#cards-box').html(movieCards);
 
-					$('#cards-box').html(movieCards);
+					/* $('#cards-box').html(movieCards); */
 				},
 				error : function() {
 					alert("에러");
@@ -90,11 +97,31 @@
 			$.ajax({
 				url : "/indexReviewList",
 				type : "post",
-				data : {},
 				dataType : "JSON",
 				contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
 				success : function(data) {
-					
+					let reviewCards = '';
+					data.res_data.forEach(function(review) {
+						reviewCards += '<div class="col" style="cursor: pointer;" onclick="location.href=\'/reviewBoardDetail?review_board_no=' + review.id + '\'">'; 
+						reviewCards += '  <div class="card" style="border: none; background-color : black;">';
+						reviewCards += '    <img src="<%=request.getContextPath()%>/reviewFilePath?img_no=' + review.imgNo +'" class="card-img-top" alt="' + review.title + '" width="230" height="340">';
+						
+						reviewCards += '    <div style="display: flex; margin-top: 10px;">';
+						reviewCards += '      <div class="vr" style="margin-right: 5px"></div>';
+						reviewCards += '      <div style="width: 95%">';
+						reviewCards += '        <div style="display: flex; justify-content: space-between; width: 100%;">';
+						reviewCards += '          <div class="text-truncate text-white">' + review.title + '</div>';
+						reviewCards += '        </div>';
+						reviewCards += '        <div class="text-truncate text-light">' + review.nickname + '</div>';
+						reviewCards += '      </div>';
+						reviewCards += '    </div>';
+						reviewCards += '  </div>';
+						reviewCards += '</div>';
+					});
+
+					$('#review-cards-box').html(reviewCards);
+
+					/* $('#review-cards-box').html(movieCards); */
 				},
 				error : function() {
 					alert("에러");
