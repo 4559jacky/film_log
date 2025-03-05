@@ -10,7 +10,7 @@
 		<result property="memberNickname" column="member_nickname"/>
 		<result property="regDate" column="reg_date"/>
 		<result property="views" column="views"/>
-		<result property="movieTitle" column="movie_title"/>
+		<result property="movieTitle" column="title"/>
 		<result property="movieId" column="movie_id"/>
 		<result property="reviewBoardWriter" column="member_no"/>
 		<result property="imgNo" column="review_board_img_no"/>
@@ -29,17 +29,38 @@
 		<result property="regDate" column="reg_date"/>
 		<result property="modDate" column="mod_date"/>
 		<result property="reviewBoardNo" column="review_board_no"/>
-		<result property="memberNo" column="member_no"/>	
-		<result property="commentWriter" column="member_nickname"/>		
+		<result property="memberNo" column="member_no"/>
+		<result property="commentWriter" column="member_nickname"/>
 	</resultMap>
+	<resultMap type="movieDto" id="movieDtoMap">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="originalTitle" column="original_title"/>
+		<result property="overview" column="overview"/>
+		<result property="runtime" column="runtime"/>
+		<result property="releaseDate" column="release_date"/>	
+		<result property="voteAverage" column="vote_average"/>	
+		<result property="posterPath" column="poster_path"/>
+		<result property="adult" column="adult"/>
+	</resultMap>
+	
+	
 	
 	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
 		FROM `review_board` r
 		JOIN `member` m
 		ON r.member_no = m.member_no
+		JOIN `movie_dto` v
+		ON r.movie_id = v.id
 		
 		LIMIT #{limitPageNo}, #{numPerPage}
+	</select>
+	
+	<select id="selectMovieListAll" resultMap="movieDtoMap">
+		SELECT *
+		FROM `movie_dto`
+		WHERE title LIKE CONCAT('%',#{title},'%')
 	</select>
 	
 	<insert id="insertReviewBoard" parameterType="reviewBoard"

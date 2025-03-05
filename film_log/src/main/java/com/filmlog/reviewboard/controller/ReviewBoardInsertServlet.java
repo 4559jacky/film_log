@@ -54,7 +54,7 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 				FileItem fileItem = items.get(i);
 				if(fileItem.isFormField()) {
 					switch(fileItem.getFieldName()) {
-						case "movie_no" :
+						case "movie_id" :
 							System.out.println("영화 번호 : "+fileItem.getString("utf-8"));
 							board.setMovieId(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
