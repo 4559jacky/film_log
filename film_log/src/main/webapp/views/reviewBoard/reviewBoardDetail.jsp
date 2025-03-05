@@ -36,6 +36,10 @@
         .comment-item:last-child {
             border-bottom: none;
         }
+        #commentList {
+   			 min-height: 20px; /* 최소 높이 보장 */
+		}
+		
     </style>
     <script src="<%=request.getContextPath()%>/resources/js/jquery-3.7.1.js"></script>
 </head>
@@ -53,9 +57,9 @@
                 <div>
                     <span>작성자: ${ReviewBoard.memberNickname}</span> |
                     <span>영화명: ${ReviewBoard.movieTitle}</span> |
-                    <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
+                    <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
                     <span>작성일: <fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></span> |
-                    <span id="countViews">조회수: ${ReviewBoard.views}</span>
+                    <span>조회수: </span><span id="countViews">${ReviewBoard.views}</span>
                 </div>
             </div>
             <hr>
@@ -82,6 +86,34 @@
         <!-- 두 번째 박스: 댓글 영역 -->
         <div class="comment-box mx-auto p-4" style="max-width: 1400px;">
             <h4 class="mb-3">댓글</h4>
+            <div>
+                <div class="comment-item" id="">
+                    <div class="d-flex justify-content-between">
+                        <div id="commentList" >
+                        	<c:choose>
+								<c:when test="${not empty commentList}">
+									<c:forEach var="c" items="${commentList}"  varStatus="vs">
+									<div class="comment-item">
+										<span><strong>${c.commentWriter}</strong></span>
+										<fmt:parseDate value="${c.regDate}" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
+										<span><small class="text-muted"><fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></small></span>
+        								<p class="mt-2" >${c.comment}</p>
+        								
+        								<c:if test="${member.memberNo eq c.memberNo}">
+								            <button style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no="${c.reviewBoardCommentNo}" class="deleteComment_btn">삭제</button>
+								        </c:if>
+								     </div>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+										<p>댓글이 없습니다.<p>
+								</c:otherwise>
+							</c:choose>
+                        </div>
+                    </div>
+                 
+                </div>
+            </div>
             <!-- 댓글 작성 폼 -->
             <form id="comment_form" class="mb-4">
                 <div class="mb-3">
@@ -92,18 +124,7 @@
                     댓글 등록</button>
                 </div>
             </form>
-            <!-- 댓글 목록 -->
-            <div id="commentList" >
-                <div class="comment-item">
-                    <div class="d-flex justify-content-between">
-                        <div>
-                        	<span id="commentWriter"><strong></strong></span>
-                        	<span id="commentRegdate"><small class="text-muted"></small></span>   
-                        </div>
-                    </div>
-                    <p class="mt-2" id="commentContent"></p>
-                </div>
-            </div>
+            
         </div>
     </div>
 	<script>
@@ -147,7 +168,9 @@
 				dataType:"JSON",
 				success:function(data){
 					if(data.res_code === "200") {
-	                    $("#viewCount").text(data.updateViews).trigger("change");
+						console.log(data.updateViews);
+	                    $("#countViews").text(data.updateViews);
+	               
 	                }
 				}
 			})
@@ -174,6 +197,7 @@
 				console.log("memberNo:" + memberNo);
 				console.log("commentContent:" +commentContent);
             	if(memberNo){
+            		
         			$.ajax({
         				url:'/insertReviewComment',
         				type:'post',
@@ -184,11 +208,19 @@
         				dataType:'json',
         				success:function(data){
         					alert(data.res_msg);
-        					if(data.res_code==200){
+        					if(data.res_code==="200"){
         						$('#comment').val("");
+        						let newComment = '<span><strong>'+data.commentWriter   
+        							+'</strong></span> <span><small class="text-muted">'
+        							+data.regDate+'</small></span>'
+        							+'<p class="mt-2" >'+data.comment+'</p>'
+        							+ '<button style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no='+ data.commentNo +' class="deleteComment_btn">삭제</button>';	
+                                $('#commentList').append(newComment);
+                             
+        				
         					}
         				}
-        			})		
+        			});		
             	}else{
             		if(confirm("로그인 후 작성 가능합니다. 로그인 하시겠습니까?")){
             			location.href = "/memberLoginPass";       
@@ -196,5 +228,32 @@
             	}
 			})
 		})
+		
+		
+		// 댓글 삭제 
+		$(document).ready(function(){
+			// append한 코드에 강제 이벤트 발생 
+			$(document).on('click','.deleteComment_btn',function(e){
+				if(confirm("정말 댓글을 삭제하시겠습니까?")){
+					const commentNo = $(this).data("comment-no");
+					//window.location = window.location;
+					$.ajax({
+						url:"/reviewBoardCommentDelete",
+						type: "post",
+						contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+						data:{commentNo : commentNo},
+						dataType:"JSON",
+						success:function(data){
+							alert(data.res_msg);
+							if(data.res_code === "200") {
+								location.reload();
+							}
+						}
+					})				
+				}
+			});
+			
+		})
+		
 	
 	</script>

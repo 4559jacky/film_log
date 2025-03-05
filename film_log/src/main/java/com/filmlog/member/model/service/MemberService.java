@@ -10,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.model.dao.MemberDao;
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 public class MemberService {
@@ -63,23 +64,26 @@ public class MemberService {
 //	}
 	
 	// 회원가입 트랜잭션 O
-	public int insertMember(Member m, List<String> genreList, MemberImg mi) {
+	public int insertMember(Member m, List<String> genreList, MemberImg mi, MemberAddress ma) {
 		SqlSession session = getSqlSession(false);
 		int result1 = 0;
 		int result2 = 0;
 		int result3 = 0;
+		int result4 = 0;
 		
 		try {
-			result1 = memberDao.insertMember(session, m);
+			int memberNo = memberDao.insertMember(session, m);
+			if(memberNo > 0) result1 = 1;
 			Map<String,Object> paramMap = new HashMap<>();
-			paramMap.put("memberNo", result1);
+			paramMap.put("memberNo", memberNo);
 			paramMap.put("list", genreList);
 			result2 = memberDao.insertMemberInterestGenre(session, paramMap);
-			mi.setMemberNo(result1);
+			mi.setMemberNo(memberNo);
 			result3 = memberDao.insertMemberImg(session, mi);
+			ma.setMemberNo(memberNo);
+			result4 = memberDao.insertMemberAddress(session,ma);
 			
-			
-			if (result1 > 0 && result2 > 0 && result3 > 0) {
+			if (result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0) {
 	            session.commit();
 	        } else {
 	            session.rollback();  // 하나라도 실패하면 롤백
@@ -97,7 +101,7 @@ public class MemberService {
 	        }
 	    }
 	    
-	    return result1 + result2 + result3;
+	    return result1 + result2 + result3 + result4;
 	}
 	
 	
@@ -133,13 +137,14 @@ public class MemberService {
 	}
 	
 	// 이미지가 있을 때 사용자정보 업데이트
-	public int updateMemberInfo(Member member, MemberImg memberImg, List<String> genreList) {
+	public int updateMemberInfo(Member member, MemberImg memberImg, List<String> genreList, MemberAddress memberAddress) {
 		SqlSession session = getSqlSession(false);
 		int result1 = 0;
 	    int result2 = 0;
 	    int result3 = 0;
 	    int result4 = 0;
 	    int result5 = 0;
+	    int result6 = 0;
 	    try {
 	    	result1 = memberDao.updateMemberInfo(session, member);
 	    	result2 = memberDao.deleteMemberImg(session, member.getMemberNo());
@@ -149,8 +154,9 @@ public class MemberService {
 	    	paramMap.put("memberNo", member.getMemberNo());
 			paramMap.put("list", genreList);
 	    	result5 = memberDao.insertMemberInterestGenre(session, paramMap);
+	    	result6 = memberDao.updateMemberAddress(session,memberAddress);
 	    	
-	    	if (result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0 && result5 > 0) {
+	    	if (result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0 && result5 > 0 && result6 > 0) {
 	            session.commit();
 	        } else {
 	            session.rollback();  // 하나라도 실패하면 롤백
@@ -168,14 +174,15 @@ public class MemberService {
 	        }
 	    }
 	    
-	    return result1 + result2 + result3 + result4 + result5;
+	    return result1 + result2 + result3 + result4 + result5 + result6;
 	}
 	
-	public int updateMemberInfo(Member member, List<String> genreList) {
+	public int updateMemberInfo(Member member, List<String> genreList, MemberAddress memberAddress) {
 		SqlSession session = getSqlSession(false);
 		int result1 = 0;
 	    int result2 = 0;
 	    int result3 = 0;
+	    int result4 = 0;
 	    try {
 	    	result1 = memberDao.updateMemberInfo(session, member);
 	    	result2 = memberDao.deleteMemberInterestGenre(session,member.getMemberNo());
@@ -183,8 +190,9 @@ public class MemberService {
 	    	paramMap.put("memberNo", member.getMemberNo());
 			paramMap.put("list", genreList);
 			result3 = memberDao.insertMemberInterestGenre(session, paramMap);
+			result4 = memberDao.updateMemberAddress(session, memberAddress);
 	    	
-	    	if (result1 > 0 && result2 > 0 && result3 > 0) {
+	    	if (result1 > 0 && result2 > 0 && result3 > 0 && result4 > 0) {
 	            session.commit();
 	        } else {
 	            session.rollback();  // 하나라도 실패하면 롤백
@@ -202,7 +210,7 @@ public class MemberService {
 	        }
 	    }
 	    
-	    return result1 + result2 + result3;
+	    return result1 + result2 + result3 + result4;
 	}
 
 	public MemberImg selectMemberImg(int memberNo) {
@@ -212,6 +220,35 @@ public class MemberService {
 		return memberImg;
 	}
 
+	public Member selectMemberByPhone(String memberPhone) {
+		SqlSession session = getSqlSession();
+		Member member = memberDao.selectMemberByPhone(session, memberPhone);
+		session.close();
+		return member;
+	}
+
+	public MemberAddress selectMemberAddress(int memberNo) {
+		SqlSession session = getSqlSession();
+		MemberAddress memberAddress = memberDao.selectMemberAddress(session, memberNo);
+		session.close();
+		return memberAddress;
+	}
+
+	public Member selectMemberPwdForChangePwd(Member m) {
+		SqlSession session = getSqlSession();
+		Member member = memberDao.selectMemberPwdForChangePwd(session, m);
+		session.close();
+		return member;
+	}
+	
+	
+	// 회원 탈퇴
+	public int deleteMemberById(String memberId) {
+		SqlSession session = getSqlSession();
+		int result = memberDao.deleteMemberById(session, memberId);
+		session.close();
+		return result;
+	}
 	
 
 	/*

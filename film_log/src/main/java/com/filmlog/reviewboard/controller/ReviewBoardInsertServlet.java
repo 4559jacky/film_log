@@ -56,13 +56,14 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 					switch(fileItem.getFieldName()) {
 						case "movie_no" :
 							System.out.println("영화 번호 : "+fileItem.getString("utf-8"));
-							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
+							board.setMovieId(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
 							board.setReviewBoardTitle(fileItem.getString("utf-8")); break;
 						case "review_board_content" :
 							board.setReviewBoardContent(fileItem.getString("utf-8")); break;
 						case "review_board_writer" :
 							board.setReviewBoardWriter(Integer.parseInt(fileItem.getString("utf-8"))); break;
+							
 					}
 				}else {
 					if(fileItem.getSize()>0) {
@@ -85,7 +86,6 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 			}
 			
 			int result = 0;
-			
 			
 			result = new ReviewBoardService().insertReviewBoard(board,img);
 			

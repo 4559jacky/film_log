@@ -31,7 +31,7 @@ public class MovieApiServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			// 영화 list
-			for(int allPage = 1; allPage <= 1; allPage++) {
+			for(int allPage = 151; allPage <= 300; allPage++) {
 				HttpRequest req = HttpRequest.newBuilder()
 						.uri(URI.create("https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page="+allPage+"&sort_by=popularity.desc"))
 						.header("accept", "application/json")
