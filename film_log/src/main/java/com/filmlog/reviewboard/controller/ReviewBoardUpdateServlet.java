@@ -55,7 +55,7 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 				if(fileItem.isFormField()) {
 					switch(fileItem.getFieldName()) {
 							// 0보다 크지 않으면 처음에 이미지 값 없음 
-						case "movie_no" :
+						case "movie_id" :
 							board.setMovieId(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
 							board.setReviewBoardTitle(fileItem.getString("utf-8")); break;

@@ -62,7 +62,7 @@
 				  </a>
 				  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMyMenu">
 				    <li><a class="dropdown-item" href="#">대시보드</a></li>
-				    <li><a class="dropdown-item" href="/myReviewListPass?memberNo=${member.memberNo}">내가 쓴 리뷰</a></li>
+				    <li><a class="dropdown-item" href="/myReviewListPass">내가 쓴 리뷰</a></li>
 				    <li><a class="dropdown-item" href="#">내가 쓴 게시물</a></li>
 				    <li><a class="dropdown-item" href="#">영화 관람 기록하기</a></li>
 				    <li><hr class="dropdown-divider"></li>
