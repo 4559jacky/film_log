@@ -71,6 +71,18 @@ public class MovieDao {
 	public int insertMovieDirector(SqlSession session, Map<String, Integer> paramMap) {
 		return session.insert("movieMapper.insertMovieDirector",paramMap);
 	}
+	// 관리자 페이지 영화 전체 목록 출력
+	public List<MovieDTO> selectMovieList(SqlSession session,MovieDTO option) {
+		return session.selectList("movieMapper.selectMovieList",option);
+	}
+	// 관리자 페이지 영화 추가
+	public int insertMovieAdmin(SqlSession session, MovieDTO movie) {
+		return session.insert("movieMapper.insertMovieAdmin",movie);
+	}
+	public int selectMovieListCount(SqlSession session) {
+		int result = session.selectOne("movieMapper.selectMovieListCount");
+		return result;
+	}
 	
 	// API
 //	public int insertMovieApi(SqlSession session, MovieDTO movie) {

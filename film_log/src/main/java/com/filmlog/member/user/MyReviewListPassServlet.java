@@ -1,4 +1,4 @@
-package com.filmlog.member.admin.controllor;
+package com.filmlog.member.user;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,48 +10,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.filmlog.movie.model.service.MovieService;
-import com.filmlog.movie.model.vo.MovieDTO;
+import com.filmlog.reviewboard.model.service.ReviewBoardService;
+import com.filmlog.reviewboard.model.vo.ReviewBoard;
 
-@WebServlet("/selectMovieList")
-public class SelectMovieListServlet extends HttpServlet {
+@WebServlet("/myReviewListPass")
+public class MyReviewListPassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public SelectMovieListServlet() {
+    public MyReviewListPassServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int memberNo = Integer.parseInt(request.getParameter("memberNo"));
+		
 		String nowPage = request.getParameter("nowPage");
 		
-//		int currentPage = 1;
-//		if(nowPage != null && nowPage.trim().isEmpty()) {
-//			try{
-//				currentPage = Integer.parseInt(nowPage);
-//			}catch(Exception e) {
-//				currentPage = 1;
-//			}
-//		}
-		
-		MovieDTO option = new MovieDTO();
-		
+		ReviewBoard option = new ReviewBoard();
 		if(nowPage != null) {
 			option.setNowPage(Integer.parseInt(nowPage));
 		}
 		
-//		option.setNowPage(currentPage);
+		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardByMemberNo(memberNo);
+		option.setTotalData(resultList.size());
 		
-		int totalData = new MovieService().selectMovieListCount();
-		option.setTotalData(totalData);
+		System.out.println(resultList);
 		
-		List<MovieDTO> resultList = new MovieService().selectMovieList(option);
-		
-		RequestDispatcher view 
-			= request.getRequestDispatcher("/views/member/admin/movieList.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/myReviewList.jsp");
 		request.setAttribute("resultList", resultList);
 		request.setAttribute("paging", option);
 		view.forward(request, response);
-		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -208,14 +208,31 @@ public class MovieService {
 	    
 	    return result1 + result2;
 	}
-
-	// API
-//	public int insertMovieApi(MovieDTO movie){
-//		SqlSession session = getSqlSession();
-//		int resultList = new MovieDao().insertMovieApi(session,movie);
-//		session.close();
-//		return resultList;
-//	}
+	
+	// 관리자 페이지 영화 전체목록 
+	public List<MovieDTO> selectMovieList(MovieDTO option) {
+		SqlSession session = getSqlSession();
+		List<MovieDTO> resultList = new MovieDao().selectMovieList(session,option);
+		session.close();
+		return resultList;
+	}
+	
+	// 관리자 페이지 영화 추가
+	public int insertMovieAdmin(MovieDTO movie) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().insertMovieAdmin(session,movie);
+		session.close();
+		return result;
+	}
+	
+	// 페이징 처리
+	public int selectMovieListCount() {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().selectMovieListCount(session);
+		session.close();
+		return result;
+	}
+	
 
 	
 

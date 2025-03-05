@@ -39,4 +39,46 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="/mappers/reviewboard-mapper.xml"/>
 	</mappers>
 	
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="driver.properties"/>
+	<typeAliases>
+		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoard" alias="reviewBoard"/>
+		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardImg" alias="reviewBoardImg"/>
+		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardComment" alias="reviewBoardComment"/>
+		<typeAlias type="com.filmlog.movie.model.vo.Movie" alias="movie"/>
+		<typeAlias type="com.filmlog.movie.model.vo.MovieDTO" alias="movieDto"/>
+		<typeAlias type="com.filmlog.movie.model.vo.Genre" alias="genre"/>
+		<typeAlias type="com.filmlog.movie.model.vo.Actor" alias="actor"/>
+		<typeAlias type="com.filmlog.movie.model.vo.Director" alias="director"/>
+		<typeAlias type="com.filmlog.member.model.vo.Member" alias="member"/>
+		<typeAlias type="com.filmlog.member.model.vo.MemberImg" alias="memberImg"/>
+		<typeAlias type="com.filmlog.member.model.vo.MemberAddress" alias="memberAddress"/>
+		<typeAlias type="com.filmlog.faq.model.vo.Faq" alias="faq"/>
+		<typeAlias type="com.filmlog.qna.model.vo.Qna" alias="qna"/>
+		<typeAlias type="com.filmlog.qna.model.vo.QnaResponse" alias="qnaResponse"/>
+	</typeAliases>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="${driver}"/>
+				<property name="url" value="${url}"/>
+				<property name="username" value="${username}"/>
+				<property name="password" value="${userpw}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	<mappers>
+		<mapper resource="/mappers/freeboard-mapper.xml"/>
+		<mapper resource="/mappers/member-mapper.xml"/>
+		<mapper resource="/mappers/movie-mapper.xml"/>
+		<mapper resource="/mappers/qna-mapper.xml"/>
+		<mapper resource="/mappers/faq-mapper.xml"/>
+		<mapper resource="/mappers/reviewboard-mapper.xml"/>
+	</mappers>
+	
 </configuration>

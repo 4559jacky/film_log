@@ -1,6 +1,7 @@
 package com.filmlog.member.controller;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -12,31 +13,39 @@ import org.json.simple.JSONObject;
 import com.filmlog.member.model.service.MemberService;
 import com.filmlog.member.model.vo.Member;
 
-@WebServlet("/dulicateIdCheck")
-public class DulicateIdCheckServlet extends HttpServlet {
+@WebServlet(name="checkPwd",urlPatterns="/checkPwd")
+public class CheckPwdServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	MemberService memberService = new MemberService();
+	
+	private MemberService memberService = new MemberService();
        
-    public DulicateIdCheckServlet() {
+    public CheckPwdServlet() {
         super();
     }
 
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String memberId = request.getParameter("member_id");
-
-		Member member = memberService.selectMemberById(memberId);
+		String memberPwd = request.getParameter("member_pwd");
+		
+		Member m = new Member();
+		m.setMemberId(memberId);
+		m.setMemberPwd(memberPwd);
+		
+		Member member = memberService.selectMemberPwdForChangePwd(m);
+		
 		JSONObject obj = new JSONObject();
-		obj.put("res_code", "200");
-		obj.put("res_msg", "사용가능한 아이디입니다.");
-
 		if(member != null) {
+			obj.put("res_code", "200");
+			obj.put("res_msg", "비밀번호 일치 확인");
+		} else {
 			obj.put("res_code", "500");
-			obj.put("res_msg", "중복된 아이디입니다.");
+			obj.put("res_msg", "비밀번호 불일치");
 		}
 		
 		response.setContentType("application/json; charset=utf-8");
 		response.getWriter().print(obj);
+		
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

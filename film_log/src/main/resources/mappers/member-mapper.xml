@@ -100,4 +100,1083 @@
 	</insert>
 	
 	
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="adminWhether" column="admin_whether"/>
+	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<!-- 아이디로 사용자 관심장르 가져오기 -->
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
+		SELECT genre_id
+		FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberImgOne" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_img_no = #{member_img_no}
+	</select>
+	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
+	
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_phone ,member_birth ,member_gender)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUES
+		<foreach collection="list" item="genre" separator=",">
+	        (#{genre} ,#{memberNo})
+	    </foreach>
+	</insert>
+	
+	<insert id="insertMemberImg" parameterType="memberImg">
+		INSERT INTO `member_img` (member_no, ori_name, new_name, img_path)
+		VALUES (#{memberNo}, #{oriName}, #{newName}, #{imgPath})
+	</insert>
+	
+	
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="adminWhether" column="admin_whether"/>
+	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<!-- 아이디로 사용자 관심장르 가져오기 -->
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
+		SELECT genre_id
+		FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberImgOne" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_img_no = #{member_img_no}
+	</select>
+	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
+	
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_phone ,member_birth ,member_gender)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUES
+		<foreach collection="list" item="genre" separator=",">
+	        (#{genre} ,#{memberNo})
+	    </foreach>
+	</insert>
+	
+	<insert id="insertMemberImg" parameterType="memberImg">
+		INSERT INTO `member_img` (member_no, ori_name, new_name, img_path)
+		VALUES (#{memberNo}, #{oriName}, #{newName}, #{imgPath})
+	</insert>
+	
+	
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="adminWhether" column="admin_whether"/>
+	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<!-- 아이디로 사용자 관심장르 가져오기 -->
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
+		SELECT genre_id
+		FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberImgOne" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_img_no = #{member_img_no}
+	</select>
+	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
+	
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_phone ,member_birth ,member_gender)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUES
+		<foreach collection="list" item="genre" separator=",">
+	        (#{genre} ,#{memberNo})
+	    </foreach>
+	</insert>
+	
+	<insert id="insertMemberImg" parameterType="memberImg">
+		INSERT INTO `member_img` (member_no, ori_name, new_name, img_path)
+		VALUES (#{memberNo}, #{oriName}, #{newName}, #{imgPath})
+	</insert>
+	
+	
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="adminWhether" column="admin_whether"/>
+	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<!-- 아이디로 사용자 관심장르 가져오기 -->
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
+		SELECT genre_id
+		FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberImgOne" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_img_no = #{member_img_no}
+	</select>
+	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
+	
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_phone ,member_birth ,member_gender)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUES
+		<foreach collection="list" item="genre" separator=",">
+	        (#{genre} ,#{memberNo})
+	    </foreach>
+	</insert>
+	
+	<insert id="insertMemberImg" parameterType="memberImg">
+		INSERT INTO `member_img` (member_no, ori_name, new_name, img_path)
+		VALUES (#{memberNo}, #{oriName}, #{newName}, #{imgPath})
+	</insert>
+	
+	
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="adminWhether" column="admin_whether"/>
+	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<!-- 아이디로 사용자 관심장르 가져오기 -->
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
+		SELECT genre_id
+		FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberImgOne" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_img_no = #{member_img_no}
+	</select>
+	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
+	
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_phone ,member_birth ,member_gender)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUES
+		<foreach collection="list" item="genre" separator=",">
+	        (#{genre} ,#{memberNo})
+	    </foreach>
+	</insert>
+	
+	<insert id="insertMemberImg" parameterType="memberImg">
+		INSERT INTO `member_img` (member_no, ori_name, new_name, img_path)
+		VALUES (#{memberNo}, #{oriName}, #{newName}, #{imgPath})
+	</insert>
+	
+	
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+	<resultMap type="member" id="memberMap">
+		<result property="memberNo" column="member_no"/>
+		<result property="memberId" column="member_id"/>
+		<result property="memberPwd" column="membe_pwd"/>
+		<result property="memberName" column="member_name"/>
+		<result property="memberNickname" column="member_nickname"/>
+		<result property="memberEmail" column="member_email"/>
+		<result property="memberBirth" column="member_birth"/>
+		<result property="memberGender" column="member_gender"/>
+		<result property="memberPhone" column="member_phone"/>
+		<result property="adminWhether" column="admin_whether"/>
+	</resultMap>
+	<resultMap type="memberImg" id="memberImgMap">
+		<result property="oriName" column="ori_name"/>
+		<result property="newName" column="new_name"/>
+		<result property="imgPath" column="img_path"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	<resultMap type="memberAddress" id="memberAddressMap">
+		<result property="postcode" column="postcode"/>
+		<result property="address" column="address"/>
+		<result property="detailAddress" column="detail_address"/>
+		<result property="extraAddress" column="extra_address"/>
+		<result property="memberNo" column="member_no"/>
+	</resultMap>
+	
+	<delete id="deleteMemberById" parameterType="string">
+		DELETE FROM `member`
+		WHERE member_id = #{memberId}
+	</delete>
+	
+	<select id="selectMemberOneByIdAndPwd" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{memberId}
+		AND member_pwd = #{memberPwd}
+	</select>
+	
+	<update id="updateMemberAddress" parameterType="memberAddress">
+		UPDATE `member_address`
+		SET postcode = #{postcode},
+			address = #{address},
+			detail_address = #{detailAddress},
+			extra_address = #{extraAddress}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<select id="selectMemberAddress" resultMap="memberAddressMap" parameterType="_int">
+		SELECT *
+		FROM `member_address`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<select id="selectMemberByPhone" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_phone = #{memberPhone}
+	</select>
+	
+	<insert id="insertMemberAddress" parameterType="memberAddress">
+		INSERT INTO `member_address`(`postcode`, address, detail_address, extra_address, member_no)
+		VALUES (#{postcode}, #{address}, #{detailAddress}, #{extraAddress}, #{memberNo})
+	</insert>
+	
+	<update id="updateMemberOne" parameterType="member">
+		UPDATE `member`
+		SET member_name = #{memberName},
+			member_nickname = #{memberNickname},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_birth = #{memberBirth},
+			member_gender = #{memberGender}
+		WHERE member_no = #{memberNo}
+	</update>
+	
+	<delete id="deleteMemberGenre" parameterType="_int">
+		DELETE FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<delete id="deleteMemberImg" parameterType="_int">
+		DELETE FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</delete>
+	
+	<select id="selectMemberImg" resultMap="memberImgMap" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<!-- 아이디로 사용자 관심장르 가져오기 -->
+	<select id="selectMemberInterestGenreAll" resultType="int" parameterType="_int">
+		SELECT genre_id
+		FROM `member_interest_genre`
+		WHERE member_no = #{memberNo}
+	</select>
+	
+	<update id="updateMemberPwd" parameterType="member">
+		UPDATE `member`
+		SET member_pwd = #{memberPwd}
+		WHERE member_id = #{memberId}
+	</update>
+	
+	<select id="selectMemberImgOne" parameterType="_int">
+		SELECT *
+		FROM `member_img`
+		WHERE member_img_no = #{member_img_no}
+	</select>
+	
+	<select id="selectMemberOne" resultMap="memberMap" parameterType="member">
+		SELECT *
+		FROM `member`
+		<where>
+			<if test='memberId != null and memberId.equals("") == false'>
+				AND member_id = #{memberId}
+			</if>
+			<if test='memberPwd != null and memberPwd.equals("") == false'>
+				AND member_pwd = #{memberPwd}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_name = #{memberName}
+			</if>
+			<if test='memberName != null and memberName.equals("") == false'>
+				AND member_phone = #{memberPhone}
+			</if>
+		</where>
+	</select>
+	
+	<select id="memberList" resultMap="memberMap">
+		SELECT *
+		FROM `member`
+	</select>
+	<select id="memberOne" resultMap="memberMap" parameterType="_int">
+		SELECT *
+		FROM `member`
+		WHERE member_no = #{param1}
+	</select>
+	<select id="selectMemberByNickname" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_nickname = #{member_nickname}
+	</select>
+	
+	<select id="selectMemberById" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_id = #{member_id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="insertMemberOne" parameterType="member"
+	useGeneratedKeys="true" keyProperty="memberNo">
+		INSERT INTO `member`(
+			member_id ,member_pwd ,member_name ,member_nickname ,member_email
+			,member_phone ,member_birth ,member_gender)
+		VALUE(
+			#{memberId} ,#{memberPwd} ,#{memberName} ,#{memberNickname} ,#{memberEmail}
+			,#{memberPhone} ,#{memberBirth} ,#{memberGender})
+	</insert>
+	<insert id="insertMemberInterestGenreOne" parameterType="map">
+		INSERT INTO `member_interest_genre` (genre_id ,member_no)
+		VALUES
+		<foreach collection="list" item="genre" separator=",">
+	        (#{genre} ,#{memberNo})
+	    </foreach>
+	</insert>
+	
+	<insert id="insertMemberImg" parameterType="memberImg">
+		INSERT INTO `member_img` (member_no, ori_name, new_name, img_path)
+		VALUES (#{memberNo}, #{oriName}, #{newName}, #{imgPath})
+	</insert>
+	
+	
 </mapper>

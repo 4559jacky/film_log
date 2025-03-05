@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -19,6 +20,7 @@ import org.json.simple.JSONObject;
 
 import com.filmlog.member.model.service.MemberService;
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 @WebServlet("/memberInfoChange")
@@ -34,6 +36,7 @@ public class MemberInfoChangeServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Member member = new Member();
 		MemberImg memberImg = new MemberImg();
+		MemberAddress ma = new MemberAddress();
 		List<String> genreList = new ArrayList<String>();
 		String path = "C:\\dev\\film_log\\profile_img";
 		
@@ -70,8 +73,17 @@ public class MemberInfoChangeServlet extends HttpServlet {
 						case "member_email" :
 							member.setMemberEmail(fileItem.getString("utf-8"));
 							break;
-						case "member_address" :
-							member.setMemberAddr(fileItem.getString("utf-8"));
+						case "postcode" :
+							ma.setPostcode(Integer.parseInt(fileItem.getString("utf-8")));
+							break;
+						case "address" :
+							ma.setAddress(fileItem.getString("utf-8"));
+							break;
+						case "detail_address" :
+							ma.setDetailAddress(fileItem.getString("utf-8"));
+							break;
+						case "extra_address" :
+							ma.setExtraAddress(fileItem.getString("utf-8"));
 							break;
 						case "member_phone" :
 							member.setMemberPhone(fileItem.getString("utf-8"));
@@ -117,6 +129,7 @@ public class MemberInfoChangeServlet extends HttpServlet {
 			}
 			Member mem = memberService.selectMemberById(member.getMemberId());
 			member.setMemberNo(mem.getMemberNo());
+			ma.setMemberNo(mem.getMemberNo());
 			
 			JSONObject obj = new JSONObject();
 			
@@ -128,8 +141,8 @@ public class MemberInfoChangeServlet extends HttpServlet {
 				MemberImg oldMemberImg = memberService.selectMemberImg(mem.getMemberNo());
 				System.out.println("전 이미지 : "+oldMemberImg);
 				String deletePath = oldMemberImg.getImgPath();
-				int result = memberService.updateMemberInfo(member, memberImg, genreList);
-				if(result >= 5) {
+				int result = memberService.updateMemberInfo(member, memberImg, genreList, ma);
+				if(result >= 6) {
 					obj.put("res_code", "200");
 					obj.put("res_msg", "정상적으로 개인정보가 수정되었습니다.");
 					File deleteFile = new File(deletePath);
@@ -146,8 +159,8 @@ public class MemberInfoChangeServlet extends HttpServlet {
 					}
 				}
 			} else { // 이미지 그대로 변경(멤버 정보, 관심장르)
-				int result = memberService.updateMemberInfo(member, genreList);
-				if(result >= 3) {
+				int result = memberService.updateMemberInfo(member, genreList, ma);
+				if(result >= 4) {
 					obj.put("res_code", "200");
 					obj.put("res_msg", "정상적으로 개인정보가 수정되었습니다.");
 				} else {
@@ -162,6 +175,11 @@ public class MemberInfoChangeServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
+		
+		Member newMem = memberService.selectMemberById(member.getMemberId());
+		HttpSession session = request.getSession();
+		session.setAttribute("member", newMem);
+		session.setMaxInactiveInterval(60*30);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

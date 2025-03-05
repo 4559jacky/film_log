@@ -114,32 +114,40 @@ public class ReviewBoardService {
 	
 	
 	// imgNo 가져와서 이거를 기준으로 삭제 메소드 
+	public int deleteReviewBoardImgOne(int imgNo) {
+		SqlSession session = getSqlSession();
+		int result = new ReviewBoardDao().deleteReviewBoardImgOne(imgNo,session);
+		session.close();
+		return result;
+	}
 	
-	
-	// 게시글 수정
+	// 게시글 수정 여기서 부터 !!
 	public int updateReviewBoard (ReviewBoard board, ReviewBoardImg img) {
 		SqlSession session = getSqlSession(false); //오토인크리먼트 꺼짐
 		int result = 0;
-		int boardNo = 0;
-		int imgNo = 0;
-		try{
-			boardNo = new ReviewBoardDao().insertReviewBoard(board,session);
+		int result2 = 0;
+		
+		int result1 = 0;
+		try {
+			
+			result1 = new ReviewBoardDao().updateReviewBoard(board,session);
+			
 			if(img != null) {
-				img.setReviewBoardNo(boardNo);
-				imgNo = new ReviewBoardDao().insertReviewBoardImg(img,session);				
+				img.setReviewBoardNo(board.getReviewBoardNo());
+				result2 = new ReviewBoardDao().insertReviewBoardImg(img,session);				
 			}
 			
 			
 			if(img != null) {
 				// 이미지 파일이 잇을 때랑 없을 때 
-				if(boardNo !=0 && imgNo!= 0) {
+				if(result1 !=0 && result2!= 0) {
 					result = 1;
 					session.commit(true);
 				}else {
 					session.rollback();
 				}
 			}else {
-				if(boardNo !=0) {
+				if(result1 !=0) {
 					result = 1;
 					session.commit(true);
 				}else {
@@ -154,11 +162,6 @@ public class ReviewBoardService {
 			e.printStackTrace();
 		}
 		
-		try {
-			
-		}catch(Exception e ) {
-			e.printStackTrace();
-		}
 		return result;
 	}
 	
@@ -176,20 +179,43 @@ public class ReviewBoardService {
 	}
 	
 	// 댓글 추가
-	public int insertReviewBoardComment(Map<String,Object> map){
+	public int insertReviewBoardComment(ReviewBoardComment comment){
 		SqlSession session = getSqlSession();
-		int result = new ReviewBoardDao().insertReviewBoardComment(map,session);
+		int CommentNo = new ReviewBoardDao().insertReviewBoardComment(comment,session);
 		session.close();
-		return result;
+		return CommentNo;
 		
 	}
 
 	//방금 단 댓글 출력
 	public ReviewBoardComment selectReviewBoardCommentOne(int commentNo) {
 		SqlSession session = getSqlSession();
-		ReviewBoardComment comment = new ReviewBoardDao().selectReviewBoardCommentOne(commentNo,session);
+		ReviewBoardComment commentOne = new ReviewBoardDao().selectReviewBoardCommentOne(commentNo,session);
 		session.close();
-		return comment;
+		return commentOne;
+	}
+	
+	// 전체 댓글 목록 조회
+	public List<ReviewBoardComment> selectReviewBoardCommentAll(int reviewBoardNo) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoardComment> commentList = new ArrayList<ReviewBoardComment>();
+		commentList = new ReviewBoardDao().selectReviewBoardCommentAll(reviewBoardNo,session);
+		session.close();
+		return commentList;
+	}
+	
+	// 댓글 삭제
+	public int deleteReviewBoardComment(int commentNo) {
+		SqlSession session = getSqlSession();
+		int result = new ReviewBoardDao().deleteReviewBoardComment(commentNo,session);
+		session.close();
+		return result;
+	}
+	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardByMemberNo(memberNo,session);
+		session.close();
+		return resultList;
 	}
 	
 }
