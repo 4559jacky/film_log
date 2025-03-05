@@ -60,25 +60,37 @@
 						  <thead class="table-dark">
 						    <tr>
 						   	  <th scope="col" style="width : 10%;">번호</th>
-						      <th scope="col" style="width : 20%;">영화 포스터</th>
+						      <!-- <th scope="col" style="width : 20%;">영화 포스터</th> -->
 						      <th scope="col" style="width : 30%;">영화 제목</th>
 						      <th scope="col" style="width : 15%;">러닝타임</th>
 						      <th scope="col" style="width : 35%;">개봉일</th>
 						      <th scope="col" style="width : 25%;">평점</th>
+						      <th scope="col" style="width : 30%;">수정</th>
+						      <th scope="col" style="width : 30%;">삭제</th>
 						    </tr>
 						  </thead>
 						  <tbody>
 						  	<c:forEach var="movie" items="${resultList }" varStatus="status">
 							    <tr>
 							      <th scope="row">${status.index +1}</th>
-							      <td>
+							      <%-- <td>
 						             <img src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="포스터" width="100">
-						          </td>
+						          </td> --%>
 							      <td>${movie.title}</td>
 								  <td>${movie.runtime }분</td>
 						          <td>${movie.releaseDate}</td>
 						          <td>
 						          	 <fmt:formatNumber value="${movie.voteAverage}" type="number" pattern="0.0" />
+						          </td>
+						          <td>
+						          	<div>
+							          	<a class="updateBtn" href="/updateMoviePass?id=${movie.id}">수정</a>						          	
+						          	</div>
+						          </td>
+						          <td>
+						          	<div class="item">
+						          		<button class="deleteBtn">삭제</button>
+						          	</div>
 						          </td>
 							    </tr>
 						    </c:forEach>
@@ -87,9 +99,42 @@
 						</div>
 					</c:otherwise>
 				</c:choose>
+					<div class="item">
+						<button class="insertBtn">추가</button>
+					</div>
 			</div>
 		</div>
 	</div>
+	<script>
+	$(document).ready(function () {
+	    $('.deleteBtn').click(function () {
+	        if (!confirm('정말 삭제하시겠습니까?')) {
+	            return;
+	        }
+	        const id = $('#id').val();
+	        $.ajax({
+	            url: "", // 삭제 요청을 처리할 서버 URL 입력
+	            type: "POST",
+	            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+	            data: { id: id },
+	            dataType: "JSON",
+	            success: function (data) {
+	                alert(data.res_msg);
+	                if (data.res_code === "200") {
+	                    location.reload();
+	                }
+	            },
+	            error: function () {
+	                alert("삭제 요청 중 오류가 발생했습니다.");
+	            }
+	        });
+
+	        // 화면에서도 즉시 삭제
+	        $(this).closest('.item').remove();
+	    });
+	});
+
+	</script>
 		<nav aria-label="Page navigation-sm">
 		  <ul class="pagination justify-content-center">
 		    <!-- 이전 버튼 -->

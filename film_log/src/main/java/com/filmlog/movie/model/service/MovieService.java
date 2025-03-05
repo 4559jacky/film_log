@@ -233,6 +233,21 @@ public class MovieService {
 		return result;
 	}
 	
+	// 관리자 페이지 영화 수정(update)
+	public int updateMovie(MovieDTO movie) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().updateMovie(session,movie);
+		session.close();
+		return result;
+	}
+	// 관리자 페이지 영화 수정페이지 데이터 불러와서 고정시키기
+	public MovieDTO selectMovieOne(int movieId) {
+		SqlSession session = getSqlSession();
+		MovieDTO movie = new MovieDao().selectMovieOne(session,movieId);
+		session.close();
+		return movie;
+	}
+	
 
 	
 
