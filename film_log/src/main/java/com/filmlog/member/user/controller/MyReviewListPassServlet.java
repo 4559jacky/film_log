@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.reviewboard.model.service.ReviewBoardService;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 
@@ -22,20 +24,47 @@ public class MyReviewListPassServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		int memberNo = Integer.parseInt(request.getParameter("memberNo"));
-		
-		String nowPage = request.getParameter("nowPage");
+		HttpSession session = request.getSession(false);
+		Member member = new Member();
+		if(session != null && session.getAttribute("member") != null) {
+			member = (Member)session.getAttribute("member");
+		}
+		int memberNo = member.getMemberNo();
 		
 		ReviewBoard option = new ReviewBoard();
-		if(nowPage != null) {
-			option.setNowPage(Integer.parseInt(nowPage));
-		}
 		
-		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardByMemberNo(memberNo);
+		String nowPage = request.getParameter("nowPage");
+	    if (request.getParameter("nowPage") != null) {
+	    	option.setNowPage(Integer.parseInt(nowPage));
+	    }
+	    
+		String filter = request.getParameter("search_filter");
+		String word = request.getParameter("search_word");
+		
+		System.out.println("검색 : "+memberNo + ","+filter+","+word);
+		
+//		if(word.equals("title")) option.setReviewBoardTitle(word);
+//		else if(word.equals("movieName")) option.setMovieTitle(word);
+		
+		option.setMemberNo(memberNo);
+		option.setFilter(filter);
+		option.setWord(word);
+		
+		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardListByWord(option);
 		option.setTotalData(resultList.size());
-		
-		System.out.println(resultList);
-		
+//		if(filter != null) {
+//			if(filter.equals("0")) {
+//				resultList = new ReviewBoardService().selectReviewBoardByMemberNo(memberNo);
+//				option.setTotalData(resultList.size());
+//			} else {
+//				resultList = new ReviewBoardService().selectReviewBoardListByWord(memberNo,filter,word);
+//				option.setTotalData(resultList.size());
+//			}
+//		} else {
+//			resultList = new ReviewBoardService().selectReviewBoardByMemberNo(memberNo);
+//			option.setTotalData(resultList.size());
+//		}
+		System.out.println(option.getTotalData());
 		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/myReviewList.jsp");
 		request.setAttribute("resultList", resultList);
 		request.setAttribute("paging", option);
