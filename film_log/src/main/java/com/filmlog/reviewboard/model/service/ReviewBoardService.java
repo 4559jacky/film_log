@@ -118,27 +118,29 @@ public class ReviewBoardService {
 	public int updateReviewBoard (ReviewBoard board, ReviewBoardImg img) {
 		SqlSession session = getSqlSession(false); //오토인크리먼트 꺼짐
 		int result = 0;
-		int boardNo = 0;
-		int imgNo = 0;
-		try{
+		int result2 = 0;
+		
+		int result1 = 0;
+		try {
 			
-			boardNo = new ReviewBoardDao().updateReviewBoard(board,session);
+			result1 = new ReviewBoardDao().updateReviewBoard(board,session);
+			
 			if(img != null) {
-				img.setReviewBoardNo(boardNo);
-				imgNo = new ReviewBoardDao().insertReviewBoardImg(img,session);				
+				img.setReviewBoardNo(board.getReviewBoardNo());
+				result2 = new ReviewBoardDao().insertReviewBoardImg(img,session);				
 			}
 			
 			
 			if(img != null) {
 				// 이미지 파일이 잇을 때랑 없을 때 
-				if(boardNo !=0 && imgNo!= 0) {
+				if(result1 !=0 && result2!= 0) {
 					result = 1;
 					session.commit(true);
 				}else {
 					session.rollback();
 				}
 			}else {
-				if(boardNo !=0) {
+				if(result1 !=0) {
 					result = 1;
 					session.commit(true);
 				}else {

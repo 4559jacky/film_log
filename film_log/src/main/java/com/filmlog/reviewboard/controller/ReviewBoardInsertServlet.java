@@ -63,6 +63,7 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 							board.setReviewBoardContent(fileItem.getString("utf-8")); break;
 						case "review_board_writer" :
 							board.setReviewBoardWriter(Integer.parseInt(fileItem.getString("utf-8"))); break;
+							
 					}
 				}else {
 					if(fileItem.getSize()>0) {
