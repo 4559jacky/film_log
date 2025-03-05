@@ -74,6 +74,14 @@ public class MovieDao {
 		int result = session.selectOne("movieMapper.selectMovieListCount");
 		return result;
 	}
+	// 관리자 페이지 영화 수정(update)
+	public int updateMovie(SqlSession session, MovieDTO movie) {
+		return session.update("movieMapper.updateMovieAdmin",movie);
+	}
+	// 관리자 페이지 영화 수정페이지 데이터 불러와서 고정시키기
+	public MovieDTO selectMovieOne(SqlSession session, int movieId) {
+		return session.selectOne("movieMapper.selectMovieOne",movieId);
+	}
 	
 	// API
 //	public int insertMovieApi(SqlSession session, MovieDTO movie) {
