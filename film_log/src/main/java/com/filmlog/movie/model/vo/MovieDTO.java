@@ -49,4 +49,6 @@ public class MovieDTO extends Paging{
     private List<Integer> genres; // 영화 장르 
 
 
-}
+    
+    private List<Actor> actors;
+ }

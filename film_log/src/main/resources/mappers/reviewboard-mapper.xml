@@ -44,7 +44,16 @@
 		<result property="adult" column="adult"/>
 	</resultMap>
 	
-	
+	<select id="selectReviewListInHome" resultMap="reviewBoardMap">
+		SELECT rb.review_board_no ,rb.review_board_title ,m.member_nickname ,ri.review_board_img_no
+		FROM review_board rb
+		JOIN review_board_img ri
+		ON rb.review_board_no = ri.review_board_no
+		JOIN member m
+		ON rb.member_no = m.member_no
+		ORDER BY rb.views DESC
+		LIMIT 4
+	</select>
 	
 	<select id="selectReviewBoardAllByWord" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
