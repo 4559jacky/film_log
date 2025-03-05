@@ -27,7 +27,7 @@ public class ReviewBoard extends Paging{
 	private String memberNickname;
 	private LocalDateTime regDate;
 	private int views;
-	private int movieNo;
+	private int movieId;
 	private String movieTitle;
 	private int imgNo;
 	private String oriImg;
