@@ -3,6 +3,7 @@ package com.filmlog.reviewboard.model.service;
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -214,6 +215,13 @@ public class ReviewBoardService {
 	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo) {
 		SqlSession session = getSqlSession();
 		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardByMemberNo(memberNo,session);
+		session.close();
+		return resultList;
+	}
+	
+	public List<ReviewBoard> selectReviewBoardListByWord(ReviewBoard option) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardListByWord(option,session);
 		session.close();
 		return resultList;
 	}
