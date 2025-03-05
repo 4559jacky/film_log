@@ -11,7 +11,7 @@
 		<result property="regDate" column="reg_date"/>
 		<result property="views" column="views"/>
 		<result property="movieTitle" column="movie_title"/>
-		<result property="movieNo" column="movie_no"/>
+		<result property="movieId" column="movie_id"/>
 		<result property="reviewBoardWriter" column="member_no"/>
 		<result property="imgNo" column="review_board_img_no"/>
 		<result property="oriImg" column="ori_img"/>
@@ -44,8 +44,8 @@
 	
 	<insert id="insertReviewBoard" parameterType="reviewBoard"
 	useGeneratedKeys="true" keyProperty="reviewBoardNo">
-		INSERT INTO `review_board`(review_board_title ,review_board_content ,member_no, movie_no)
-		VALUES (#{reviewBoardTitle}, #{reviewBoardContent}, #{reviewBoardWriter}, #{movieNo})
+		INSERT INTO `review_board`(review_board_title ,review_board_content ,member_no, movie_id)
+		VALUES (#{reviewBoardTitle}, #{reviewBoardContent}, #{reviewBoardWriter}, #{movieId})
 	</insert>
 	
  	<insert id="insertReviewBoardImg"  parameterType="reviewBoardImg">
@@ -84,7 +84,7 @@
 		UPDATE `review_board` 
 		SET review_board_title = #{reviewBoardTitle},
 		review_board_content = #{reviewBoardContent},
-		movie_no = #{movieNo}
+		movie_id = #{movieId}
 		WHERE review_board_no = #{reviewBoardNo}
 	</update>
 	

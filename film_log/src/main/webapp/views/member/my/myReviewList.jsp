@@ -70,7 +70,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 							<td>${((paging.nowPage-1)*paging.numPerPage)+(vs.index+1)}</td>
 							<td>${r.reviewBoardTitle }</td>
 							<td>${r.memberNickname }</td>
-							<fmt:parseDate value="${r.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
+							<fmt:parseDate value="${r.regDate }" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
 							<td>
 								<fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/>
 							</td>

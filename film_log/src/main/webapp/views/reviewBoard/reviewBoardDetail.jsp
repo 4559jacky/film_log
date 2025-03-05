@@ -57,8 +57,8 @@
                 <div>
                     <span>작성자: ${ReviewBoard.memberNickname}</span> |
                     <span>영화명: ${ReviewBoard.movieTitle}</span> |
-                    <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
-                    <span>작성일: <fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm:ss"/></span> |
+                    <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
+                    <span>작성일: <fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></span> |
                     <span>조회수: </span><span id="countViews">${ReviewBoard.views}</span>
                 </div>
             </div>
