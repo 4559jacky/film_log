@@ -5,10 +5,10 @@ import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.movie.model.vo.MovieDTO;
 import com.filmlog.reviewboard.model.dao.ReviewBoardDao;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
@@ -25,6 +25,16 @@ public class ReviewBoardService {
 		return resultList;
 		
 	}
+	
+	// 영화 전체 목록
+	public List<MovieDTO> selectMovieListAll (String movieTitle){
+		SqlSession session = getSqlSession();
+		List<MovieDTO> movieList = new ArrayList<MovieDTO>();
+		movieList = new ReviewBoardDao().selectMovieListAll(session,movieTitle);
+		session.close();
+		return movieList;
+	}
+	
 	// 게시글 추가
 	public int insertReviewBoard (ReviewBoard board, ReviewBoardImg img) {
 		SqlSession session = getSqlSession(false); //오토인크리먼트 꺼짐

@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.filmlog.movie.model.vo.MovieDTO;
 import com.filmlog.reviewboard.model.service.ReviewBoardService;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
-import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
 
 
 @WebServlet("/reviewBoardList")
@@ -37,7 +37,6 @@ public class ReviewBoardListServlet extends HttpServlet {
 		option.setTotalData(totalData);
 		
 		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardAll(option);
-		System.out.println(resultList);
 		
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/reviewBoard/reviewBoardList.jsp");
