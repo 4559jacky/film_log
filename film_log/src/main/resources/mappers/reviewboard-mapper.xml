@@ -32,6 +32,16 @@
 		<result property="commentWriter" column="member_nickname"/>		
 	</resultMap>
 	
+	<select id="selectReviewListInHome" resultMap="reviewBoardMap">
+		SELECT rb.review_board_no ,rb.review_board_title ,m.member_nickname ,ri.review_board_img_no
+		FROM review_board rb
+		JOIN review_board_img ri
+		ON rb.review_board_no = ri.review_board_no
+		JOIN member m
+		ON rb.member_no = m.member_no
+		ORDER BY rb.views DESC
+	</select>
+	
 	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
 		FROM `review_board` r

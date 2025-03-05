@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.movie.model.vo.Actor;
 import com.filmlog.movie.model.vo.Director;
 import com.filmlog.movie.model.vo.Genre;
@@ -13,6 +14,14 @@ import com.filmlog.movie.model.vo.MovieDTO;
 
 public class MovieDao {
 	private SqlSessionFactory sqlSessionFactory;
+	
+	public List<Actor> selectMovieActors(SqlSession session, int movieNo) {
+		return session.selectList("movieMapper.selectMovieActors", movieNo);
+	}
+	
+	public List<MovieDTO> selectMovieListInHome(SqlSession session, Member member) {
+		return session.selectList("movieMapper.selectMovieListInHome", member);
+	}
 	
 	// 배우 추가
 	public int insertActor(SqlSession session, Actor actor) {

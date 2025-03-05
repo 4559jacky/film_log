@@ -14,7 +14,22 @@
 		<result property="voteAverage" column="vote_average"/>
 		<result property="posterPath" column="poster_path"/>
 		<result property="adult" column="adult"/>
+		<collection property="actors" resultMap="actorMap"/>
 	</resultMap>
+	
+	<resultMap type="actor" id="actorMap">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+	</resultMap>
+	
+	<select id="selectMovieActors" resultMap="actorMap" parameterType="_int">
+		SELECT a.id, a.name
+		FROM actor a
+		JOIN movie_actors ma
+		ON a.id = ma.actor_id
+		WHERE ma.movie_id = #{movieNo}
+		limit 3;
+	</select>
 	
 	<!-- 전체 영화 조회 -->
 	<select id="selectMovieAll" resultMap="movieMap"  parameterType="movieDto">
@@ -103,5 +118,21 @@
         FROM `movie`
     </select>
 
+	<select id="selectMovieListInHome" resultMap="movieMap" parameterType="member">
+		SELECT md.id ,md.title ,md.vote_average ,md.poster_path
+		FROM movie_dto md
+		JOIN movie_genre mg
+		ON md.id = mg.movie_id
+		JOIN member_interest_genre mig
+		ON mg.genre_id = mig.genre_id
+		JOIN member m
+		ON mig.member_no = m.member_no
+		<where>
+			<if test='memberNo != 0 and adminWhether != "T"'>
+				AND m.member_no = #{memberNo}
+			</if>
+		</where>
+		LIMIT 5;
+	</select>
 
 </mapper>

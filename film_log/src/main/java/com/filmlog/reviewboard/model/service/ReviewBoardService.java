@@ -15,6 +15,13 @@ import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
 public class ReviewBoardService {
 	
+	public List<ReviewBoard> selectReviewListInHome() {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> reviews = new ArrayList<ReviewBoard>();
+		reviews = new ReviewBoardDao().selectReviewListInHome(session);
+		return reviews;
+	}
+	
 	// 리뷰 게시판 목록 출력
 	public List<ReviewBoard> selectReviewBoardAll(ReviewBoard option){
 		SqlSession session = getSqlSession();

@@ -10,6 +10,10 @@ import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
 public class ReviewBoardDao {
+	
+	public List<ReviewBoard> selectReviewListInHome(SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewListInHome");
+	}
 
 	// 리뷰 게시판 목록 출력
 	public List<ReviewBoard> selectReviewBoardAll(SqlSession session, ReviewBoard option){

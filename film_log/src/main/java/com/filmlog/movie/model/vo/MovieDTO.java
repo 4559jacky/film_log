@@ -42,4 +42,6 @@ public class MovieDTO {
     
     @JsonProperty("genre_ids")
     private List<Integer> genres;
-}
+    
+    private List<Actor> actors;
+ }
