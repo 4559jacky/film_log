@@ -33,12 +33,28 @@
 		<result property="commentWriter" column="member_nickname"/>		
 	</resultMap>
 	
+	<select id="selectReviewBoardAllByWord" resultMap="reviewBoardMap" parameterType="reviewBoard">
+		SELECT *
+		FROM `review_board` r
+		JOIN `member`m ON r.member_no = m.member_no
+		JOIN `movie_dto` v ON r.movie_id = v.id
+		<where>
+			r.member_no = #{memberNo}
+			<if test='filter != null and filter.equals("title") == true'>
+				AND review_board_title LIKE CONCAT('%',#{word},'%')
+			</if>
+			<if test='filter != null and filter.equals("movieName") == true'>
+				AND v.title LIKE CONCAT('%',#{word},'%')
+			</if>
+		</where>
+		LIMIT #{limitPageNo}, #{numPerPage}
+	</select>
+	
 	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
 		FROM `review_board` r
 		JOIN `member` m
 		ON r.member_no = m.member_no
-		
 		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
 	
