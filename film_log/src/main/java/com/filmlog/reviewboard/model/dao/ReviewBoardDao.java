@@ -5,15 +5,25 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.movie.model.vo.MovieDTO;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
 public class ReviewBoardDao {
+	
+	public List<ReviewBoard> selectReviewListInHome(SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewListInHome");
+	}
 
 	// 리뷰 게시판 목록 출력
 	public List<ReviewBoard> selectReviewBoardAll(SqlSession session, ReviewBoard option){
 		return session.selectList("reviewboardMapper.selectReviewBoardAll",option);
+	}
+	
+	//영화 전체 목록
+	public List<MovieDTO> selectMovieListAll(SqlSession session,String movieTitle){
+		return session.selectList("reviewboardMapper.selectMovieListAll",movieTitle);
 	}
 	
 	// 게시글 추가
@@ -109,6 +119,10 @@ public class ReviewBoardDao {
 
 	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo, SqlSession session) {
 		return session.selectList("reviewboardMapper.selectReviewListByMemberNo",memberNo);
+	}
+
+	public List<ReviewBoard> selectReviewBoardListByWord(ReviewBoard option, SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewBoardAllByWord",option);
 	}
 	
 }

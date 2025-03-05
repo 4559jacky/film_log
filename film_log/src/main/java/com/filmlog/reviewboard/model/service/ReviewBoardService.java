@@ -3,17 +3,25 @@ package com.filmlog.reviewboard.model.service;
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.movie.model.vo.MovieDTO;
 import com.filmlog.reviewboard.model.dao.ReviewBoardDao;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 import com.filmlog.reviewboard.model.vo.ReviewBoardComment;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
 public class ReviewBoardService {
+	
+	public List<ReviewBoard> selectReviewListInHome() {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> reviews = new ArrayList<ReviewBoard>();
+		reviews = new ReviewBoardDao().selectReviewListInHome(session);
+		return reviews;
+	}
 	
 	// 리뷰 게시판 목록 출력
 	public List<ReviewBoard> selectReviewBoardAll(ReviewBoard option){
@@ -24,6 +32,16 @@ public class ReviewBoardService {
 		return resultList;
 		
 	}
+	
+	// 영화 전체 목록
+	public List<MovieDTO> selectMovieListAll (String movieTitle){
+		SqlSession session = getSqlSession();
+		List<MovieDTO> movieList = new ArrayList<MovieDTO>();
+		movieList = new ReviewBoardDao().selectMovieListAll(session,movieTitle);
+		session.close();
+		return movieList;
+	}
+	
 	// 게시글 추가
 	public int insertReviewBoard (ReviewBoard board, ReviewBoardImg img) {
 		SqlSession session = getSqlSession(false); //오토인크리먼트 꺼짐
@@ -118,27 +136,29 @@ public class ReviewBoardService {
 	public int updateReviewBoard (ReviewBoard board, ReviewBoardImg img) {
 		SqlSession session = getSqlSession(false); //오토인크리먼트 꺼짐
 		int result = 0;
-		int boardNo = 0;
-		int imgNo = 0;
-		try{
+		int result2 = 0;
+		
+		int result1 = 0;
+		try {
 			
-			boardNo = new ReviewBoardDao().updateReviewBoard(board,session);
+			result1 = new ReviewBoardDao().updateReviewBoard(board,session);
+			
 			if(img != null) {
-				img.setReviewBoardNo(boardNo);
-				imgNo = new ReviewBoardDao().insertReviewBoardImg(img,session);				
+				img.setReviewBoardNo(board.getReviewBoardNo());
+				result2 = new ReviewBoardDao().insertReviewBoardImg(img,session);				
 			}
 			
 			
 			if(img != null) {
 				// 이미지 파일이 잇을 때랑 없을 때 
-				if(boardNo !=0 && imgNo!= 0) {
+				if(result1 !=0 && result2!= 0) {
 					result = 1;
 					session.commit(true);
 				}else {
 					session.rollback();
 				}
 			}else {
-				if(boardNo !=0) {
+				if(result1 !=0) {
 					result = 1;
 					session.commit(true);
 				}else {
@@ -205,6 +225,13 @@ public class ReviewBoardService {
 	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo) {
 		SqlSession session = getSqlSession();
 		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardByMemberNo(memberNo,session);
+		session.close();
+		return resultList;
+	}
+	
+	public List<ReviewBoard> selectReviewBoardListByWord(ReviewBoard option) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardListByWord(option,session);
 		session.close();
 		return resultList;
 	}

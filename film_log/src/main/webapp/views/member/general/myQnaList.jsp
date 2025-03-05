@@ -37,7 +37,6 @@
 					<tr onclick="window.location.href='/qna?qna_board_no=${qna.qnaBoardNo}'" style="cursor: pointer;">
 						<th scope="row">
 						 ${paging.totalData - (paging.numPerPage * (paging.nowPage - 1)) - vs.index}
-				<%-- 		${qnaList.size() - vs.index} --%>
 						</th>
 						<td align="center" style="vertical-align: middle;">
 							<c:if test="${qna.qnaResponse.responseNo == 0}">

@@ -55,11 +55,11 @@
             <h3 class="mb-3">${ReviewBoard.reviewBoardTitle}</h3>
             <div class="d-flex justify-content-between mb-3">
                 <div>
-                    <span>작성자: ${ReviewBoard.memberNickname}</span> |
-                    <span>영화명: ${ReviewBoard.movieTitle}</span> |
-                    <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm:ss" var="strRegDate"/>
-                    <span>작성일: <fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm:ss"/></span> |
-                    <span>조회수: </span><span id="countViews">${ReviewBoard.views}</span>
+                    <span><b>작성자</b>: ${ReviewBoard.memberNickname}</span> |
+                    <span><b>영화명</b>: ${ReviewBoard.movieTitle}</span> |
+                    <fmt:parseDate value="${ReviewBoard.regDate }" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
+                    <span><b>작성일</b>: <fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></span> |
+                    <span><b>조회수</b>: </span><span id="countViews">${ReviewBoard.views}</span>
                 </div>
             </div>
             <hr>
@@ -117,12 +117,13 @@
             <!-- 댓글 작성 폼 -->
             <form id="comment_form" class="mb-4">
                 <div class="mb-3">
-                    <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요" id="comment" required></textarea>
-                </div>
-                <div class="text-end">
-                    <button type="button" class="btn btn-custom" id="comment_btn" style=" background-color: #d3d3d3; color: #000; border: none;">
-                    댓글 등록</button>
-                </div>
+			        <textarea class="form-control" rows="3" placeholder="댓글을 입력하세요" id="comment" required></textarea>
+			        <div class="d-flex justify-content-between mt-2">
+			            <small id="comment_count" class="form-text text-muted">0 / 50</small>
+			            <button type="button" class="btn btn-custom" id="comment_btn" style="background-color: #d3d3d3; color: #000; border: none;">
+			            댓글 등록</button>
+			        </div>
+			    </div>
             </form>
             
         </div>
@@ -255,5 +256,16 @@
 			
 		})
 		
+		// 댓글 글자 수 제한 
+		$('#comment').on('input',function(){
+			let content = $(this).val().trim();
+	        let length = content.length;
+
+	        $('#comment_count').text(length + ' /50 ');
+	        
+			if(length>50){
+				alert("50자 이하로 입려해주세요.");
+			}
+		})
 	
 	</script>

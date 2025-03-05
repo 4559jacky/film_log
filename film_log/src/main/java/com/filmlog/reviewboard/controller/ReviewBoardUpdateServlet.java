@@ -20,7 +20,6 @@ import com.filmlog.reviewboard.model.service.ReviewBoardService;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 import com.filmlog.reviewboard.model.vo.ReviewBoardImg;
 
-@SuppressWarnings("unused")
 @WebServlet("/reviewBoardUpdate")
 public class ReviewBoardUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -56,8 +55,8 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 				if(fileItem.isFormField()) {
 					switch(fileItem.getFieldName()) {
 							// 0보다 크지 않으면 처음에 이미지 값 없음 
-						case "movie_no" :
-							board.setMovieNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
+						case "movie_id" :
+							board.setMovieId(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_title" :
 							board.setReviewBoardTitle(fileItem.getString("utf-8")); break;
 						case "review_board_content" :
@@ -65,7 +64,7 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 						case "review_board_writer" :
 							board.setReviewBoardWriter(Integer.parseInt(fileItem.getString("utf-8"))); break;
 						case "review_board_no" :
-							board.setReviewBoardNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
+						    board.setReviewBoardNo(Integer.parseInt(fileItem.getString("utf-8"))); break;
 					}
 				}else {
 					if(fileItem.getSize()>0) {
@@ -90,6 +89,7 @@ public class ReviewBoardUpdateServlet extends HttpServlet {
 			
 			int result = 0;
 			
+			System.out.println(board);
 			
 //		if(!보드에있는img 게터 써서.equals("0")) {
 //			System.out.println("기존 이미지 ㅇㅇ");

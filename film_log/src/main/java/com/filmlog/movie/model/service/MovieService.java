@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.movie.model.dao.MovieDao;
 import com.filmlog.movie.model.vo.Actor;
 import com.filmlog.movie.model.vo.Director;
@@ -16,7 +17,21 @@ import com.filmlog.movie.model.vo.Genre;
 import com.filmlog.movie.model.vo.MovieDTO;
 
 public class MovieService {
-
+	
+	public List<Actor> selectMovieActors(int movieNo) {
+		SqlSession session = getSqlSession();
+		List<Actor> actors = new MovieDao().selectMovieActors(session, movieNo);
+		session.close();
+		return actors;
+	}
+	
+	public List<MovieDTO> selectMovieListInHome(Member member) {
+		SqlSession session = getSqlSession();
+		List<MovieDTO> movieList = new MovieDao().selectMovieListInHome(session, member);
+		session.close();
+		return movieList;
+	}
+ 
 	// 영화 목록
 //	public List<Movie> selectMovieList() {
 //		SqlSession session = getSqlSession();

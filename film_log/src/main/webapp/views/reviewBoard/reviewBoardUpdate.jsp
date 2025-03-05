@@ -27,11 +27,11 @@
             <div class="mb-3">
                 <label class="form-label">제목</label>
                 <div class="d-flex">
-                    <select class="form-select me-2" style="max-width: 200px;" name="movie_no" id="select_movie">
-                        <option selected>영화 선택</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
+                    <div class="position-relative" style="max-width: 300px;">
+					    <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" autocomplete="off">
+					    <input type="hidden" name="movie_id" id="selected_movie_id"> <!-- 선택한 영화 ID 저장 -->
+					    <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
+					</div>
                     <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title"
                     value="${ReviewBoard.reviewBoardTitle}" >
                 </div>
@@ -73,13 +73,63 @@
 	/* 제목 : 모든 글자 포함 30자 이하,
 	내용 : 모든 글자 포함 1000자 이하, 
 	사진 없을 시 or 다른 경로 추가 */
+	$(document).ready(function(){
+		$('#search_movie').on('keyup',function(){
+			const movieTitle = $(this).val().trim();
+			
+			if (movieTitle.length === 0) {
+				$('#movie_list').hide().empty();
+		        return;
+		    }
+			
+			$.ajax({
+				url:'/reviewBoardSelectMovieList',
+				type: "post",
+				contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+				data:{movieTitle : movieTitle},
+				dataType:"json",
+				success:function(data){
+					$('#movie_list').empty();
+						 if (!data.movieArray || data.movieArray.length === 0) {
+					        $('#movie_list').append('<li class="list-group-item text-muted">검색 결과가 없습니다.</li>');
+					    } else {
+					    	let result = "";
+					    	for(let i = 0 ; i < data.movieArray.length ; i++){
+					    		result = '<li class="list-group-item" data-id='+data.movieArray[i].movieId+' data-title='+data.movieArray[i].movieTitle+'>'
+					    				+data.movieArray[i].movieTitle+ '</li>'
+						    	$('#movie_list').append(result);
+					    	}
+					    }
+						$('#movie_list').show();
+					
+				}
+			})	
+		})
+		
+		$(document).on('click', '#movie_list .list-group-item', function() {
+			const movieId = $(this).data('id');
+	        const movieTitle = $(this).data('title');
+
+	        $('#search_movie').val(movieTitle);
+	        $('#selected_movie_id').val(movieId);
+	        $('#movie_list').hide().empty();
+		})
+	})
+	
+	
+	
+	
+	
+	
 		$('#update_btn').click(function(){
+			
 			let form = document.update_board_form;
-			if($('#select_movie').val()=="0"){
+			const boardno = form.review_board_no.value;
+			if(!$('#selected_movie_id').val()){
 	        	alert("영화를 선택해주세요.");
 	        	return;
 	        }
-			if (!form.movie_no.value||!form.review_board_title.value || !form.review_board_content.value) {
+			if (!form.movie_id.value||!form.review_board_title.value || !form.review_board_content.value) {
 	            alert("제목과 내용을 모두 입력해주세요.");
 	            return;
 	        }
@@ -93,6 +143,7 @@
 					form.review_board_file.value='';
 					}
 			}
+			
 			let sendData = new FormData(form);
 			$.ajax({
 				url:'/reviewBoardUpdate',
@@ -107,9 +158,10 @@
 					alert(data.res_msg);
 					if(data.res_code==200){
 						location.href="/reviewBoardList";
-					}else {
-				           alert("게시글 수정에 실패했습니다.");
-				       }
+					}else{
+						event.preventDefault();
+			            event.stopPropagation();
+					}
 				}
 			})	
 			

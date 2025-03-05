@@ -61,7 +61,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     <div class="input-form-backgroud row">
       <div class="input-form col-md-12 mx-auto">
         <h4 class="mb-3">로그인</h4><br>
-        <form class="validation-form" action='/memberLogin' name="login_form" method="post" novalidate>
+        <form class="validation-form" novalidate>
 			<div id="login" class="login">
 				<div class="row">
 		            <div class="mb-3">
@@ -69,18 +69,18 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		              <input type="text" class="form-control" name="member_id" id="memberId" placeholder="아이디"
 		              value="<c:out value="${rememberId == null ? '' : rememberId}"/>" required>
 		              <div class="invalid-feedback id-error">
-		                아이디를 입력해주세요.
+		                아이디를 확인해주세요.
 		              </div>
 		            </div>
 		            <div class="mb-3">
 		              <label for="memberPwd">비밀번호</label>
 		              <input type="password" class="form-control" name="member_pwd" id="memberPwd" placeholder="비밀번호" required>
-		              <div class="invalid-feedback">
-		                비밀번호를 입력해주세요.
+		              <div class="invalid-feedback pwd-error">
+		                비밀번호를 확인해주세요.
 		              </div>
 		            </div>
 		            <div class="col-md-6 mb-3">
-					    <input type="checkbox" id="rememberId" <c:if test="${rememberId == null}">checked</c:if> >
+					    <input type="checkbox" name="remember_id" id="rememberId" <c:if test="${rememberId == null}">checked</c:if> >
 					    <label for="rememberId">아이디 저장</label>
 					</div>
 					<div class="col-md-6 mb-3 find-account">
@@ -102,6 +102,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     		let form = $('.validation-form');
     		let id = form.find("input[name='member_id']").val();
 	        let password = form.find("input[name='member_pwd']").val();
+	        let rememberId =  form.find("input[name='remember_id']").val();
 	        let isValid = true;
     		if (id == '') {
     			event.preventDefault();
@@ -120,10 +121,34 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				$("#memberPwd").removeClass("is-invalid").addClass("is-valid");
 			}
     		
-    		if (isValid) {
-    			form.submit();
+    		if (!isValid) {
+    			event.preventDefault();
+	            event.stopPropagation();
+	            alert("형식에 맞지않은 정보가 있습니다.");
 	        } else {
-	        	alert('정확하지 않은 정보가 있습니다.');
+	        	$.ajax({
+	        		url:'/memberLogin',
+	        		type:'post',
+	        		data:{
+	        			member_id : id,
+	        			member_pwd : password,
+	        			remember_id : rememberId
+	        		},
+	        		dataType: 'JSON',
+	        		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		            success: function (data) {
+		            	alert(data.res_msg);
+		                if (data.res_code === '200') {
+		                    location.href = '/';
+		                } else {
+		                	event.preventDefault();
+		    	            event.stopPropagation();
+		    	            $("#memberId").addClass("is-invalid");
+		    	            $("#memberPwd").addClass("is-invalid");
+		    	            
+		                }
+		            }
+	        	})
 	        }
     	})
     	$('#joinButton').click(function(){

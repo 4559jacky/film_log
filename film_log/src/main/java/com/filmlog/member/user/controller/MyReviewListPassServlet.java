@@ -1,4 +1,4 @@
-package com.filmlog.reviewboard.controller;
+package com.filmlog.member.user.controller;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,22 +10,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.filmlog.movie.model.vo.MovieDTO;
 import com.filmlog.reviewboard.model.service.ReviewBoardService;
 import com.filmlog.reviewboard.model.vo.ReviewBoard;
 
-
-@WebServlet("/reviewBoardList")
-public class ReviewBoardListServlet extends HttpServlet {
+@WebServlet("/myReviewListPass")
+public class MyReviewListPassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    
-    public ReviewBoardListServlet() {
+    public MyReviewListPassServlet() {
         super();
-     
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		int memberNo = Integer.parseInt(request.getParameter("memberNo"));
+		
 		String nowPage = request.getParameter("nowPage");
 		
 		ReviewBoard option = new ReviewBoard();
@@ -33,21 +31,17 @@ public class ReviewBoardListServlet extends HttpServlet {
 			option.setNowPage(Integer.parseInt(nowPage));
 		}
 		
-		int totalData = new ReviewBoardService().selectReviewBoardCount(option);
-		option.setTotalData(totalData);
+		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardByMemberNo(memberNo);
+		option.setTotalData(resultList.size());
 		
-		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardAll(option);
+		System.out.println(resultList);
 		
-		
-		RequestDispatcher view = request.getRequestDispatcher("/views/reviewBoard/reviewBoardList.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/myReviewList.jsp");
 		request.setAttribute("resultList", resultList);
 		request.setAttribute("paging", option);
 		view.forward(request, response);
-		
-	
 	}
 
-	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

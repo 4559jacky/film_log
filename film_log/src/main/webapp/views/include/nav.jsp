@@ -58,20 +58,20 @@
         	<c:when test="${member.adminWhether == 'F' }">
         		<li class="nav-item dropdown">
 				  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMyMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-				    My 메뉴
+				    My메뉴
 				  </a>
 				  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMyMenu">
 				    <li><a class="dropdown-item" href="#">대시보드</a></li>
-				    <li><a class="dropdown-item" href="/myReviewListPass?memberNo=${member.memberNo}">내가 쓴 리뷰</a></li>
+				    <li><a class="dropdown-item" href="/myReviewListPass">내가 쓴 리뷰</a></li>
 				    <li><a class="dropdown-item" href="#">내가 쓴 게시물</a></li>
-				    <li><a class="dropdown-item" href="#">영화 관람 기록하기</a></li>
+				    <li><a class="dropdown-item" href="/myMovieLog">영화 관람 기록하기</a></li>
 				    <li><hr class="dropdown-divider"></li>
 				    <li><a class="dropdown-item" href="#">좋아요한 리뷰</a></li>
 				    <li><a class="dropdown-item" href="#">좋아요한 게시글</a></li>
 				    <li><a class="dropdown-item" href="#">좋아요한 영화</a></li>
 				    <li><hr class="dropdown-divider"></li>
 				    <li><a class="dropdown-item" href="/memberPwdChangePass?memberNo=${member.memberNo}">비밀번호 변경</a></li>
-				    <li><a class="dropdown-item" id="memberInfo" href="/memberInfoChangePass?memberNo=${member.memberNo}">개인정보 수정</a></li>
+				    <li><a class="dropdown-item" id="memberInfo" href="/memberInfoChangePass">개인정보 수정</a></li>
 				    <li><a class="dropdown-item" href="/myQnaList">문의 내역</a></li>
 				    <li><a class="dropdown-item" href="/memberDeletePass">회원 탈퇴</a></li>
 				    <li><a class="dropdown-item" href="/memberLogout">로그아웃</a></li>
