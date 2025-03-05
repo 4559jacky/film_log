@@ -116,5 +116,9 @@ public class ReviewBoardDao {
 	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo, SqlSession session) {
 		return session.selectList("reviewboardMapper.selectReviewListByMemberNo",memberNo);
 	}
+
+	public List<ReviewBoard> selectReviewBoardListByWord(ReviewBoard option, SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewBoardAllByWord",option);
+	}
 	
 }

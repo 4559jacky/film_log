@@ -112,10 +112,6 @@ public class ReviewBoardInsertServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		
-		
-		
-		
 	}
 
 
