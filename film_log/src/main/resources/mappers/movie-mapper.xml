@@ -25,11 +25,9 @@
 		SELECT COUNT(*) FROM `movie_dto`
 	</select>
   
-  <select id="selectMovieOne">
-		SELECT id, title, d.name, overview, runtime, releaseDate, voteAverage
-		FROM `movie_dto` m
-		JOIN `director` d ON m.id = d.id
-		JOIN `actor` a ON 
+  <select id="selectMovieOne" parameterType="_int">
+		SELECT *
+		FROM `movie_dto`
 		WHERE id = ${movieId}
 	</select>
   
