@@ -31,22 +31,37 @@ public class MyMovieLogServlet extends HttpServlet {
 		}
 		
 		List<Genre> genres = new WatchedMovieRecordService().selectGenre(member.getMemberNo());
-		System.out.println(genres);
 		
-		/*
-		 * String movieTitle = request.getParameter("movie_title"); String tempgenreType
-		 * = request.getParameter("genre_type"); int nowPage = 1;
-		 * if(request.getParameter("nowPage") != null) { nowPage =
-		 * Integer.parseInt(request.getParameter("nowPage")); }
-		 * 
-		 * int genreType = 0; WatchedMovieRecord option = new WatchedMovieRecord();
-		 * option.setNowPage(nowPage); option.setMovieTitle(movieTitle);
-		 * 
-		 * int totalRecord = new WatchedMovieRecordService().selectRecordCount(option);
-		 */
+		String movieTitle = request.getParameter("movie_title");
+		String tempGenreType = request.getParameter("genre_type");
+		System.out.println("tempGenreType" + tempGenreType);
+		
+		WatchedMovieRecord option = new WatchedMovieRecord();
+		option.setMemberNo(member.getMemberNo());
+		option.setMovieTitle(movieTitle);
+		
+		int nowPage = 1;
+		option.setNowPage(nowPage);
+		if(request.getParameter("nowPage") != null) {
+			nowPage = Integer.parseInt(request.getParameter("nowPage"));
+			option.setNowPage(nowPage);
+		}
+		int genreType = 0;
+		option.setGenreType(genreType);
+		if(tempGenreType != null) {
+			genreType = Integer.parseInt(tempGenreType);
+			option.setGenreType(genreType);
+		}
+		
+		int totalRecord = new WatchedMovieRecordService().selectRecordCount(option);
+		option.setTotalData(totalRecord);
+		
+		List<WatchedMovieRecord> records = new WatchedMovieRecordService().selectRecordAll(option);
 		
 		RequestDispatcher view = request.getRequestDispatcher("/views/member/general/myMovieLog.jsp");
 		request.setAttribute("genres", genres);
+		request.setAttribute("records", records);
+		request.setAttribute("paging", option);
 		view.forward(request, response);
 	}
 
