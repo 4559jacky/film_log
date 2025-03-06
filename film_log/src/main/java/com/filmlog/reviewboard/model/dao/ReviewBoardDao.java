@@ -1,7 +1,6 @@
 package com.filmlog.reviewboard.model.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -114,6 +113,12 @@ public class ReviewBoardDao {
 	//댓글 삭제 
 	public int deleteReviewBoardComment(int commentNo, SqlSession session) {
 		int result = session.delete("reviewboardMapper.deleteReviewBoardComment",commentNo);
+		return result;
+	}
+	
+	// 댓글 수정 
+	public int updateReviewBoardComment(ReviewBoardComment comment, SqlSession session) {
+		int result = session.delete("reviewboardMapper.updateReviewBoardComment",comment);
 		return result;
 	}
 
