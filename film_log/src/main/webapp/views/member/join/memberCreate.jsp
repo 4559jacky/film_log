@@ -72,7 +72,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        <label for="membeAddress">주소</label><br>
 				<div class="row">
 		          <div class="col-md-6 mb-3">
-		            <input type="text" class="form-control" name="postcode" id="sample6_postcode" placeholder="우편번호"><br>
+		            <input type="text" class="form-control" name="postcode" id="sample6_postcode" placeholder="우편번호" readonly><br>
 		            <div class="invalid-feedback">
 		              우편번호를 입력해주세요. (숫자로만 입력가능)
 		            </div>
@@ -83,7 +83,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				</div>
 				<div class="row">
 				  <div class="mb-3">
-					<input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소"><br>
+					<input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소" readonly><br>
 					<div class="invalid-feedback">
 		              주소를 입력해주세요.
 		            </div>
@@ -412,7 +412,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            $("#sample6_address").removeClass("is-invalid").addClass("is-valid");
 		        }
 		        
-
+		        
 		        if (!phone || !/^\d{3}-\d{4}-\d{4}$/.test(phone)) {
 		            event.preventDefault();
 		            event.stopPropagation();
@@ -423,7 +423,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        }
 		        
 		        // 생년월일 정규식표현
-		        const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-([0-2][1-9]|3[01])$/;
+		        const dateRegex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
 
 		        if (!birth || dateRegex.test(birth) == false) {
 		            event.preventDefault();
