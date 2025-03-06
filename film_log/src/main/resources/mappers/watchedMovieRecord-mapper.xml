@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="watchedMovieRecordMapper">
+	<resultMap type="watchedMovieRecord" id="watchedMovieRecordMap">
+		<result property="recordNo" column="record_no"/>
+		<result property="movieNo" column="movie_no"/>
+		<result property="memberNo" column="member_no"/>
+		<result property="memo" column="memo"/>
+		<result property="watchedDate" column="watched_date"/>
+	</resultMap>
+	
+	<resultMap type="genre" id="genreMap">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/> 
+	</resultMap>
+	
+	<select id="selectGenre" resultMap="genreMap" parameterType="_int">
+		SELECT DISTINCT gd.id, gd.`name`
+		FROM genre_dto gd
+		JOIN movie_genre mg ON gd.id = mg.genre_id
+		JOIN watched_movie_record wmr ON mg.movie_id = wmr.movie_no
+		JOIN member m ON m.member_no = wmr.member_no
+		WHERE wmr.member_no = #{memberNo};
+	</select>
+	
+	<select id="recordCount" resultMap="watchedMovieRecordMap" parameterType="watchedMovieRecord">
+		
+	</select>
+</mapper>
+
