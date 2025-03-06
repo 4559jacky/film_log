@@ -15,8 +15,8 @@ import com.filmlog.movie.model.vo.MovieDTO;
 public class MovieDao {
 	private SqlSessionFactory sqlSessionFactory;
 	
-	public List<Actor> selectMovieActors(SqlSession session, int movieNo) {
-		return session.selectList("movieMapper.selectMovieActors", movieNo);
+	public List<Actor> selectMovieActors(SqlSession session, int movieId) {
+		return session.selectList("movieMapper.selectMovieActors", movieId);
 	}
 	
 	public List<MovieDTO> selectMovieListInHome(SqlSession session, Member member) {
@@ -90,6 +90,18 @@ public class MovieDao {
 	// 관리자 페이지 영화 수정페이지 데이터 불러와서 고정시키기
 	public MovieDTO selectMovieOne(SqlSession session, int movieId) {
 		return session.selectOne("movieMapper.selectMovieOne",movieId);
+	}
+
+	public Director selectMovieDirector(SqlSession session, int movieId) {
+		return session.selectOne("movieMapper.selectMovieDirector",movieId);
+	}
+
+	public List<Genre> selectMovieGenres(SqlSession session, int movieId) {
+		return session.selectList("movieMapper.selectMovieGenres",movieId);
+	}
+
+	public int deleteMovie(SqlSession session, int movieId) {
+		return session.update("movieMapper.deleteMovie",movieId);
 	}
 	
 	// API
