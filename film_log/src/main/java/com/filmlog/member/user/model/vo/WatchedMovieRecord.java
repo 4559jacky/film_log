@@ -25,4 +25,5 @@ public class WatchedMovieRecord extends Paging {
 	private LocalDateTime watchedDate;
 	private int genreType;
 	private String movieTitle;
+	private String posterPath;
 }

@@ -202,7 +202,6 @@
 					alert(data.res_msg);
 					if(data.res_code == "200") {
 						location.href="/myQnaList";
-						// 나중에 마이페이지 내 문의 내역 보기로 이동
 					}
 				}
 			})
