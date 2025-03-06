@@ -1,4 +1,4 @@
-package com.filmlog.member.controller.Pass;
+package com.filmlog.member.admin.controllor;
 
 import java.io.IOException;
 
@@ -9,17 +9,28 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/myPass")
-public class MyPassServlet extends HttpServlet {
+import com.filmlog.movie.model.service.MovieService;
+import com.filmlog.movie.model.vo.MovieDTO;
+
+@WebServlet("/updateMoviePass")
+public class UpdateMoviePassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public MyPassServlet() {
+    public UpdateMoviePassServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/my.jsp");
+		int movieId = Integer.parseInt(request.getParameter("id"));
+		System.out.println(movieId);
+		
+		MovieDTO md = new MovieService().selectMovieOne(movieId);
+		request.setAttribute("movie",md);
+		
+		RequestDispatcher view
+		= request.getRequestDispatcher("/views/member/admin/movieUpdate.jsp");
 		view.forward(request, response);
+	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

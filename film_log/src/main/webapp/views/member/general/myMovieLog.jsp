@@ -12,7 +12,7 @@
 <link href="/resources/css/include/paing.css?after" rel="stylesheet" type="text/css">
 </head>
 <body id="body">
-	<%@ include file="/views/include/nav.jsp" %>
+	<%@ include file="/views/include/myMenuNav.jsp" %>
 	<div class="container-sm">
 		<br>
 		<p class="text-center fs-1">영화 관람 기록</p>

@@ -24,6 +24,29 @@
 	<select id="selectMovieListCount" resultType="int">
 		SELECT COUNT(*) FROM `movie_dto`
 	</select>
+  
+  <select id="selectMovieOne" parameterType="_int">
+		SELECT *
+		FROM `movie_dto`
+		WHERE id = ${movieId}
+	</select>
+  
+  <!-- 관리자페이지 영화 삭제 -->
+	<delete id="deleteMovie" parameterType="int">
+		DELETE FROM movies WHERE id = #{id}
+	</delete>
+  
+  <!-- 관리자페이지 영화수정 -->
+	<update id="updateMovieAdmin" parameterType="com.filmlog.movie.model.vo.MovieDTO">
+		UPDATE `movie_dto`
+		SET title = #{title}
+		,runtime = #{runtime}
+		,overview = #{overview}
+		,release_date = #{releaseDate}
+		,vote_average = #{voteAverage}
+		,poster_path = #{posterPath}
+		WHERE id = #{id}
+	</update>
 	
 	<!-- 관리자페이지 영화추가 -->
 	<insert id="insertMovieAdmin" parameterType="movieDto">
@@ -99,7 +122,7 @@
 			 (#{movieId}, #{actor})
 		</foreach>
 	</insert>
-	
+  
 	<!-- 감독 추가 -->
 	<insert id="insertDirectorOne" parameterType="director">
 		INSERT IGNORE INTO `director` (id, name, original_name, job, profile_path)
@@ -119,6 +142,7 @@
 		FROM `movie_dto`
 		WHERE id = #{id}
 	</select>
+  
 	<!-- 영화 목록 -->
 	<select id="movieList" resultType="com.filmlog.movie.model.vo.MovieDTO">
         SELECT *
