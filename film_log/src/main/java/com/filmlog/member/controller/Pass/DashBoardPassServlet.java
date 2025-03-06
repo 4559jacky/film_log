@@ -9,20 +9,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/myPass")
-public class MyPassServlet extends HttpServlet {
+@WebServlet("/dashBoard")
+public class DashBoardPassServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public MyPassServlet() {
+    public DashBoardPassServlet() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/my.jsp");
+		RequestDispatcher view = request.getRequestDispatcher("/views/member/my/dashBoard.jsp");
 		view.forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
 		doGet(request, response);
 	}
 

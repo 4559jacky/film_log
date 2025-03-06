@@ -6,24 +6,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<meta charset="UTF-8">
+<title>나의 리뷰</title>
 <link href="/resources/css/include/allpage.css" rel="stylesheet" type="text/css">
 <link href="/resources/css/my/myReview.css?after" rel="stylesheet" type="text/css">
 <link href="/resources/css/include/paing.css?after" rel="stylesheet" type="text/css">
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>나의 리뷰</title>
     <style>
         .table-dark { background-color: #f8f9fa !important; color: #000 !important; }
         .select_btn { background-color: #e9ecef !important; color: #000 !important; border-color: #ced4da !important; }
         .insert_btn { background-color: #e9ecef !important; color: #000 !important; border-color: #ced4da !important; }
-
     </style>
 </head>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
-	<%@ include file="/views/include/nav.jsp" %>
+	<%@ include file="/views/include/myMenuNav.jsp" %>
 	<br>
 	<div class="container-sm">
 	<p class="text-center fs-1">내가 작성한 리뷰</p>
@@ -114,6 +110,5 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			location.href='/reviewBoardDetail?review_board_no='+boardNo;
 		})	
 	</script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
