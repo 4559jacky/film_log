@@ -55,6 +55,7 @@
 		LIMIT 4
 	</select>
 	
+	
 	<select id="selectReviewBoardAllByWord" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
 		FROM `review_board` r
@@ -72,6 +73,7 @@
 		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
 	
+	<!-- 리뷰 게시글 전체 목록 출력 -->
 	<select id="selectReviewBoardAll" resultMap="reviewBoardMap" parameterType="reviewBoard">
 		SELECT *
 		FROM `review_board` r
@@ -83,27 +85,32 @@
 		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
 	
+	
 	<select id="selectMovieListAll" resultMap="movieDtoMap">
 		SELECT *
 		FROM `movie_dto`
 		WHERE title LIKE CONCAT('%',#{title},'%')
 	</select>
 	
+	<!-- 리뷰 게시글 추가 -->
 	<insert id="insertReviewBoard" parameterType="reviewBoard"
 	useGeneratedKeys="true" keyProperty="reviewBoardNo">
 		INSERT INTO `review_board`(review_board_title ,review_board_content ,member_no, movie_id)
 		VALUES (#{reviewBoardTitle}, #{reviewBoardContent}, #{reviewBoardWriter}, #{movieId})
 	</insert>
 	
+	<!-- 리뷰 게시글 이미지 추가 -->
  	<insert id="insertReviewBoardImg"  parameterType="reviewBoardImg">
 		INSERT INTO `review_board_img`(ori_img ,new_img ,img_path,review_board_no)
 		VALUES (#{oriImg}, #{newImg}, #{imgPath}, #{reviewBoardNo})
 	</insert> 
 	
+	<!-- 페이징 -->
 	<select id="selectReviewBoardCount" parameterType="reviewBoard" resultType="_int">
 		SELECT COUNT(*) FROM review_board
 	</select>
 	
+	<!-- 리뷰 게시글 상세 조회 -->
 	<select id="selectReviewBoardOne" parameterType="reviewBoard" resultMap="reviewBoardMap">
 		SELECT *
 		FROM `review_board` r
@@ -116,17 +123,20 @@
 		WHERE r.review_board_no = #{reviewBoardNo}
 	</select>
 	
+	<!-- 리뷰 게시글 상세 조회 이미지 출력 -->
 	<select id="selectImgOne" parameterType="int" resultMap="reviewBoardImgMap">
 		SELECT *
 		FROM `review_board_img`
 		WHERE review_board_img_no = #{imgNo}
 	</select>
 	
+	<!-- 리뷰 게시글 게시글 삭제 -->
 	<delete id="deleteReviewBoard" parameterType="int">
 		DELETE FROM `review_board`
 		WHERE review_board_no = #{reviewBoardNo}
 	</delete>
 	
+	<!-- 리뷰 게시글 수정 -->
 	<update id="updateReviewBoard" parameterType="reviewBoard" >
 		UPDATE `review_board` 
 		SET review_board_title = #{reviewBoardTitle},
@@ -135,27 +145,31 @@
 		WHERE review_board_no = #{reviewBoardNo}
 	</update>
 	
-	
+	<!-- 리뷰 게시글 이미지 삭제 -->
 	<delete id="deleteReviewBoardImg" parameterType="reviewBoardImg">
 		DELETE FROM `review_board_img`
 		WHERE review_board_no = #{reviewBoardNo}
 	</delete>
 	
+	<!-- 리뷰 게시글 조회수 증가 -->
 	<update id="updateViews" parameterType="int">
 		UPDATE `review_board` SET views = views+1
 		WHERE review_board_no = #{reviewBoardNo}
 	</update>
 	
+	<!-- 리뷰 게시글 조회수 조회 -->
 	<select id="selectUpdateViews" parameterType="int" resultType="_int">
 	    SELECT views FROM `review_board` WHERE review_board_no = #{reviewBoardNo}
 	</select>
 	
+	<!-- 리뷰 게시글 댓글 추가 -->
 	<insert id="insertReviewBoardComment" parameterType="reviewBoardComment"
 	useGeneratedKeys="true" keyProperty="reviewBoardCommentNo">
 		INSERT INTO `review_board_comment`(review_board_no ,member_no ,comment)
 		VALUES (#{reviewBoardNo}, #{memberNo}, #{comment})
 	</insert>
 	
+	<!-- 리뷰 게시글 방금 추가된 댓글 조회 -->
 	<select id="selectReviewBoardCommentOne" parameterType="int" resultMap="reviewBoardCommentMap">
 		SELECT *
 		FROM `review_board_comment` c
@@ -164,6 +178,7 @@
 		WHERE review_board_comment_no = #{reviewBoardCommentNo}
 	</select>
 	
+	<!-- 리뷰 게시글 전체 댓글 조회 -->
 	<select id="selectReviewBoardCommentAll" resultMap="reviewBoardCommentMap" parameterType="int">
 		SELECT *
 		FROM `review_board_comment` c
@@ -172,10 +187,19 @@
 		WHERE review_board_no = #{reviewBoardNo}
 	</select>
 	
+	<!-- 댓글 삭제 -->
 	<delete id="deleteReviewBoardComment"  parameterType="int">
 		DELETE FROM `review_board_comment`
 		WHERE review_board_comment_no = #{reviewBoardCommentNo}
 	</delete>
+	
+	<!-- 댓글 수정 -->
+	<delete id="updateReviewBoardComment"  parameterType="reviewBoardComment">
+		UPDATE `review_board_comment` 
+		SET comment = #{comment}
+		WHERE review_board_comment_no = #{reviewBoardCommentNo}
+	</delete>
+	
 	
 	<delete id="deleteReviewBoardImgOne"  parameterType="int">
 		DELETE FROM `review_board_img`

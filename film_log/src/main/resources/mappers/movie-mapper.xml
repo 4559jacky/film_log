@@ -44,6 +44,7 @@
 		SELECT COUNT(*) FROM `movie_dto`
 	</select>
   
+
   	<select id="selectMovieGenres" resultMap="movieMap" parameterType="int">
  		SELECT *
 		FROM `genre_dto` gd
@@ -62,6 +63,7 @@
 		SELECT *
 		FROM `movie_dto`
 		WHERE id = #{movieId}
+
 	</select>
   
   <!-- 관리자페이지 영화 삭제 -->

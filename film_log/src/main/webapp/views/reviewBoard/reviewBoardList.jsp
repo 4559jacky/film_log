@@ -29,10 +29,10 @@
                 <select class="form-select" id="searchFilter">
                 	<option value="0">선택</option>
                     <option value="1">제목</option>
-                    <option value="2">내용</option>
+                    <option value="2">영화</option>
                     <option value="3">작성자</option>
                 </select>
-                <input type="text" class="form-control" placeholder="검색어 입력">
+                <input type="text" id="" class="form-control" placeholder="검색어 입력">
                 <button class="btn select_btn">검색</button>
                 <script>
 	                $(document).ready(function () {

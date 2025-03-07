@@ -20,7 +20,7 @@
 </head>
 <body>
 	<c:set var="movies" value="${movieList}"/>
-	<%@ include file="/views/include/nav.jsp" %>
+	<%@ include file="/views/include/adminMenuNav.jsp" %>
 	<div class="container mt=5"><br><br>
 		<h2 class="text-center">영화 목록</h2><br><br>
 		<div class="d-flex justify-content-center my-3">

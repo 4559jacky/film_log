@@ -13,7 +13,7 @@
 <link href="/resources/css/include/paing.css?after" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<%@ include file="/views/include/nav.jsp" %>
+	<%@ include file="/views/include/myMenuNav.jsp" %>
 <br>
 <div class="container-sm">
 <p class="text-center fs-1">내 문의 내역</p>
