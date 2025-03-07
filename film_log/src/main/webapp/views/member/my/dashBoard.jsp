@@ -10,37 +10,56 @@
 <script src="<%=request.getContextPath()%>/resources/js/jquery-3.7.1.js"></script>
 </head>
 <body>
-	<div class="container-sm">
-		<br>
-		<p class="text-center fs-1">대시보드</p>
-		<p class="text-center fs-5">내가 관람한 영화 기록 통계</p>
-		<br>
-		<hr class="my-2" id="hr">
-		<br>
-	</div>
-	<div class="container-sm">
-    <!-- 첫 번째 그룹 (장르별 텍스트 + 차트) -->
-    <div class="row text-center justify-content-between flex-md-row flex-column">
-	    <div class="col-6 col-md-6">
-	    	<div class="d-grid gap-2 d-md-flex justify-content-md-start">
-	      		<div class="text-center fs-5">장르별</div>
-	    	</div>
-	      	<canvas id="myChart"></canvas>
-	    </div>
-	    <div class="col-6 col-md-6">
-	    	<div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            	<div class="text-center fs-5">연도별</div>
-        	</div>
-        	<div class="d-flex align-items-center justify-content-center" style="height: 65vh;">
-        	<canvas id="myBarChart"></canvas>
-        	</div>
-	    </div>
-    </div> 
+
+<div class="container-sm">
+    <br>
+    <p class="text-center fs-1">대시보드</p>
+    <p class="text-center fs-5">내가 관람한 영화 기록 통계</p>
+    <br>
+    <hr class="my-2" id="hr">
+    <br>
 </div>
 
-	<br>
-	
-	
+<div class="container-sm">
+    <!-- 첫 번째 그룹 (장르별 차트 + 년도별 차트, 월별 차트) -->
+    <div class="row text-center justify-content-between flex-md-row flex-column">
+        <div class="col-12 col-md-6"> <!-- 장르별 차트 -->
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                <div class="text-center fs-5">장르별</div>
+            </div>
+            <canvas id="myChart" class="w-100"></canvas>
+        </div>
+
+        <!-- 두 번째 그룹 (년도별 차트 + 월별 차트) -->
+        <div class="col-12 col-md-6">
+            <!-- 년도별과 월별 차트를 세로로 배치 -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <div class="text-center fs-5">연도별</div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <canvas id="myBarChart" class="w-100"></canvas>
+                    </div>
+                <div class="col-12">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                        <div class="text-center fs-5">월별</div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <canvas id="myLineChart" class="w-100" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+
+
+
+
+
+
 	<script>
 	
 	$(function() {
@@ -63,7 +82,7 @@
 				
 				const ctx = document.getElementById('myChart').getContext('2d');
 				const myChart = new Chart(ctx, {
-				    type: 'pie',  // 차트 종류 ('bar', 'line', 'pie' 등)
+				    type: 'pie',
 				    data: {
 				        labels: labels,
 				        datasets: [{
@@ -115,7 +134,7 @@
 				        }]
 				    },
 				    options: {
-				        responsive: true,  // 반응형 설정
+				        responsive: true,
 				        scales: {
 				        	x : {
 				        		display : false,
@@ -189,7 +208,7 @@
 			            responsive: true,
 			            plugins: {
 			                legend: {
-			                    display: false  // 레전드 숨기기
+			                    display: false
 			                }
 			            },
 			            scales: {
@@ -209,6 +228,64 @@
 
 		})
 	})
+	
+$(function() {
+    $.ajax({
+        url: "/monthChart",
+        type: "post",
+        data: {},
+        dataType: "json",
+        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        success: function(data) {
+            const months = data.month;
+
+            const labels = [];
+            const chartData = [];
+
+            months.forEach((month) => {
+                labels.push(month.month);
+                console.log(month.month);
+                chartData.push(month.count);
+                console.log(month.count);
+            });
+
+            const ctx3 = document.getElementById('myLineChart').getContext('2d');
+            const myLineChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '관람한 영화 수',
+                        data: chartData,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        },
+        error: function() {
+            alert("차트 데이터 로딩에 실패했습니다.");
+        }
+    });
+})
 
 	</script>
 </body>
