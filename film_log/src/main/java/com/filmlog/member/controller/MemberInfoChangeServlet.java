@@ -39,6 +39,7 @@ public class MemberInfoChangeServlet extends HttpServlet {
 		MemberAddress ma = new MemberAddress();
 		List<String> genreList = new ArrayList<String>();
 		String path = "C:\\dev\\film_log\\profile_img";
+		String defaultImg = "";
 		
 		File dir = new File(path);
 		if(!dir.exists()) {
@@ -93,6 +94,9 @@ public class MemberInfoChangeServlet extends HttpServlet {
 							break;
 						case "member_gender" :
 							member.setMemberGender(fileItem.getString("utf-8"));
+							break;
+						case "default_img" :
+							defaultImg = fileItem.getString("utf-8");
 							break;
 						case "interest" :
 							genreList.add(fileItem.getString("utf-8"));
@@ -158,6 +162,8 @@ public class MemberInfoChangeServlet extends HttpServlet {
 						deleteFile1.delete();
 					}
 				}
+			} else if(defaultImg.equals("true")) {
+				
 			} else { // 이미지 그대로 변경(멤버 정보, 관심장르)
 				int result = memberService.updateMemberInfo(member, genreList, ma);
 				if(result >= 4) {
