@@ -9,9 +9,17 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.user.model.dao.WatchedMovieRecordDao;
 import com.filmlog.member.user.model.vo.WatchedMovieRecord;
+import com.filmlog.member.user.model.vo.YearWatch;
 import com.filmlog.movie.model.vo.Genre;
 
 public class WatchedMovieRecordService {
+	
+	public List<YearWatch> selectChartYears(int memberNo) {
+		SqlSession session = getSqlSession();
+		List<YearWatch> years = new ArrayList<YearWatch>();
+		years = new WatchedMovieRecordDao().selectChartYears(session, memberNo);
+		return years;
+	}
 	
 	public List<Genre> selectChartGenres(int memberNo) {
 		SqlSession session = getSqlSession();

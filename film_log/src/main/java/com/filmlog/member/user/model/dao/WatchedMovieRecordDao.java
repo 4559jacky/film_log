@@ -5,9 +5,14 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.user.model.vo.WatchedMovieRecord;
+import com.filmlog.member.user.model.vo.YearWatch;
 import com.filmlog.movie.model.vo.Genre;
 
 public class WatchedMovieRecordDao {
+	
+	public List<YearWatch> selectChartYears(SqlSession session, int memberNo) {
+		return session.selectList("watchedMovieRecordMapper.selectChartYears", memberNo);
+	}
 	
 	public List<Genre> selectChartGenres(SqlSession session, int memberNo) {
 		return session.selectList("watchedMovieRecordMapper.selectChartGenres", memberNo);
