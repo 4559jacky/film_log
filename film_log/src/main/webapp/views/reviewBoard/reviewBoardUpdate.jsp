@@ -32,26 +32,34 @@
         <div class="review-box mx-auto mt-4 p-4" style="max-width: 1400px;">
             <form action='/reviewBoardUpdate' name="update_board_form" method="post"> 
             <div class="mb-3">
-                <label class="form-label">제목</label>
-                <div class="d-flex">
-                    <div class="position-relative" style="max-width: 300px;">
-					    <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" 
-					    autocomplete="off" size="30" value="${ReviewBoard.movieTitle }">
-					    <input type="hidden" name="movie_id" id="selected_movie_id" value="${ReviewBoard.movieId }"> <!-- 선택한 영화 ID 저장 -->
-					    <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
-					</div>
-                    <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title"
-                    value="${ReviewBoard.reviewBoardTitle}" >
-                    
-                </div>
-            </div>
+			    <label class="form-label">제목</label>
+			    <div class="d-flex">
+			      
+			        <div class="position-relative" style="max-width: 300px;">
+			            <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" 
+			            autocomplete="off" size="30" value="${ReviewBoard.movieTitle }">
+			            <input type="hidden" name="movie_id" id="selected_movie_id" value="${ReviewBoard.movieId }"> <!-- 선택한 영화 ID 저장 -->
+			            <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
+			        </div>
+			        
+			        <div class="position-relative flex-grow-1 ms-4">
+			            <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title" 
+			            id="boardTitle" maxlength="50" value="${ReviewBoard.reviewBoardTitle}">
+			        </div>
+			    </div>
+			    <div class="mt-2 text-end">
+			        <small id="comment_count" class="form-text text-muted">0 / 30</small>
+			    </div>
+			</div>
             <textarea id="summernote" name="review_board_content">${ReviewBoard.reviewBoardContent}</textarea><br>
-
-                <input type="hidden" name="review_board_writer" value="<c:out value='${member.memberNo}'/>">
-                <div class="text-end">
-                    <input type="button" class="btn btn-custom" value="게시글 수정" id="updateButton"
-                    style="background-color: #e9ecef; color: #000; border-color: #ced4da;">
-                </div>
+            <div class="mt-1 text-end">
+		       <small id="content_count" class="form-text text-muted">0 / 1000</small>
+			</div><br>
+            <input type="hidden" name="review_board_writer" value="<c:out value='${member.memberNo}'/>">
+            <div class="text-end">
+                <input type="button" class="btn btn-custom" value="게시글 수정" id="updateButton"
+                style="background-color: #e9ecef; color: #000; border-color: #ced4da;">
+            </div>
  
        		<input type="hidden" name="img_no" value="${ReviewBoard.imgNo}">
        		<input type="hidden" name="review_board_no" value="${ReviewBoard.reviewBoardNo}">
@@ -165,6 +173,34 @@
 			})	
 			
 		})
+		
+		// 제목 글자 수 제한
+		$('#boardTitle').on('input',function(){
+			let content = $(this).val().trim();
+	        let length = content.length;
+
+	        $('#comment_count').text(length + ' /30 ');
+	        
+			if(length>30){
+				alert("제목을 30자 이하로 입력해주세요.");
+			    $(this).val(content.substring(0, 30));
+				return;
+			}
+		})
+		
+		// 내용 글자 수 제한
+		$('#summernote').on('summernote.change', function() {
+		    let content = $(this).summernote('code').replace(/<[^>]+>/g, '').trim();  // HTML 태그를 제거하고 텍스트만 추출
+		    let length = content.length;
+		
+		    $('#content_count').text(length + ' /1000');
+		
+		    if (length > 1000) {
+		        alert("1000자 이하로 입력해주세요.");
+		        let truncatedContent = content.substring(0, 1000);
+		        return;
+		    }
+		});
 		
 	</script>
     

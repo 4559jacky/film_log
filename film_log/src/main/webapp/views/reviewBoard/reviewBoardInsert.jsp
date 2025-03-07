@@ -32,27 +32,28 @@
                <div class="mb-3">
 				    <label class="form-label">제목</label>
 				    <div class="d-flex">
-				        
+				        <!-- 영화 선택 입력란 -->
 				        <div class="position-relative" style="max-width: 300px;">
 				            <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" autocomplete="off" size="30">
 				            <input type="hidden" name="movie_id" id="selected_movie_id"> <!-- 선택한 영화 ID 저장 -->
 				            <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
 				        </div>
-				       
-				        <div class="position-relative flex-grow-1 ms-3">
+				        <!-- 제목 입력란 -->
+				        <div class="position-relative flex-grow-1 ms-4">
 				            <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title" id="boardTitle" maxlength="50">
-				        
-				            <small id="comment_count" class="form-text text-muted position-absolute end-0 top-100 translate-middle-y pe-2">0 / 50</small>
-				        	
 				        </div>
+				    </div>
+				    <!-- 글자 수 표시 (제목 아래로 간격 넓게 설정) -->
+				    <div class="mt-2 text-end">
+				        <small id="comment_count" class="form-text text-muted">0 / 30</small>
 				    </div>
 				</div>
 
-
-
                 <!-- ✅ Summernote 적용 -->
                 <textarea id="summernote" name="review_board_content"></textarea><br>
-
+				<div class="mt-1 text-end">
+			       <small id="content_count" class="form-text text-muted">0 / 1000</small>
+				</div><br>
                 <input type="hidden" name="review_board_writer" value="<c:out value='${member.memberNo}'/>">
                 <div class="text-end">
                     <input type="button" class="btn btn-custom" value="게시글 등록" id="insertButton"
@@ -168,13 +169,28 @@
 			let content = $(this).val().trim();
 	        let length = content.length;
 
-	        $('#comment_count').text(length + ' /50 ');
+	        $('#comment_count').text(length + ' /30 ');
 	        
-			if(length>50){
-				alert("50자 이하로 입려해주세요.");
+			if(length>30){
+				alert("제목을 30자 이하로 입력해주세요.");
+			    $(this).val(content.substring(0, 30));
 				return;
 			}
 		})
+		
+		// 내용 글자 수 제한
+		$('#summernote').on('summernote.change', function() {
+		    let content = $(this).summernote('code').replace(/<[^>]+>/g, '').trim();  // HTML 태그를 제거하고 텍스트만 추출
+		    let length = content.length;
+		
+		    $('#content_count').text(length + ' /1000');
+		
+		    if (length > 1000) {
+		        alert("1000자 이하로 입력해주세요.");
+		        let truncatedContent = content.substring(0, 1000);
+		        return;
+		    }
+		});
 		
 
     </script>
