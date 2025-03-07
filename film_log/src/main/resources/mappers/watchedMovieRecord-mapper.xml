@@ -19,6 +19,11 @@
 		<result property="genreCount" column="genre_count"/>
 	</resultMap>
 	
+	<resultMap type="yearWatch" id="yearWatchMap">
+		<result property="year" column="year"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	
 	<update id="updateRecord" parameterType="watchedMovieRecord">
 		UPDATE watched_movie_record
 		SET movie_no = #{movieNo} ,memo = #{memo} ,#{watchedDate}
@@ -42,6 +47,13 @@
 		INSERT INTO watched_movie_record(movie_no ,member_no ,memo ,watched_date)
 		VALUES (#{movieNo} ,#{memberNo} ,#{memo} ,#{watchedDate})
 	</insert>
+	
+	<select id="selectChartYears" resultMap="yearWatchMap" parameterType="_int">
+		SELECT YEAR(watched_date) AS YEAR ,COUNT(*) AS count
+		FROM watched_movie_record
+		WHERE member_no = #{memberNo}
+		GROUP BY YEAR(watched_date), member_no
+	</select>
 	
 	<select id="selectChartGenres" resultMap="genreMap" parameterType="_int">		
 		SELECT gd.id, gd.name, COUNT(*) AS genre_count

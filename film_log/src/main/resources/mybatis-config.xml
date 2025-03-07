@@ -21,6 +21,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="com.filmlog.qna.model.vo.Qna" alias="qna"/>
 		<typeAlias type="com.filmlog.qna.model.vo.QnaResponse" alias="qnaResponse"/>
 		<typeAlias type="com.filmlog.member.user.model.vo.WatchedMovieRecord" alias="watchedMovieRecord"/>
+		<typeAlias type="com.filmlog.member.user.model.vo.YearWatch" alias="yearWatch"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">

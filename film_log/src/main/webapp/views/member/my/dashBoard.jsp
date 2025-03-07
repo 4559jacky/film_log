@@ -141,55 +141,74 @@
 			dataType : "json",
 			contentType : "application/x-www-form-urlencoded; charset=UTF-8",
 			success : function(data) {
-				
+				const years = data.years;
+			    
+			    const labels = [];
+			    const chartData = [];
+			    
+			    years.forEach((year, index) => {
+			        labels.push(year.year);
+			        chartData.push(year.count);
+			    });
+			    
+			    const ctx2 = document.getElementById('myBarChart').getContext('2d');
+			    const myBarChart = new Chart(ctx2, {
+			        type: 'bar',
+			        data: {
+			            labels: labels,
+			            datasets: [{
+			                data: chartData,
+			                backgroundColor: [
+			                	'rgba(255, 50, 80, 0.7)',    // 진한 빨강
+			                    'rgba(0, 102, 204, 0.7)',    // 짙은 파랑
+			                    'rgba(255, 140, 40, 0.7)',   // 진한 노랑
+			                    'rgba(30, 150, 110, 0.7)',   // 짙은 민트
+			                    'rgba(120, 30, 200, 0.7)',   // 진한 보라
+			                    'rgba(255, 80, 0, 0.7)',     // 진한 주황
+			                    'rgba(255, 50, 120, 0.7)',   // 진한 핑크
+			                    'rgba(0, 150, 50, 0.7)',     // 짙은 연두
+			                    'rgba(255, 100, 0, 0.7)',    // 짙은 주황
+			                    'rgba(0, 80, 200, 0.7)'      // 짙은 파랑2
+			                ],
+			                borderColor: [
+			                	'rgba(255, 50, 80, 1)',    // 진한 빨강
+			                    'rgba(0, 102, 204, 1)',    // 짙은 파랑
+			                    'rgba(255, 140, 40, 1)',   // 진한 노랑
+			                    'rgba(30, 150, 110, 1)',   // 짙은 민트
+			                    'rgba(120, 30, 200, 1)',   // 진한 보라
+			                    'rgba(255, 80, 0, 1)',     // 진한 주황
+			                    'rgba(255, 50, 120, 1)',   // 진한 핑크
+			                    'rgba(0, 150, 50, 1)',     // 짙은 연두
+			                    'rgba(255, 100, 0, 1)',    // 짙은 주황
+			                    'rgba(0, 80, 200, 1)'      // 짙은 파랑2
+			                ],
+			                borderWidth: 1
+			            }]
+			        },
+			        options: {
+			            responsive: true,
+			            plugins: {
+			                legend: {
+			                    display: false  // 레전드 숨기기
+			                }
+			            },
+			            scales: {
+			                x: {
+			                    beginAtZero: true
+			                },
+			                y: {
+			                    beginAtZero: true
+			                }
+			            }
+			        }
+			    });
+			},
+			error : function() {
+				alert("에러");
 			}
 
 		})
 	})
-
-const ctx2 = document.getElementById('myBarChart').getContext('2d');
-const myBarChart = new Chart(ctx2, {
-    type: 'bar',
-    data: {
-        labels: ['2020', '2021'],
-        datasets: [{
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.5)',   // 빨강
-                'rgba(54, 162, 235, 0.5)',   // 파랑
-                'rgba(255, 206, 86, 0.5)',   // 노랑
-                'rgba(75, 192, 192, 0.5)',   // 청록
-                'rgba(153, 102, 255, 0.5)',  // 보라
-                'rgba(255, 159, 64, 0.5)'    // 주황
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',   // 빨강
-                'rgba(54, 162, 235, 1)',   // 파랑
-                'rgba(255, 206, 86, 1)',   // 노랑
-                'rgba(75, 192, 192, 1)',   // 청록
-                'rgba(153, 102, 255, 1)',  // 보라
-                'rgba(255, 159, 64, 1)'    // 주황
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                display: false  // 레전드 숨기기
-            }
-        },
-        scales: {
-            x: {
-                beginAtZero: true
-            },
-            y: {
-                beginAtZero: true
-            }
-        }
-    }
-});
 
 	</script>
 </body>
