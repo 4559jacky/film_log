@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.member.model.vo.EmailCode;
 import com.filmlog.member.model.vo.Member;
 import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
@@ -106,6 +107,28 @@ public class MemberDao {
 
 	public int deleteMemberById(SqlSession session, String memberId) {
 		return session.delete("memberMapper.deleteMemberById",memberId);
+	}
+
+	public int insertEmailCode(SqlSession session, Map<String, String> paramMap) {
+		return session.insert("memberMapper.insertEmailCode",paramMap);
+	}
+
+	public Member selectEmail(SqlSession session, String email) {
+		return session.selectOne("memberMapper.selectEmail",email);
+	}
+
+	public EmailCode checkEmailCode(SqlSession session, Map<String, String> paramMap) {
+		System.out.println("코드 : "+paramMap.get("code"));
+		System.out.println("이메일 : "+paramMap.get("email"));
+		return session.selectOne("memberMapper.selectEmailCode", paramMap);
+	}
+
+	public int updateEmailCode(SqlSession session, Map<String, String> paramMap) {
+		return session.update("memberMapper.updateEmailCode",paramMap);
+	}
+
+	public int deleteEmailCode(SqlSession session, String memberEmail) {
+		return session.delete("memberMapper.deleteEmailCode",memberEmail);
 	}
 
 	/*

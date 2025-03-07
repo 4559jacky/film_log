@@ -34,7 +34,7 @@
 		<div>
 		<br>
 			<div>
-		    	<p class="text-center fs-1"><strong>추천 리뷰</strong></p>
+		    	<p class="text-center fs-1"><strong>어제의 인기 리뷰</strong></p>
 		    	<hr class="my-2" id="hr" style="width: 20%; margin: 0 auto; height: 2px; border-top: 2px solid white;">
 			</div>
 		</div>
@@ -42,12 +42,32 @@
 		<br>
 		<div class="container-xxl">
         	<div class="row row-cols-1 row-cols-md-4 g-5" id="review-cards-box">
-			
+        		<c:forEach var="board" items="${popularReviewTop4 }">
+					<div class="col" style="cursor: pointer;" onclick="location.href='/reviewBoardDetail?review_board_no=${board.reviewBoardNo}'">
+						<div class="card" style="border: none; background-color : black;">
+							<img src="<%=request.getContextPath()%>/reviewFilePath?img_no=${board.imgNo}" class="card-img-top" alt="' + review.title + '" width="230" height="340">
+								<div style="display: flex; margin-top: 10px;">
+									<div class="vr" style="margin-right: 5px"></div>
+										<div style="width: 95%">
+									<div style="display: flex; justify-content: space-between; width: 100%;">
+								<div class="text-truncate text-white">${board.reviewBoardTitle}</div>
+								</div>
+								<div class="text-truncate text-light">${board.memberNickname}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</c:forEach>
         	</div>
         	<br>
     	</div>
 	</div>
 	<script>
+		$(document).ready(function(){
+			let reviews = '${popularReviewTop4}';
+			console.log("리뷰 : "+reviews);
+		})
+	
 		$(function() {
 			const memberNo = $('#memberNo').val();
 			console.log(memberNo);
@@ -93,7 +113,7 @@
 				}
 			});
 		});
-		$(function() {
+		<%-- $(function() {
 			$.ajax({
 				url : "/indexReviewList",
 				type : "post",
@@ -126,8 +146,8 @@
 				error : function() {
 					alert("에러");
 				}
-			});
-		})
+			}); 
+		})--%>
 	</script>
 </body>
 </html>

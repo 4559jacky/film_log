@@ -28,6 +28,44 @@
 		<result property="extraAddress" column="extra_address"/>
 		<result property="memberNo" column="member_no"/>
 	</resultMap>
+	<resultMap type="emailCode" id="emailCodeMap">
+		<result property="email" column="email"/>
+		<result property="code" column="code"/>
+	</resultMap>
+	
+	<delete id="deleteEmailCode" parameterType="string">
+		DELETE FROM `email_code`
+		WHERE `email` = #{email}
+	</delete>
+	
+	<update id="updateEmailCode" parameterType="map">
+		UPDATE `email_code`
+		SET `code` = #{code}
+		WHERE `email` = #{email}
+	</update>
+	
+	
+	<select id="selectEmailCode" resultMap="emailCodeMap" parameterType="map">
+		SELECT *
+		FROM `email_code`
+		<where>
+			`email` = #{email}
+			<if test='code != null and code.equals("") == false'>
+				AND `code` = #{code}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectEmail" resultMap="memberMap" parameterType="string">
+		SELECT *
+		FROM `member`
+		WHERE member_email = #{email}
+	</select>
+	
+	<insert id="insertEmailCode" parameterType="map">
+		INSERT INTO `email_code` (email, code)
+		VALUES(#{email}, #{code})
+	</insert>
 	
 	<delete id="deleteMemberById" parameterType="string">
 		DELETE FROM `member`
