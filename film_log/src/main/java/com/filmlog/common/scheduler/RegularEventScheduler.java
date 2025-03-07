@@ -18,8 +18,8 @@ public class RegularEventScheduler implements Job{
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
 	    try {
-//	        LocalDate date = LocalDate.now().minusDays(1);
-	    	LocalDate date = LocalDate.now();
+	        LocalDate date = LocalDate.now().minusDays(1);
+//	    	LocalDate date = LocalDate.now();
 	        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	        String yesterday = dtf.format(date);
 
