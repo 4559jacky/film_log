@@ -1,42 +1,38 @@
 package com.filmlog.freeboard.model.service;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.apache.ibatis.session.SqlSession;
+import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
-/**
- * Servlet implementation class FreeBoardService
- */
-@WebServlet("/FreeBoardService")
-public class FreeBoardService extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FreeBoardService() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+import com.filmlog.freeboard.model.dao.FreeBoardDao;
+import com.filmlog.freeboard.model.vo.FreeBoard;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+public class FreeBoardService {
+	// 게시판 전체 목록조회
+	public List<FreeBoard> selectBoardList(FreeBoard option) {
+		SqlSession session = getSqlSession();
+		List<FreeBoard> resultList = new ArrayList<FreeBoard>();
+		resultList = new FreeBoardDao().selectBoardList(session,option);
+		return resultList;
+	}
+	
+	// 페이징 처리
+	public int selectBoardListCount() {
+		SqlSession session = getSqlSession();
+		int result = new FreeBoardDao().selectBoardListCount(session);
+		session.close();
+		return result;
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	public int insertFreeBoard(FreeBoard board) {
+		SqlSession session = getSqlSession();
+		int result = new FreeBoardDao().insertFreeBoard(session,board);
+		session.close();
+		return result;
 	}
+
+	
 
 }
