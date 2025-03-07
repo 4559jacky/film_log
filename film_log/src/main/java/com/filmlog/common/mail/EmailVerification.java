@@ -1,9 +1,11 @@
 package com.filmlog.common.mail;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Random;
 
 public class EmailVerification {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         String email = "user-email@example.com";  // 사용자 이메일 입력 받기
         String verificationCode = generateVerificationCode();
         String subject = "회원가입 이메일 인증번호";
