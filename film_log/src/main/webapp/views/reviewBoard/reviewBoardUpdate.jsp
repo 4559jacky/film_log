@@ -35,12 +35,14 @@
                 <label class="form-label">제목</label>
                 <div class="d-flex">
                     <div class="position-relative" style="max-width: 300px;">
-					    <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" autocomplete="off">
-					    <input type="hidden" name="movie_id" id="selected_movie_id"> <!-- 선택한 영화 ID 저장 -->
+					    <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" 
+					    autocomplete="off" size="30" value="${ReviewBoard.movieTitle }">
+					    <input type="hidden" name="movie_id" id="selected_movie_id" value="${ReviewBoard.movieId }"> <!-- 선택한 영화 ID 저장 -->
 					    <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
 					</div>
                     <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title"
                     value="${ReviewBoard.reviewBoardTitle}" >
+                    
                 </div>
             </div>
             <textarea id="summernote" name="review_board_content">${ReviewBoard.reviewBoardContent}</textarea><br>
@@ -104,8 +106,8 @@
 					    } else {
 					    	let result = "";
 					    	for(let i = 0 ; i < data.movieArray.length ; i++){
-					    		result = '<li class="list-group-item" data-id='+data.movieArray[i].movieId+' data-title='+data.movieArray[i].movieTitle+'>'
-					    				+data.movieArray[i].movieTitle+ '</li>'
+					    		result = result = '<li class="list-group-item" data-id="' + data.movieArray[i].movieId + '" data-title="' + data.movieArray[i].movieTitle + '">'
+					            + data.movieArray[i].movieTitle + '</li>';
 						    	$('#movie_list').append(result);
 					    	}
 					    }

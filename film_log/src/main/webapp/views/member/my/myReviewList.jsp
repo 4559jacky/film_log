@@ -34,17 +34,24 @@
         		<div></div>
         	</div>
         	<div class="d-grid gap-2 d-md-flex justify-content-md-end">
-	            	<form name="search_board_form" action="/myReviewListPass" method="post" class="d-flex">
-	            		<%-- <input type="hidden" name="member_no" value="${member.memberNo}"> --%>
-		                <select class="form-select" id="searchFilter" name="search_filter">
-		                	<option value="0">선택</option>
-		                    <option value="title">제목</option>
-		                    <option value="movieName">영화 이름</option>
-		                </select>
-		                <input type="text" class="form-control" id="searchWord" name="search_word" placeholder="검색어 입력"
-		                value="${paging.word == null? '' : paging.word}">
-		                <input type="submit" id="search_btn" value="검색">
-	                </form>
+	            <form name="search_board_form" action="/myReviewListPass" method="get" class="d-flex">
+				    <div class="row g-2">
+				        <div class="col-md-3">
+				            <select class="form-select" id="searchFilter" name="search_filter">
+				                <option value="0">선택</option>
+				                <option value="1" ${paging.filter eq 'title'? 'selected':'' }>제목</option>
+				                <option value="2" ${paging.filter eq 'movieName'? 'selected':'' }>영화 이름</option>
+				            </select>
+				        </div>
+				        <div class="col-md-6">
+				            <input type="text" id="selectWord" class="form-control" placeholder="검색어 입력" name="search_word"
+				                   value="${paging.word == null? '' : paging.word}">
+				        </div>
+				        <div class="col-md-3">
+				            <button class="btn select_btn w-100">검색</button>
+				        </div>
+				    </div>
+				</form>
         	</div>
 	    </div>
 	    <br>
