@@ -91,34 +91,33 @@
 			</div>
 		</div>
 	</div>
-		<nav aria-label="Page navigation-sm">
-		  <ul class="pagination justify-content-center">
-		    <!-- 이전 버튼 -->
-		    <c:if test="${paging.prev}">
-		      <li>
-		        <a class="pagination-newer" href="/movieList?nowPage=${paging.pageBarStart - 1}" aria-label="Previous">
-		          <span aria-hidden="true">&laquo;</span>
-		        </a>
-		      </li>
-		    </c:if>
-		
-		    <!-- 페이지 번호 -->
-		    <c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
-		      <li class="${i == paging.nowPage ? 'pagination-active' : ''}">
-		        <a href="/movieList?nowPage=${i}">${i}</a>
-		      </li>
-		    </c:forEach>
-		
-		    <!-- 다음 버튼 -->
-		    <c:if test="${paging.next}">
-		      <li>
-		        <a class="pagination-older" href="/movieList?nowPage=${paging.pageBarEnd + 1}" aria-label="Next">
-		          <span aria-hidden="true">&raquo;</span>
-		        </a>
-		      </li>
-		    </c:if>
-		  </ul>
-		</nav>
+	<c:if test="${not empty paging}">
+		<div class="center">
+			<div class="pagination justify-content-center">
+				<c:if test="${paging.prev}">
+					<c:url var="testUrl" value="/movieList">
+						<c:param name="nowPage" value="${paging.pageBarStart > 1 ? paging.pageBarStart-1 : 1}"/>
+					</c:url>
+					<a class="page-link" href="${testUrl} ">&laquo;</a>
+				</c:if>
+				<c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
+					<a class="page-link" href="/movieList?nowPage=${i}">
+						${i}
+					</a>
+				</c:forEach>
+				<c:if test="${paging.next}">
+					<a class="page-link" href="/movieList?nowPage=${paging.pageBarEnd < paging.totalPage ? (paging.pageBarEnd + 1) : paging.totalPage}">&raquo;</a>
+				</c:if>
+			</div>
+		</div>
+	</c:if>
+	<!-- <script>
+		$('table.table-hover tbody tr').on('click',function(){
+			const movieId = $(this).data('id');
+			console.log(movieId);
+			location.href='/reviewBoardDetail?review_board_no='+movieId;
+		})	
+	</script> -->
 	<!-- <a href="/movieAPI">영화 API 추가하기</a>
 	<a href="/movieCastAndCrewAPI">감독 및 배우 API 추가하기</a>
 	<script>

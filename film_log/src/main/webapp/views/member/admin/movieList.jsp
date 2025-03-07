@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>영화 목록</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<%=request.getContextPath()%>/resources/css/include/paging.css" rel="stylesheet" type="text/css">
+    <link href="<%=request.getContextPath()%>/resources/css/include/paing.css" rel="stylesheet" type="text/css">
     <style>
         .table-dark { background-color: #f8f9fa !important; color: #000 !important; }
         .select_btn { background-color: #e9ecef !important; color: #000 !important; border-color: #ced4da !important; }
@@ -60,12 +60,11 @@
 						  <thead class="table-dark">
 						    <tr>
 						   	  <th scope="col" style="width : 10%;">번호</th>
-						      <!-- <th scope="col" style="width : 20%;">영화 포스터</th> -->
 						      <th scope="col" style="width : 30%;">영화 제목</th>
 						      <th scope="col" style="width : 15%;">러닝타임</th>
 						      <th scope="col" style="width : 35%;">개봉일</th>
 						      <th scope="col" style="width : 25%;">평점</th>
-						      <th scope="col" style="width : 30%;">수정</th>
+						      <th scope="col" style="width : 30%;">상세</th>
 						      <th scope="col" style="width : 30%;">삭제</th>
 						    </tr>
 						  </thead>
@@ -73,9 +72,6 @@
 						  	<c:forEach var="movie" items="${resultList }" varStatus="status">
 							    <tr>
 							      <th scope="row">${status.index +1}</th>
-							      <%-- <td>
-						             <img src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="포스터" width="100">
-						          </td> --%>
 							      <td>${movie.title}</td>
 								  <td>${movie.runtime }분</td>
 						          <td>${movie.releaseDate}</td>
@@ -84,11 +80,11 @@
 						          </td>
 						          <td>
 						          	<div>
-							          	<a class="updateBtn" href="/updateMoviePass?id=${movie.id}">수정</a>						          	
+							          	<a class="updateBtn" href="/updateMoviePass?id=${movie.id}">상세</a>						          	
 						          	</div>
 						          </td>
 						          <td>
-						          	<div class="item">
+						          	<div class="item" id="${movieList }">
 						          		<button class="deleteBtn">삭제</button>
 						          	</div>
 						          </td>
@@ -99,9 +95,6 @@
 						</div>
 					</c:otherwise>
 				</c:choose>
-					<div class="item">
-						<button class="insertBtn">추가</button>
-					</div>
 			</div>
 		</div>
 	</div>
@@ -111,9 +104,10 @@
 	        if (!confirm('정말 삭제하시겠습니까?')) {
 	            return;
 	        }
-	        const id = $('#id').val();
+	        const self = $(this);
+	        const id = self.closest('.item').data('id');
 	        $.ajax({
-	            url: "", // 삭제 요청을 처리할 서버 URL 입력
+	            url: "/deleteMovie", // 삭제 요청을 처리할 서버 URL 입력
 	            type: "POST",
 	            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 	            data: { id: id },
@@ -121,51 +115,39 @@
 	            success: function (data) {
 	                alert(data.res_msg);
 	                if (data.res_code === "200") {
-	                    location.reload();
+	                	$(this).closest('.item').remove();
 	                }
 	            },
 	            error: function () {
 	                alert("삭제 요청 중 오류가 발생했습니다.");
 	            }
 	        });
-
-	        // 화면에서도 즉시 삭제
-	        $(this).closest('.item').remove();
 	    });
 	});
-
+	// 검색버튼 
 	</script>
-		<nav aria-label="Page navigation-sm">
-		  <ul class="pagination justify-content-center">
-		    <!-- 이전 버튼 -->
-		    <c:if test="${paging.prev}">
-		      <li>
-		        <a class="pagination-newer" href="/movieList?nowPage=${paging.pageBarStart - 1}" aria-label="Previous">
-		          <span aria-hidden="true">&laquo;</span>
-		        </a>
-		      </li>
-		    </c:if>
-		
-		    <!-- 페이지 번호 -->
-		    <c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
-		      <li class="${i == paging.nowPage ? 'pagination-active' : ''}">
-		        <a href="/movieList?nowPage=${i}">${i}</a>
-		      </li>
-		    </c:forEach>
-		
-		    <!-- 다음 버튼 -->
-		    <c:if test="${paging.next}">
-		      <li>
-		        <a class="pagination-older" href="/movieList?nowPage=${paging.pageBarEnd + 1}" aria-label="Next">
-		          <span aria-hidden="true">&raquo;</span>
-		        </a>
-		      </li>
-		    </c:if>
-		  </ul>
-		</nav>
-	<script>
-		
-	</script>
+	
+	<c:if test="${not empty paging}">
+		<div class="center">
+			<div class="pagination justify-content-center">
+				<c:if test="${paging.prev}">
+					<c:url var="testUrl" value="/movieList">
+						<c:param name="nowPage" value="${paging.pageBarStart > 1 ? paging.pageBarStart-1 : 1}"/>
+					</c:url>
+					<a class="page-link" href="${testUrl} ">&laquo;</a>
+				</c:if>
+				<c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
+					<a class="page-link" href="/movieList?nowPage=${i}">
+						${i}
+					</a>
+				</c:forEach>
+				<c:if test="${paging.next}">
+					<a class="page-link" href="/movieList?nowPage=${paging.pageBarEnd < paging.totalPage ? (paging.pageBarEnd + 1) : paging.totalPage}">&raquo;</a>
+				</c:if>
+			</div>
+		</div>
+	</c:if>
+	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
