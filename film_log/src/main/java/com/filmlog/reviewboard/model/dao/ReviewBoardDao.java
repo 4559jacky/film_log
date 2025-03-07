@@ -124,5 +124,9 @@ public class ReviewBoardDao {
 	public List<ReviewBoard> selectReviewBoardListByWord(ReviewBoard option, SqlSession session) {
 		return session.selectList("reviewboardMapper.selectReviewBoardAllByWord",option);
 	}
+
+	public List<ReviewBoard> selectReviewBoardTop4(String yeaterday, SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewBoardTop4",yeaterday);
+	}
 	
 }

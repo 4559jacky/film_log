@@ -235,5 +235,12 @@ public class ReviewBoardService {
 		session.close();
 		return resultList;
 	}
+
+	public List<ReviewBoard> selectReviewBoardTop4(String yeaterday) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> reviewTop4 = new ReviewBoardDao().selectReviewBoardTop4(yeaterday,session);
+		session.close();
+		return reviewTop4;
+	}
 	
 }
