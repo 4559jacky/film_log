@@ -9,6 +9,10 @@ import com.filmlog.movie.model.vo.Genre;
 
 public class WatchedMovieRecordDao {
 	
+	public List<Genre> selectChartGenres(SqlSession session, int memberNo) {
+		return session.selectList("watchedMovieRecordMapper.selectChartGenres", memberNo);
+	}
+	
 	public int updateRecord(SqlSession session, WatchedMovieRecord record) {
 		return session.insert("watchedMovieRecordMapper.updateRecord", record);
 	}
