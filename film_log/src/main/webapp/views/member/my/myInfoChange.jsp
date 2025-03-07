@@ -138,13 +138,13 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	              	<img src="<%=request.getContextPath()%>/memberImgUpdatePath?member_no=${member.getMemberNo() }" style="width:200px; height:200px; border: 2px solid black; border-radius: 50%; object-fit: cover;">
 					<br><br>
 					<label for="memberImg" style="font-size:20px;"><b>프로필 이미지 변경</b></label><br>
-					<input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br>
+					<input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br><br>
 					<div class="invalid-feedback file-error">
 	                	형식에 맞지않는 파일입니다.(png만 가능)
 	              	</div>
+	              	<label style="font-size:20px;"><b>기본이미지로 변경 </b><input type="checkbox" name="default_img" id="defaultImg"></label><br>
 	            </div>
 	            <div class="mb-3">
-	              
 	            </div>
 	          </div>
 	          <button class="btn btn-primary btn-lg btn-block btn-next2" type="button">다음</button>
@@ -511,8 +511,20 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        $("#join2").hide();
 		        $("#join3").show();
 		    }); */
+		    $('#memberImg').change(function(){
+		    	console.log('이미지 확인');
+		    	if($('#defaultImg').is(":checked")) {
+		    		$('#defaultImg').prop("checked", false);
+		    	}
+		    })
 	    
 		    ///////////////////////////////////////
+		    $('#defaultImg').change(function(){
+		    	console.log('체크박스 확인');
+		    	if($('#defaultImg').is(":checked")){
+		    		$('#memberImg').val('');
+		    	}
+		    })
 		    
 		    // 두번째 버튼(이미지)
 		    $(".btn-next2").click(function (event) { 
@@ -592,9 +604,9 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
    					})
    				} else {
       					alert('이미지 파일만 선택할 수 있습니다.');
-      					memberImg = '';
+      					$('#memberImg').val('');
                	}
-           	} else {
+           	}  else {
 				$.ajax({
 					url : '/memberInfoChange',
 					type : 'post',

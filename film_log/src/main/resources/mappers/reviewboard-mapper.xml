@@ -47,10 +47,9 @@
 	<!-- 스케줄러 -->
 	<select id="selectReviewBoardTop4" resultMap="reviewBoardMap" parameterType="string">
 		SELECT r.review_board_no, r.review_board_title, r.review_board_content, r.reg_date, r.mod_date,
-				m.member_no, i.review_board_img_no, r.movie_id
+				m.member_no, r.movie_id
 		FROM `review_board` r
 		JOIN `member` m ON m.member_no = r.member_no
-		JOIN `review_board_img` i ON i.review_board_no = r.review_board_no
 		JOIN `movie_dto` d ON r.movie_id = d.id
 		WHERE DATE_FORMAT(reg_date, '%Y-%m-%d') = #{yesterday}
 		ORDER BY views desc
