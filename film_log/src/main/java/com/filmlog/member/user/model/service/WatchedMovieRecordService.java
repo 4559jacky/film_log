@@ -13,6 +13,13 @@ import com.filmlog.movie.model.vo.Genre;
 
 public class WatchedMovieRecordService {
 	
+	public List<Genre> selectChartGenres(int memberNo) {
+		SqlSession session = getSqlSession();
+		List<Genre> genres = new ArrayList<Genre>();
+		genres = new WatchedMovieRecordDao().selectChartGenres(session, memberNo);
+		return genres;
+	}
+	
 	public int updateRecord(WatchedMovieRecord record) {
 		SqlSession session = getSqlSession();
 		int result = new WatchedMovieRecordDao().insertRecord(session, record);

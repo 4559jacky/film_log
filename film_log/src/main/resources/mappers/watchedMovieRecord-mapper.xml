@@ -16,6 +16,7 @@
 	<resultMap type="genre" id="genreMap">
 		<result property="id" column="id"/>
 		<result property="name" column="name"/> 
+		<result property="genreCount" column="genre_count"/>
 	</resultMap>
 	
 	<update id="updateRecord" parameterType="watchedMovieRecord">
@@ -41,6 +42,16 @@
 		INSERT INTO watched_movie_record(movie_no ,member_no ,memo ,watched_date)
 		VALUES (#{movieNo} ,#{memberNo} ,#{memo} ,#{watchedDate})
 	</insert>
+	
+	<select id="selectChartGenres" resultMap="genreMap" parameterType="_int">		
+		SELECT gd.id, gd.name, COUNT(*) AS genre_count
+		FROM genre_dto gd
+		JOIN movie_genre mg ON gd.id = mg.genre_id
+		JOIN watched_movie_record wmr ON mg.movie_id = wmr.movie_no
+		JOIN member m ON m.member_no = wmr.member_no
+		WHERE wmr.member_no = #{memberNo}
+		GROUP BY gd.id, gd.name;
+	</select>
 	
 	<select id="selectGenre" resultMap="genreMap" parameterType="_int">
 		SELECT DISTINCT gd.id, gd.`name`
