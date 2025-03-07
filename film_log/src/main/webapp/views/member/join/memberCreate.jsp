@@ -60,14 +60,29 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				    </div>
 				</div>
 	          </div>
+	          <label for="memberEmail">이메일</label>
 			  <div class="row">
-		          <div class="mb-3">
-		            <label for="memberEmail">이메일</label>
+		          <div class="col-md-6 mb-3">
 		            <input type="email" class="form-control" name="member_email" id="memberEmail" placeholder="you@example.com" required>
-		            <div class="invalid-feedback">
-		              이메일을 형식에 맞게 입력해주세요. ex) hogildong123@gmail.com
+		            <div class="invalid-feedback email-error">
+		              	이메일을 형식에 맞게 입력해주세요. ex) hogildong123@gmail.com
 		            </div>
 		          </div>
+		          <div class="col-md-6 mb-3">
+					<input type="button" class="form-control" id="sendCode" value="인증번호 보내기">
+				  </div>
+		      </div>
+		      <label for="emailCode">인증번호</label>
+		      <div class="row">
+		          <div class="col-md-6 mb-3">
+		            <input type="text" class="form-control" name="email_code" id="emailCode" placeholder="인증번호" required>
+		            <div class="invalid-feedback code-error">
+		              	인증번호를 입력해주세요.
+		            </div>
+		          </div>
+		          <div class="col-md-6 mb-3">
+					<input type="button" class="form-control" id="checkCode" value="인증번호 확인">
+				  </div>
 		      </div>
 		        <label for="membeAddress">주소</label><br>
 				<div class="row">
@@ -220,8 +235,8 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script type="text/javascript">
+		let emailCheck = false;
 		// 주소 데이터 가져오기
-		
 		function sample6_execDaumPostcode() {
 	        new daum.Postcode({
 	            oncomplete: function(data) {
@@ -269,6 +284,100 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	            }
 	        }).open();
 	    }
+		
+      	$(document).ready(function(){
+      		$('#sendCode').click(function(event){
+	      		let form = $('.validation-form');
+			    let email = form.find("input[name='member_email']").val();
+	      		isValid = true;
+	      		const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+	      		if (!email || !regEmail.test(email)) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#memberEmail").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+		        }
+	      		
+	      		if(isValid) {
+	      			$.ajax({
+	      				url:'/emailVerification',
+	      				type:'post',
+	      				data:{email : email},
+	      				dataType:'JSON',
+	      				contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
+	      				success : function(data) {
+	      					alert(data.res_msg);
+	      					if(data.res_code == '200') {
+	      						$("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+	      					} else {
+	      						$("#memberEmail").addClass("is-invalid");
+	      						$('.email-error').text('이미 사용중인 이메일입니다.').show();
+	      					}
+	      				},
+	      				error: function (error) {
+	      			        console.log("오류 발생", error);
+	      			    }
+	      			})
+	      		} else {
+	      			alert('이메일 형식이 맞지않습니다.');
+	      			event.preventDefault();
+		            event.stopPropagation();
+	      		}
+	      	});
+      		
+      		$('#checkCode').click(function(event){
+      			console.log('왜안찍혀 이거;;');
+	      		let form = $('.validation-form');
+	      		let email = form.find("input[name='member_email']").val();
+			    let code = form.find("input[name='email_code']").val();
+	      		isValid = true;
+	      		let regex = /^\d{6}$/;
+	      		if (!code || !regex.test(code)) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#emailCode").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#emailCode").removeClass("is-invalid").addClass("is-valid");
+		            $("#emailCode").addClass("noValid");
+		        }
+	      		
+	      		if(isValid) {
+	      			$.ajax({
+	      				url:'/emailCheck',
+	      				type:'post',
+	      				data:{
+	      					email : email,
+	      					code : code
+	      					},
+	      				dataType:'JSON',
+	      				contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
+	      				success : function(data) {
+	      					alert(data.res_msg);
+	      					if(data.res_code == '200') {
+	      						emailCheck = true;
+	      						$('#memberEmail').prop('readonly', true);
+	      						$("#emailCode").prop('readonly', true);
+	      						$("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+	      						$("#emailCode").removeClass("is-invalid").addClass("is-valid");
+	      						$("#emailCode").removeClass("noValid");
+	      					} else {
+	      						$("#emailCode").addClass("is-invalid");
+	      						$("#emailCode").addClass("noValid")
+	      					}
+	      				}
+	      			})
+	      		} else {
+	      			alert('코드는 6자리입니다.');
+	      			event.preventDefault();
+		            event.stopPropagation();
+		            $("#emailCode").addClass("is-invalid");
+	      		}
+	      	});
+      		
+      	})
 	
 		// 버튼을 활용하여 페이지 전환 기능
 		$(document).ready(function () {
@@ -347,6 +456,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        let name = form.find("input[name='member_name']").val();
 		        let nickname = form.find("input[name='member_nickname']").val();
 		        let email = form.find("input[name='member_email']")[0]; // HTML input element 직접 가져옴 */
+		        let code = form.find("input[name='email_code']")[0];
 		        let postCode = form.find("input[name='postcode']").val();
 		        let address = form.find("input[name='address']").val();
 		        let detailAddress = form.find("input[name='detail_address']").val();
@@ -356,6 +466,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        let gender = form.find("input[name='member_gender']").val();
 
 		        let isNicknameValid = $("#memberNickname").hasClass("is-valid");
+		        let isCodeValid = $("#emailCode").hasClass("noValid");
 		        let isPhoneValid = $("#memberPhone").hasClass("is-valid");
 		        let isValid = true;
 		        // 유효성 검사
@@ -375,10 +486,18 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            isValid = false;
 		        }
 		        
-		        if (!isNicknameValid) {
+		        if (!isPhoneValid) {
 		            event.preventDefault();
 		            event.stopPropagation();
-		            $("#memberphone").addClass("is-invalid").text();
+		            console.log('여기걸리나');
+		            $("#memberphone").addClass("is-invalid");
+		            isValid = false;
+		        }
+		        
+		        if (isCodeValid) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#memberPhone").addClass("is-invalid");
 		            isValid = false;
 		        }
 
@@ -389,6 +508,16 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            isValid = false;
 		        } else {
 		            $("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+		        }
+		        
+		        if (!code.checkValidity()) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            console.log('여기걸리나');
+		            $("#emailCode").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#emailCode").removeClass("is-invalid").addClass("is-valid");
 		        }
 		        
 		        // 우편번호 숫자인지 확인
@@ -600,6 +729,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	            let nickname = form.find("input[name='member_nickname']").val();
 	            let duplicateNicknameCheck = false;
 	            let email = form.find("input[name='member_email']").val();
+	            let code = form.find("input[name='email_code']").val();
 	            let address = form.find("input[name='member_address']").val();
 	            let phone = form.find("input[name='member_phone']").val();
 	            let birth = form.find("input[name='member_birth']").val();
@@ -632,6 +762,11 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	                console.log('실패');
 	                alert('개인정보 수집 및 이용에 동의해주세요.');
 	                personalAgree.classList.add("is-invalid");
+	            } else if(emailCheck == false) {
+	            	event.preventDefault();
+	                event.stopPropagation();
+	                alert('이메일 인증이 필요합니다.');
+	                $("#emailCode").addClass("is-invalid");
 	            } else {
 	            	$.ajax({
 	            		url : "/encryptPassword",
