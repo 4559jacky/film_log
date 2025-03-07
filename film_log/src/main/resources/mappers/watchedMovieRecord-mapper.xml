@@ -24,6 +24,11 @@
 		<result property="count" column="count"/>
 	</resultMap>
 	
+	<resultMap type="monthWatch" id="monthWatchMap">
+		<result property="month" column="month"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	
 	<update id="updateRecord" parameterType="watchedMovieRecord">
 		UPDATE watched_movie_record
 		SET movie_no = #{movieNo} ,memo = #{memo} ,#{watchedDate}
@@ -47,6 +52,13 @@
 		INSERT INTO watched_movie_record(movie_no ,member_no ,memo ,watched_date)
 		VALUES (#{movieNo} ,#{memberNo} ,#{memo} ,#{watchedDate})
 	</insert>
+	
+	<select id="selectChartMonths" resultMap="monthWatchMap" parameterType="_int">
+		SELECT CONCAT(MONTH(watched_date), '월') AS month, COUNT(*) AS count
+		FROM watched_movie_record
+		WHERE member_no = #{memberNo}
+		GROUP BY MONTH(watched_date), member_no
+	</select>
 	
 	<select id="selectChartYears" resultMap="yearWatchMap" parameterType="_int">
 		SELECT YEAR(watched_date) AS YEAR ,COUNT(*) AS count

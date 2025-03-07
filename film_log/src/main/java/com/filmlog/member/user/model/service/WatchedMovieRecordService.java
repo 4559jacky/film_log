@@ -8,11 +8,19 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.member.user.model.dao.WatchedMovieRecordDao;
+import com.filmlog.member.user.model.vo.MonthWatch;
 import com.filmlog.member.user.model.vo.WatchedMovieRecord;
 import com.filmlog.member.user.model.vo.YearWatch;
 import com.filmlog.movie.model.vo.Genre;
 
 public class WatchedMovieRecordService {
+	
+	public List<MonthWatch> selectChartMonths(int memberNo) {
+		SqlSession session = getSqlSession();
+		List<MonthWatch> months = new ArrayList<MonthWatch>();
+		months = new WatchedMovieRecordDao().selectChartMonths(session, memberNo);
+		return months;
+	}
 	
 	public List<YearWatch> selectChartYears(int memberNo) {
 		SqlSession session = getSqlSession();
@@ -72,4 +80,5 @@ public class WatchedMovieRecordService {
 		int result = new WatchedMovieRecordDao().selectRecordCount(session, option);
 		return result;
 	}
+
 }
