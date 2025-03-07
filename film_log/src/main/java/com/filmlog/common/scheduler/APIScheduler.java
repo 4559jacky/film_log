@@ -60,7 +60,7 @@ public class APIScheduler extends HttpServlet{
 			// CronTrigger를 사용하여 실행 일정 설정
 			CronTrigger trigger = newTrigger()
 					.withIdentity("trigger1", "group1")	// 트리거 ID 및 그룹명 설정
-					.withSchedule(cronSchedule("0/60 * * * * ?")) 
+					.withSchedule(cronSchedule("0 0/1 * * * ?")) 
 					//.withSchedule(cronSchedule("0 0 0 * * *")) 
 					//.withSchedule(cronSchedule("0/10 * * * * ?")) // 10초마다 한번씩 동작
 					.build();
