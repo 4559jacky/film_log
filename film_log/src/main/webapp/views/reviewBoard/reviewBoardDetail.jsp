@@ -107,7 +107,7 @@
 									</c:forEach>
 								</c:when>
 								<c:otherwise>
-										<p>댓글이 없습니다.<p>
+										<p id="commentNull">댓글이 없습니다.<p>
 								</c:otherwise>
 							</c:choose>
                         </div>
@@ -219,6 +219,8 @@
         							+ '<button class= "btn btn-sm btn-custom me-1 update_btn" style="display: none; background-color: #d3d3d3; color: #000; border: none;" data-comment-no='+ data.commentNo +'>수정 완료</button>'
         							+'</div>';
                                 $('#commentList').append(newComment);
+                                $('#commentNull').hide();
+                          
         					}
         				}
         			});		
@@ -268,7 +270,7 @@
 		        commentItem.find('.update_btn').show();
 		        commentItem.find('.deleteComment_btn').hide();
 		        commentItem.find('.updateComment_btn').hide();
-		       
+		        
 		    });
 		});
 		
@@ -306,6 +308,7 @@
 	        $('#comment_count').text(length + ' /50 ');
 	        
 			if(length>50){
+				$(this).val(content.substring(0, 50));
 				alert("50자 이하로 입력해주세요.");
 				return;
 			}
