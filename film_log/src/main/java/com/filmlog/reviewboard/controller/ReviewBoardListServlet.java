@@ -27,21 +27,28 @@ public class ReviewBoardListServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nowPage = request.getParameter("nowPage");
+		String filter = request.getParameter("selectNo");
+		String word = request.getParameter("selectWord");
 		
 		ReviewBoard option = new ReviewBoard();
+	
 		if(nowPage != null) {
 			option.setNowPage(Integer.parseInt(nowPage));
 		}
+		
+		option.setFilter(filter); 
+		option.setWord(word);
 		
 		int totalData = new ReviewBoardService().selectReviewBoardCount(option);
 		option.setTotalData(totalData);
 		
 		List<ReviewBoard> resultList = new ReviewBoardService().selectReviewBoardAll(option);
 		
-		
 		RequestDispatcher view = request.getRequestDispatcher("/views/reviewBoard/reviewBoardList.jsp");
+		
 		request.setAttribute("resultList", resultList);
 		request.setAttribute("paging", option);
+		
 		view.forward(request, response);
 		
 	

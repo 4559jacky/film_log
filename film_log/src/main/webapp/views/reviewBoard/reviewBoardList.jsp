@@ -25,30 +25,25 @@
         <hr class="my-2" id="hr"><br><br>
         
         <div class="d-flex justify-content-between my-3 review_board_list">
-            <div class="input-group w-50">
-                <select class="form-select" id="searchFilter">
-                	<option value="0">선택</option>
-                    <option value="1">제목</option>
-                    <option value="2">영화</option>
-                    <option value="3">작성자</option>
-                </select>
-                <input type="text" id="" class="form-control" placeholder="검색어 입력">
-                <button class="btn select_btn">검색</button>
-                <script>
-	                $(document).ready(function () {
-	                    $(".insert_btn").click(function () {
-	                    	var memberNo = "${member.memberNo}";
-	                    	if(memberNo){
-	                        	location.href = "/reviewBoardInsertPass";               		
-	                    	}else{
-	                    		if(confirm("로그인 후 작성 가능합니다. 로그인 하시겠습니까?")){
-	                    			location.href = "/memberLoginPass";       
-	                    		}	
-	                    	}
-	                    });
-	                });
-                </script>
-            </div>
+        	<form action="/reviewBoardList" method="get">
+			    <div class="row g-2">
+			        <div class="col-md-3">
+			            <select class="form-select" id="selectNo" name="selectNo">
+			                <option value="0">선택</option>
+			                <option value="1" ${paging.filter eq '1'? 'selected':'' }>제목</option>
+			                <option value="2" ${paging.filter eq '2'? 'selected':'' }>영화</option>
+			                <option value="3" ${paging.filter eq '3'? 'selected':'' }>작성자</option>
+			            </select>
+			        </div>
+			        <div class="col-md-6">
+			            <input type="text" id="selectWord" class="form-control" placeholder="검색어 입력" name="selectWord"
+			                   value="${paging.word == null? '' : paging.word}">
+			        </div>
+			        <div class="col-md-3">
+			            <button class="btn select_btn w-100">검색</button>
+			        </div>
+			    </div>
+			</form>
             <button class="btn insert_btn">리뷰 작성</button>
         </div>
         <table class="table table-hover">
@@ -79,7 +74,7 @@
 				</c:when>
 				<c:otherwise>
 					<tr>
-						<td colspan="5">게시글이 없습니다.</td>
+						<td colspan="5" style="pointer-events: none;">게시글이 없습니다.</td>
 					</tr>
 				</c:otherwise>
 			</c:choose>
@@ -89,29 +84,62 @@
     <c:if test="${not empty paging}">
 		<div class="center">
 			<div class="pagination justify-content-center">
-				<c:if test="${paging.prev} ">
+				<c:if test="${paging.pageBarStart > 1}">
 					<c:url var="testUrl" value="/reviewBoardList">
 					<c:param name="nowPage" value="${paging.pageBarStart-1}"/>
 					</c:url>
 					<a class="page-link" href="${testUrl} ">&laquo;</a>
 				</c:if>
 				<c:forEach var="i" begin="${paging.pageBarStart}" end="${paging.pageBarEnd}">
-					<a class="page-link" href="/reviewBoardList?nowPage=${i}">
+					<a class="page-link" href="/reviewBoardList?nowPage=${i}&selectNo=${param.selectNo}&selectWord=${param.selectWord}">
 						${i}
 					</a>
 				</c:forEach>
 				<c:if test="${paging.next}">
-					<a class="page-link" href="/reviewBoardList?nowPage=${(paging.pageBarEnd)+1}">&raquo;</a>
+					<a class="page-link" href="/reviewBoardList?nowPage=${(paging.pageBarEnd)+1}&selectNo=${param.selectNo}&selectWord=${param.selectWord}">&raquo;</a>
 				</c:if>
 			</div>
 		</div>
 	</c:if>
 	<script>
+		$(document).ready(function () {
+	        $(".insert_btn").click(function () {
+	        	var memberNo = "${member.memberNo}";
+	        	if(memberNo){
+	            	location.href = "/reviewBoardInsertPass";               		
+	        	}else{
+	        		if(confirm("로그인 후 작성 가능합니다. 로그인 하시겠습니까?")){
+	        			location.href = "/memberLoginPass";       
+	        		}	
+	        	}
+	        });
+	    });
+		
 		$('table.table-hover tbody tr').on('click',function(){
 			const boardNo = $(this).data('board-no');
 			console.log(boardNo);
 			location.href='/reviewBoardDetail?review_board_no='+boardNo;
 		})	
+		
+		/* $('#select_btn').click(function(){
+			const selectNo = $('#selectNo').val();
+			const selectWord = $('#selectWord').val();
+			
+			$.ajax({
+				url:"/reviewBoardList",
+				type: "post",
+				contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+				data:{selectNo : selectNo,
+					selectWord : selectWord},
+				dataType:"JSON",
+				success:function(data){
+					if(data.res_code === "200") {
+						console.log("성공이욤 ㅎ");
+	                }
+				}
+			})
+		}) */
+		
 	</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

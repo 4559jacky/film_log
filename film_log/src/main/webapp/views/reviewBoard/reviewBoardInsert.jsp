@@ -29,17 +29,25 @@
         <br><br><hr class="my-2" id="hr"><br><br>
         <div class="review-box mx-auto mt-4 p-4" style="max-width: 1400px;">
             <form action='reviewBoardInsert' name="insert_board_form" method="post">
-                <div class="mb-3">
-	                <label class="form-label">제목</label>
-	                <div class="d-flex">
-						<div class="position-relative" style="max-width: 300px;">
-						    <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" autocomplete="off">
-						    <input type="hidden" name="movie_id" id="selected_movie_id"> <!-- 선택한 영화 ID 저장 -->
-						    <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
-						</div>
-	                    <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title" id="boardTitle">
-	                </div>
-	            </div>
+               <div class="mb-3">
+				    <label class="form-label">제목</label>
+				    <div class="d-flex">
+				        
+				        <div class="position-relative" style="max-width: 300px;">
+				            <input type="text" class="form-control" id="search_movie" placeholder="영화 선택" autocomplete="off" size="30">
+				            <input type="hidden" name="movie_id" id="selected_movie_id"> <!-- 선택한 영화 ID 저장 -->
+				            <ul class="list-group position-absolute w-100" id="movie_list" style="display: none; max-height: 200px; overflow-y: auto; z-index: 1000;"></ul>
+				        </div>
+				       
+				        <div class="position-relative flex-grow-1 ms-3">
+				            <input type="text" class="form-control" placeholder="제목 입력" name="review_board_title" id="boardTitle" maxlength="50">
+				        
+				            <small id="comment_count" class="form-text text-muted position-absolute end-0 top-100 translate-middle-y pe-2">0 / 50</small>
+				        	
+				        </div>
+				    </div>
+				</div>
+
 
 
                 <!-- ✅ Summernote 적용 -->
@@ -101,8 +109,8 @@
 						    } else {
 						    	let result = "";
 						    	for(let i = 0 ; i < data.movieArray.length ; i++){
-						    		result = '<li class="list-group-item" data-id='+data.movieArray[i].movieId+' data-title='+data.movieArray[i].movieTitle+'>'
-						    				+data.movieArray[i].movieTitle+ '</li>'
+						    		result = '<li class="list-group-item" data-id="' + data.movieArray[i].movieId + '" data-title="' + data.movieArray[i].movieTitle + '">'
+						            + data.movieArray[i].movieTitle + '</li>';
 							    	$('#movie_list').append(result);
 						    	}
 						    }
@@ -155,7 +163,18 @@
 			
 		})
 
-		
+		// 제목 글자 수 제한
+		$('#boardTitle').on('input',function(){
+			let content = $(this).val().trim();
+	        let length = content.length;
+
+	        $('#comment_count').text(length + ' /50 ');
+	        
+			if(length>50){
+				alert("50자 이하로 입려해주세요.");
+				return;
+			}
+		})
 		
 
     </script>

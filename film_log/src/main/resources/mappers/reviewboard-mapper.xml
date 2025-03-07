@@ -81,10 +81,22 @@
 		ON r.member_no = m.member_no
 		JOIN `movie_dto` v
 		ON r.movie_id = v.id
-
+		<where>
+			<if test='filter != null'>
+				<if test='filter.equals("1") == true'>
+					AND r.review_board_title LIKE CONCAT('%',#{word},'%')
+				</if>
+				<if test='filter.equals("2") == true'>
+					AND v.title LIKE CONCAT('%',#{word},'%')
+				</if>
+				<if test='filter.equals("3") == true'>
+					AND m.member_nickname LIKE CONCAT('%',#{word},'%')
+				</if>
+			</if>
+		</where>
+		ORDER BY r.reg_date DESC
 		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
-	
 	
 	<select id="selectMovieListAll" resultMap="movieDtoMap">
 		SELECT *
@@ -107,7 +119,26 @@
 	
 	<!-- 페이징 -->
 	<select id="selectReviewBoardCount" parameterType="reviewBoard" resultType="_int">
-		SELECT COUNT(*) FROM review_board
+		SELECT COUNT(*)
+		FROM `review_board` r
+		JOIN `member` m
+		ON r.member_no = m.member_no
+		JOIN `movie_dto` v
+		ON r.movie_id = v.id
+		
+		<where>
+			<if test='filter != null'>
+				<if test='filter.equals("1") == true'>
+					AND r.review_board_title LIKE CONCAT('%',#{word},'%')
+				</if>
+				<if test='filter.equals("2") == true'>
+					AND v.title LIKE CONCAT('%',#{word},'%')
+				</if>
+				<if test='filter.equals("3") == true'>
+					AND m.member_nickname LIKE CONCAT('%',#{word},'%')
+				</if>
+			</if>
+		</where>
 	</select>
 	
 	<!-- 리뷰 게시글 상세 조회 -->

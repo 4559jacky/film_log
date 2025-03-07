@@ -306,7 +306,7 @@
 	        $('#comment_count').text(length + ' /50 ');
 	        
 			if(length>50){
-				alert("50자 이하로 입려해주세요.");
+				alert("50자 이하로 입력해주세요.");
 				return;
 			}
 		})
