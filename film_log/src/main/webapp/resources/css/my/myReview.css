@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+#qna_over_div {
+	background-color: white;
+	border-radius : 20px;
+}
+
+#create_response_div {
+	background-color: white;
+	border-radius : 20px;
+}
+
+#qna_title {
+	height : 50px;
+}
+
+#responseInput {
+	width : 100%;
+	height : 100%;
+	resize : none;
+	border-radius : 10px;
+}
+
+#response_content{
+	width : 100%;
+	height : 100%;
+	resize : none;
+	border-radius : 10px;
+}

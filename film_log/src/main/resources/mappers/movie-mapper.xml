@@ -3,7 +3,6 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="movieMapper">
-
 	<resultMap type="movieDto" id="movieMap">
 		<result property="id" column="id"/>
 		<result property="title" column="title"/>
@@ -14,7 +13,89 @@
 		<result property="voteAverage" column="vote_average"/>
 		<result property="posterPath" column="poster_path"/>
 		<result property="adult" column="adult"/>
+		<!-- <collection property="actors" resultMap="actorMap"/>
+		<collection property="director" resultMap="directorMap" column="id"/>
+		<collection property="genres" resultMap="genreMap"/> -->
 	</resultMap>
+	
+	<resultMap type="actor" id="actorMap">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="originalName" column="original_name"/>
+		<result property="gender" column="gender"/>
+		<result property="character" column="character"/>
+		<result property="profilePath" column="profile_path"/>
+	</resultMap>
+	
+	<resultMap  type="director" id="directorMap">
+	    <id property="id" column="id"/>
+	    <result property="name" column="name"/>
+	    <result property="originalName" column="original_name"/>
+	    <result property="job" column="job"/>
+	    <result property="profilePath" column="profile_path"/>
+    </resultMap>
+	
+	<resultMap  type="genre" id="genreMap">
+	    <id property="id" column="id"/>
+	    <result property="name" column="name"/>
+    </resultMap>
+	
+	<select id="selectMovieListCount" resultType="int">
+		SELECT COUNT(*) FROM `movie_dto`
+	</select>
+  
+
+  	<select id="selectMovieGenres" resultMap="movieMap" parameterType="int">
+ 		SELECT *
+		FROM `genre_dto` gd
+		JOIN `movie_genre` mg ON mg.genre_id = gd.id
+		WHERE mg.genre_id = #{movieId}
+ 	</select> 
+  
+ 	<select id="selectMovieDirector" resultMap="directorMap" parameterType="int">
+ 		SELECT *
+		FROM `director` d
+		JOIN `movie_director` md ON md.director_id = d.id 
+		WHERE md.director_id = #{movieId}
+ 	</select> 
+  
+  	<select id="selectMovieOne" resultMap="movieMap" parameterType="int">
+		SELECT *
+		FROM `movie_dto`
+		WHERE id = #{movieId}
+
+	</select>
+  
+  <!-- 관리자페이지 영화 삭제 -->
+	<delete id="deleteMovie" parameterType="int">
+		DELETE FROM `movie_dto` WHERE id = #{id}
+	</delete>
+  
+  <!-- 관리자페이지 영화수정 -->
+	<update id="updateMovieAdmin" parameterType="com.filmlog.movie.model.vo.MovieDTO">
+		UPDATE `movie_dto`
+		SET title = #{title}
+		,runtime = #{runtime}
+		,overview = #{overview}
+		,release_date = #{releaseDate}
+		,vote_average = #{voteAverage}
+		,poster_path = #{posterPath}
+		WHERE id = #{id}
+	</update>
+	
+	<!-- 관리자페이지 영화추가 -->
+	<insert id="insertMovieAdmin" parameterType="movieDto">
+		INSERT IGNORE INTO `movie_dto`(title,runtime,original_title,overview,release_date,vote_average,poster_path)
+		VALUES(#{title},#{runtime},#{originalTitle},#{overview},#{releaseDate},#{voteAverage},#{posterPath})
+	</insert>
+	
+	<!-- 관리자페이지 영화목록 조회 -->
+	<select id="selectMovieList" resultMap="movieMap" parameterType="movieDto">
+        SELECT *
+        FROM `movie_dto`
+        <!-- Limit 0,#{totalData} -->
+        Limit 0,10
+    </select>
 	
 	<!-- 전체 영화 조회 -->
 	<select id="selectMovieAll" resultMap="movieMap"  parameterType="movieDto">
@@ -76,7 +157,7 @@
 			 (#{movieId}, #{actor})
 		</foreach>
 	</insert>
-	
+  
 	<!-- 감독 추가 -->
 	<insert id="insertDirectorOne" parameterType="director">
 		INSERT IGNORE INTO `director` (id, name, original_name, job, profile_path)
@@ -96,12 +177,35 @@
 		FROM `movie_dto`
 		WHERE id = #{id}
 	</select>
-
+  
 	<!-- 영화 목록 -->
 	<select id="movieList" resultType="com.filmlog.movie.model.vo.MovieDTO">
-        SELECT * 
+        SELECT *
         FROM `movie`
     </select>
+    
+    <select id="selectMovieActors" resultMap="actorMap" parameterType="_int">
+		SELECT a.id, a.name
+		FROM actor a
+		JOIN movie_actors ma
+		ON a.id = ma.actor_id
+		WHERE ma.movie_id = #{movieId}
+	</select>
 
-
+	<select id="selectMovieListInHome" resultMap="movieMap" parameterType="member">
+		SELECT md.id ,md.title ,md.vote_average ,md.poster_path
+		FROM movie_dto md
+		JOIN movie_genre mg
+		ON md.id = mg.movie_id
+		JOIN member_interest_genre mig
+		ON mg.genre_id = mig.genre_id
+		JOIN member m
+		ON mig.member_no = m.member_no
+		<where>
+			<if test='memberNo != 0 and adminWhether != "T"'>
+				AND m.member_no = #{memberNo}
+			</if>
+		</where>
+		LIMIT 5;
+	</select>
 </mapper>

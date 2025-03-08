@@ -28,6 +28,7 @@ public class ReviewBoardDeleteServlet extends HttpServlet {
 		String temp = request.getParameter("reviewBoardNo");
 		int reviewBoardNo = 0;
 		if(temp !=null) reviewBoardNo = Integer.parseInt(temp);
+		
 		int result = new ReviewBoardService().deleteReviewBoard(reviewBoardNo);
 		
 		JSONObject obj = new JSONObject();

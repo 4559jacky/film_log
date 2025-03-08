@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.movie.model.dao.MovieDao;
 import com.filmlog.movie.model.vo.Actor;
 import com.filmlog.movie.model.vo.Director;
@@ -16,7 +17,21 @@ import com.filmlog.movie.model.vo.Genre;
 import com.filmlog.movie.model.vo.MovieDTO;
 
 public class MovieService {
-
+	
+	public List<Actor> selectMovieActors(int movieId) {
+		SqlSession session = getSqlSession();
+		List<Actor> actors = new MovieDao().selectMovieActors(session, movieId);
+		session.close();
+		return actors;
+	}
+	
+	public List<MovieDTO> selectMovieListInHome(Member member) {
+		SqlSession session = getSqlSession();
+		List<MovieDTO> movieList = new MovieDao().selectMovieListInHome(session, member);
+		session.close();
+		return movieList;
+	}
+ 
 	// 영화 목록
 //	public List<Movie> selectMovieList() {
 //		SqlSession session = getSqlSession();
@@ -193,14 +208,68 @@ public class MovieService {
 	    
 	    return result1 + result2;
 	}
+	
+	// 관리자 페이지 영화 전체목록 
+	public List<MovieDTO> selectMovieList(MovieDTO option) {
+		SqlSession session = getSqlSession();
+		List<MovieDTO> resultList = new MovieDao().selectMovieList(session,option);
+		session.close();
+		return resultList;
+	}
+	
+	// 관리자 페이지 영화 추가
+	public int insertMovieAdmin(MovieDTO movie) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().insertMovieAdmin(session,movie);
+		session.close();
+		return result;
+	}
+	
+	// 페이징 처리
+	public int selectMovieListCount() {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().selectMovieListCount(session);
+		session.close();
+		return result;
+	}
+	
+	// 관리자 페이지 영화 수정(update)
+	public int updateMovie(MovieDTO movie) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().updateMovie(session,movie);
+		session.close();
+		return result;
+	}
+	// 관리자 페이지 영화 수정페이지 데이터 불러와서 고정시키기
+	public MovieDTO selectMovieOne(int movieId) {
+		SqlSession session = getSqlSession();
+		MovieDTO movie = new MovieDao().selectMovieOne(session,movieId);
+		session.close();
+		return movie;
+	}
 
-	// API
-//	public int insertMovieApi(MovieDTO movie){
-//		SqlSession session = getSqlSession();
-//		int resultList = new MovieDao().insertMovieApi(session,movie);
-//		session.close();
-//		return resultList;
-//	}
+	public Director selectMovieDirector(int movieId) {
+		SqlSession session = getSqlSession();
+		Director director = new MovieDao().selectMovieDirector(session,movieId);
+		session.close();
+		return director;
+	}
+
+	public List<Genre> selectMovieGenres(int movieId) {
+		SqlSession session = getSqlSession();
+		List<Genre> genre = new MovieDao().selectMovieGenres(session,movieId);
+		session.close();
+		return genre;
+	}
+
+	public int deleteMovie(int movieId) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().deleteMovie(session,movieId);
+		session.close();
+		return result;
+	}
+
+	
 
 	
 

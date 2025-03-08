@@ -20,7 +20,6 @@ public class Member {
 	private String memberName;
 	private String memberNickname;
 	private String memberEmail;
-	private String memberAddr;
 	private String memberPhone;
 	private String memberBirth;
 	private String memberGender;
@@ -40,7 +39,6 @@ public class Member {
 		this.memberName = memberName;
 		this.memberNickname = memberNickname;
 		this.memberEmail = memberEmail;
-		this.memberAddr = memberAddr;
 		this.memberPhone = memberPhone;
 		this.memberBirth = memberBirth;
 		this.memberGender = memberGender;

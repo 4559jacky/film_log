@@ -13,7 +13,7 @@
 <link href="/resources/css/include/paing.css?after" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<%@ include file="/views/include/nav.jsp" %>
+	<%@ include file="/views/include/myMenuNav.jsp" %>
 <br>
 <div class="container-sm">
 <p class="text-center fs-1">내 문의 내역</p>
@@ -37,7 +37,6 @@
 					<tr onclick="window.location.href='/qna?qna_board_no=${qna.qnaBoardNo}'" style="cursor: pointer;">
 						<th scope="row">
 						 ${paging.totalData - (paging.numPerPage * (paging.nowPage - 1)) - vs.index}
-				<%-- 		${qnaList.size() - vs.index} --%>
 						</th>
 						<td align="center" style="vertical-align: middle;">
 							<c:if test="${qna.qnaResponse.responseNo == 0}">

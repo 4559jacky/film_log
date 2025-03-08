@@ -4,11 +4,11 @@ public class Paging {
 
 	private int totalData;
 	private int totalPage;
-	private int numPerPage = 20;
+	private int numPerPage = 20; //20
 	private int limitPageNo;
 	private int nowPage = 1;
 	
-	private int pageBarSize = 5;
+	private int pageBarSize = 5; //5
 	private int pageBarStart;
 	private int pageBarEnd;
 	

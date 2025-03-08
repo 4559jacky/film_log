@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.filmlog.movie.model.service.MovieService;
-import com.filmlog.movie.model.vo.Movie;
+import com.filmlog.movie.model.vo.MovieDTO;
 
 @WebServlet("/movieList")
 public class MovieListServlet extends HttpServlet {
@@ -23,10 +23,36 @@ public class MovieListServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		/* List<Movie> resultList = new MovieService().selectMovieList(); */
-		/* request.setAttribute("resultList", resultList); */
+		String nowPage = request.getParameter("nowPage");
+		
+//		int currentPage = 1;
+//		if(nowPage != null && nowPage.trim().isEmpty()) {
+//			try{
+//				currentPage = Integer.parseInt(nowPage);
+//			}catch(Exception e) {
+//				currentPage = 1;
+//			}
+//		}
+		
+		MovieDTO option = new MovieDTO();
+		
+		if(nowPage != null) {
+			option.setNowPage(Integer.parseInt(nowPage));
+		}
+		
+//		option.setNowPage(currentPage);
+		
+		int totalData = new MovieService().selectMovieListCount();
+		option.setTotalData(totalData);
+		
+		System.out.println(totalData);
+		
+		List<MovieDTO> resultList = new MovieService().selectMovieList(option);
+		
 		RequestDispatcher view 
 			= request.getRequestDispatcher("/views/movie/list.jsp");
+		request.setAttribute("resultList", resultList);
+		request.setAttribute("paging", option);
 		view.forward(request, response);
 		
 	}

@@ -22,8 +22,8 @@
         <ul class="nav flex-column flex-grow-1">
             <li class="nav-item"><a class="nav-link text-white" href="#">1:1 문의 목록 조회</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#">회원 목록 조회</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="#">전체 영화 목록 조회</a></li>
-            <li class="nav-item"><a class="nav-link text-white" href="#">영화 추가</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/movieList.jsp">전체 영화 목록 조회</a></li>
+            <li class="nav-item"><a class="nav-link text-white" href="/movieInsert.jsp">영화 추가</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#">영화 수정</a></li>
             <li class="nav-item"><a class="nav-link text-white" href="#">영화 삭제</a></li>
         </ul>

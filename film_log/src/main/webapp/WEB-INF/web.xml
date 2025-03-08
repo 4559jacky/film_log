@@ -17,4 +17,30 @@
   	<error-code>500</error-code>
   	<location>/views/errorPages/error500.jsp</location>
   </error-page>
+  <servlet>
+	<servlet-name>QuartzInitializer</servlet-name>
+		<servlet-class>org.quartz.ee.servlet.QuartzInitializerServlet</servlet-class>
+		<init-param>
+			<param-name>config-file</param-name>
+			<param-value>/com/filmlog/common/scheduler/quartz.properties</param-value>
+		</init-param>
+		<init-param>
+			<param-name>shutdown-on-unload</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>wait-on-shutdown</param-name>
+		<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>start-scheduler-on-load</param-name>
+		<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<servlet-name>APIScheduler</servlet-name>
+		<servlet-class>com.filmlog.common.scheduler.APIScheduler</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
 </web-app>

@@ -19,6 +19,7 @@ import lombok.ToString;
 public class Genre {
 	private int id;
 	private String name;
+	private int genreCount;
 	
 	public Genre(int id) {  // int 값을 받을 생성자 추가
         this.id = id;
