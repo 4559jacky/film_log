@@ -15,6 +15,8 @@
 		<result property="reviewBoardWriter" column="member_no"/>
 		<result property="imgNo" column="review_board_img_no"/>
 		<result property="oriImg" column="ori_img"/>
+		<result property="movieImgPath" column="poster_path"/>
+	
 	</resultMap>
 	<resultMap type="reviewBoardImg" id="reviewBoardImgMap">
 		<result property="imgNo" column="review_board_img_no"/>
@@ -47,7 +49,7 @@
 	<!-- 스케줄러 -->
 	<select id="selectReviewBoardTop4" resultMap="reviewBoardMap" parameterType="string">
 		SELECT r.review_board_no, r.review_board_title, r.review_board_content, r.reg_date, r.mod_date,
-				m.member_no, r.movie_id , i.review_board_no
+				m.member_no, r.movie_id , i.review_board_no , d.poster_path
 		FROM `review_board` r
 		JOIN `member` m ON m.member_no = r.member_no
 		JOIN `movie_dto` d ON r.movie_id = d.id
