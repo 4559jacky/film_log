@@ -571,7 +571,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
         	let form = $('.validation-form');
         	let memberImg = form.find("input[name='member_img']").val();
             let sendData = new FormData(form.get(0));
-
+            
+            let defaultImgChecked = $('#defaultImg').is(':checked') ? 'Y' : 'N';
+            sendData.append('default_img', defaultImgChecked);
+           
             sendData.forEach((value, key) => {
                 console.log(key, value);
             });
@@ -604,9 +607,9 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
    					})
    				} else {
       					alert('이미지 파일만 선택할 수 있습니다.');
-      					$('#memberImg').val('');
+      					memberImg = '';
                	}
-           	}  else {
+           	} else {
 				$.ajax({
 					url : '/memberInfoChange',
 					type : 'post',
