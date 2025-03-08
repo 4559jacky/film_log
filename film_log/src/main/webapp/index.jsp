@@ -45,7 +45,8 @@
         		<c:forEach var="board" items="${popularReviewTop4 }">
 					<div class="col" style="cursor: pointer;" onclick="location.href='/reviewBoardDetail?review_board_no=${board.reviewBoardNo}'">
 						<div class="card" style="border: none; background-color : black;">
-							<img src="<%=request.getContextPath()%>/reviewFilePath?img_no=${board.imgNo}" class="card-img-top" alt="' + review.title + '" width="230" height="340">
+						<img src="https://image.tmdb.org/t/p/w500/${board.movieImgPath}" class="card-img-top" width="230" height="340">
+							<%-- <img src="<%=request.getContextPath()%>/reviewFilePath?img_no=${board.imgNo}" class="card-img-top" alt="' + review.title + '" width="230" height="340"> --%>
 								<div style="display: flex; margin-top: 10px;">
 									<div class="vr" style="margin-right: 5px"></div>
 										<div style="width: 95%">
@@ -66,6 +67,7 @@
 		$(document).ready(function(){
 			let reviews = '${popularReviewTop4}';
 			console.log("리뷰 : "+reviews);
+	
 		})
 	
 		$(function() {
