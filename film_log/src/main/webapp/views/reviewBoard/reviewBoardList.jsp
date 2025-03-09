@@ -10,10 +10,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>리뷰 게시판</title>
     <style>
-        .table-dark { background-color: #f8f9fa !important; color: #000 !important; }
-        .select_btn { background-color: #e9ecef !important; color: #000 !important; border-color: #ced4da !important; }
-        .insert_btn { background-color: #e9ecef !important; color: #000 !important; border-color: #ced4da !important; }
+        
+         thead {
+            background-color: #e9ecef !important; /* 연한 회색 배경 */
+            color: #000 !important; /* 검정 글씨 */
+        }
 
+        
+        .select_btn, .insert_btn { 
+            background-color: #e9ecef !important; 
+            color: #000 !important; 
+            border-color: #ced4da !important; 
+        }
+        
+        /* 테이블 모서리 둥글게 */
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        /* 테이블 헤더 둥글게 */
+        thead tr:first-child th:first-child {
+            border-top-left-radius: 10px;
+        }
+        thead tr:first-child th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        /* 테이블 하단 둥글게 */
+        tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+        tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -45,7 +75,7 @@
             <button class="btn insert_btn">리뷰 작성</button>
         </div>
         <table class="table table-hover">
-            <thead class="table-dark">
+            <thead>
                 <tr>
                     <th>게시글 번호</th>
                     <th>제목</th>
@@ -118,26 +148,6 @@
 			console.log(boardNo);
 			location.href='/reviewBoardDetail?review_board_no='+boardNo;
 		})	
-		
-		/* $('#select_btn').click(function(){
-			const selectNo = $('#selectNo').val();
-			const selectWord = $('#selectWord').val();
-			
-			$.ajax({
-				url:"/reviewBoardList",
-				type: "post",
-				contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-				data:{selectNo : selectNo,
-					selectWord : selectWord},
-				dataType:"JSON",
-				success:function(data){
-					if(data.res_code === "200") {
-						console.log("성공이욤 ㅎ");
-	                }
-				}
-			})
-		}) */
-		
 	</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

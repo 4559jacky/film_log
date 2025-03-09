@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 <configuration>
 	<properties resource="driver.properties"/>
 	<typeAliases>
+		<typeAlias type="com.filmlog.freeboard.model.vo.FreeBoard" alias="freeBoard"/>
 		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoard" alias="reviewBoard"/>
 		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardImg" alias="reviewBoardImg"/>
 		<typeAlias type="com.filmlog.reviewboard.model.vo.ReviewBoardComment" alias="reviewBoardComment"/>
@@ -22,6 +23,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<typeAlias type="com.filmlog.qna.model.vo.QnaResponse" alias="qnaResponse"/>
 		<typeAlias type="com.filmlog.member.user.model.vo.WatchedMovieRecord" alias="watchedMovieRecord"/>
 		<typeAlias type="com.filmlog.member.user.model.vo.YearWatch" alias="yearWatch"/>
+		<typeAlias type="com.filmlog.member.user.model.vo.MonthWatch" alias="monthWatch"/>
 	</typeAliases>
 	<environments default="development">
 		<environment id="development">
