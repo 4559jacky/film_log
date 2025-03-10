@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>리뷰 게시글 작성</title>
+    <title>리뷰 게시글 수정</title>
 
     <!-- ✅ Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,7 +27,7 @@
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote-lite.min.js"></script>
     
     <div class="container mt-5">
-         <h2 class="text-center">리뷰 게시글 작성</h2>
+         <h2 class="text-center">리뷰 게시글 수정</h2>
         <br><br><hr class="my-2" id="hr"><br><br>
         <div class="review-box mx-auto mt-4 p-4" style="max-width: 1400px;">
             <form action='/reviewBoardUpdate' name="update_board_form" method="post"> 
@@ -146,7 +146,7 @@
 	        	return;
 	        }
 			
-			if (!form.movie_id.value||!form.review_board_title.value || !form.summernote.value) {
+			if (!form.movie_id.value||!form.review_board_title.value || !form.review_board_content.value) {
 	            alert("제목과 내용을 모두 입력해주세요.");
 	            return;
 	        }

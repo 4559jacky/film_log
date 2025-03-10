@@ -137,7 +137,7 @@
 	        	alert("영화를 선택해주세요.");
 	        	return;
 	        }
-			if (!form.movie_id.value||!form.review_board_title.value || !form.summernote.value) {
+			if (!form.movie_id.value||!form.review_board_title.value || !form.review_board_content.value) {
 	            alert("제목과 내용을 모두 입력해주세요.");
 	            return;
 	        }
