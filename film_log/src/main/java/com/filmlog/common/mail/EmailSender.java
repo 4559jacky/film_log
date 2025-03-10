@@ -3,13 +3,11 @@ package com.filmlog.common.mail;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.PasswordAuthentication;
 import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -27,10 +25,6 @@ public class EmailSender {
 		String auth = prop.getProperty("auth");
 		String sslEnable = prop.getProperty("sslEnable");
 		
-    	
-//        String host = "smtp.naver.com";  // Gmail을 사용할 경우
-//        String fromEmail = "wodlr1784@naver.com";  // 보내는 이메일 주소
-//        String password = "jje6531784@";  // 이메일 비밀번호
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
