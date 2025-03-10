@@ -11,10 +11,10 @@
     <title>리뷰 게시판</title>
     <style>
         
-         thead {
-            background-color: #e9ecef !important; /* 연한 회색 배경 */
-            color: #000 !important; /* 검정 글씨 */
-        }
+        .table thead th {
+		    background-color: #e9ecef !important; /* 연한 회색 배경 */
+		    color: #000 !important;
+		}
 
         
         .select_btn, .insert_btn { 
@@ -68,11 +68,11 @@
 			                   value="${paging.word == null? '' : paging.word}">
 			        </div>
 			        <div class="col-md-3">
-			            <button class="btn select_btn w-100">검색</button>
+			            <button class="btn select_btn">검색</button>
 			        </div>
 			    </div>
 			</form>
-            <button class="btn insert_btn">리뷰 작성</button>
+            <button class="btn insert_btn">게시글 작성</button>
         </div>
         <table class="table table-hover">
             <thead>
@@ -83,7 +83,7 @@
                     <th>게시일</th>
                     <th>조회수</th>
                 </tr>
-            </thead>
+           </thead>
             <tbody>
                 <c:choose>
 				<c:when test="${not empty resultList }">
