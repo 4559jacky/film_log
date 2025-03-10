@@ -2,6 +2,8 @@ package com.filmlog.member.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +41,7 @@ public class MemberInfoChangeServlet extends HttpServlet {
 		MemberAddress ma = new MemberAddress();
 		List<String> genreList = new ArrayList<String>();
 		String path = "C:\\dev\\film_log\\profile_img";
-		String defaultImg = "";
+		String defaultImgCheck = "";
 		
 		File dir = new File(path);
 		if(!dir.exists()) {
@@ -96,7 +98,7 @@ public class MemberInfoChangeServlet extends HttpServlet {
 							member.setMemberGender(fileItem.getString("utf-8"));
 							break;
 						case "default_img" :
-							defaultImg = fileItem.getString("utf-8");
+							defaultImgCheck = fileItem.getString("utf-8");
 							break;
 						case "interest" :
 							genreList.add(fileItem.getString("utf-8"));
@@ -131,6 +133,29 @@ public class MemberInfoChangeServlet extends HttpServlet {
 					}
 				}
 			}
+			
+			if(defaultImgCheck.equals("Y")) {
+				memberImg = new MemberImg();
+				System.out.println("여기 걸리나");
+				File defaultImg = new File("C:\\dev\\film_log\\noProfile_img\\profile.png");
+				// 기본이미지가 존재여부
+				if(defaultImg.exists()) {
+					// UUID를 사용하여 새 파일명 생성
+					String uuid = UUID.randomUUID().toString().replace("-", "");
+					String newName = uuid + ".png";
+					
+					File copiedFile = new File(dir, newName);
+					Files.copy(defaultImg.toPath(), copiedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+					
+					memberImg.setOriName("profile.png"); // 원본 파일명
+					memberImg.setNewName(newName); // 새 파일명
+		            memberImg.setImgPath(path + "\\" + newName); // 저장 경로
+				} else {
+					System.out.println("기본 이미지가 존재하지 않습니다.");
+				}
+			}
+			
+			System.out.println("기본이미지 체크 : "+defaultImgCheck);
 			Member mem = memberService.selectMemberById(member.getMemberId());
 			member.setMemberNo(mem.getMemberNo());
 			ma.setMemberNo(mem.getMemberNo());
@@ -162,8 +187,6 @@ public class MemberInfoChangeServlet extends HttpServlet {
 						deleteFile1.delete();
 					}
 				}
-			} else if(defaultImg.equals("true")) {
-				
 			} else { // 이미지 그대로 변경(멤버 정보, 관심장르)
 				int result = memberService.updateMemberInfo(member, genreList, ma);
 				if(result >= 4) {
