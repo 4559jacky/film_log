@@ -27,10 +27,6 @@ public class EmailSender {
 		String auth = prop.getProperty("auth");
 		String sslEnable = prop.getProperty("sslEnable");
 		
-    	
-//        String host = "smtp.naver.com";  // Gmail을 사용할 경우
-//        String fromEmail = "wodlr1784@naver.com";  // 보내는 이메일 주소
-//        String password = "jje6531784@";  // 이메일 비밀번호
 
         Properties properties = new Properties();
         properties.put("mail.smtp.host", host);
