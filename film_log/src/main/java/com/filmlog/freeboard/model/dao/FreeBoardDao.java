@@ -5,9 +5,13 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import com.filmlog.freeboard.model.vo.FreeBoard;
-import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
+import com.filmlog.member.model.vo.Member;
 
 public class FreeBoardDao {
+	
+	public List<FreeBoard> selectMyBoardList(SqlSession session, Member member) {
+		return session.selectList("freeboardMapper.selectMyBoardList", member);
+	}
 
 	public List<FreeBoard> selectBoardList(SqlSession session, FreeBoard option) {
 		return session.selectList("freeboardMapper.selectFreeBoardList",option);

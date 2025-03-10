@@ -55,6 +55,13 @@
 		VALUES (#{freeBoardTitle},#{freeBoardContent},#{memberNo})
 	</insert>
 	
+	<select id="selectMyBoardList" resultMap="freeBoardMap" parameterType="member">
+		SELECT *,DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i') AS str_regDate
+		FROM `free_board` fb
+		JOIN `member` m ON m.member_no = fb.member_no
+		WHERE m.member_no = #{memberNo}
+	</select>
+	
 	<!-- 자유게시글 전체 목록조회 -->
 	<select id="selectFreeBoardList" resultMap="freeBoardMap" parameterType="int">
 		SELECT *,DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i') AS str_regDate

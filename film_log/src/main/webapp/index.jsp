@@ -8,7 +8,6 @@
 <%-- <script src="<c:url value='/resources/js/jquery-3.7.1.js'/>"></script> --%>
 <!-- <link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
 <link href="/resources/css/include/allpage.css" rel="stylesheet" type="text/css">
-
 </head>
 <body id="body">
 	<%@ include file="/views/include/nav.jsp" %>
@@ -84,9 +83,9 @@
 				success : function(data) {
 					let movieCards = '';
 					data.res_data.forEach(function(movie) {
-					    movieCards += '<div class="col">';
+					    movieCards += '<div class="col" onclick="location.href=\'/updateMoviePass?id=' + movie.id + '\'">';
 					    movieCards += '  <div id="body" class="card" style="border: none;">';
-					    movieCards += '    <img src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" class="card-img-top" alt="' + movie.title + '" width="230" height="340">';
+					    movieCards += '    <img src="https://image.tmdb.org/t/p/w500' + movie.poster_path + '" class="card-img-top" style="cursor: pointer;" alt="' + movie.title + '" width="230" height="340">';
 					    movieCards += '    <div style="display: flex; margin-top: 10px;">';
 					    movieCards += '      <div class="vr" style="margin-right: 5px"></div>';
 					    movieCards += '      <div style="width: 95%">';

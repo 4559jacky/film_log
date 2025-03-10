@@ -49,14 +49,13 @@
 	<!-- 스케줄러 -->
 	<select id="selectReviewBoardTop4" resultMap="reviewBoardMap" parameterType="string">
 		SELECT r.review_board_no, r.review_board_title, r.review_board_content, r.reg_date, r.mod_date,
-				m.member_no, r.movie_id , i.review_board_no , d.poster_path
+				r.member_no, m.member_nickname, r.views, r.movie_id, d.poster_path
 		FROM `review_board` r
 		JOIN `member` m ON m.member_no = r.member_no
 		JOIN `movie_dto` d ON r.movie_id = d.id
-		JOIN `review_board_img` i ON r.review_board_no = i.review_board_no
 		WHERE DATE_FORMAT(reg_date, '%Y-%m-%d') = #{yesterday}
 		ORDER BY views desc
-		LIMIT 4
+		LIMIT 4;
 	</select>
 	
 	<select id="selectReviewListInHome" resultMap="reviewBoardMap">

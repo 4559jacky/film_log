@@ -26,8 +26,6 @@ public class MemberLoginServlet extends HttpServlet {
 
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		List<Member> memberList = memberService.selectMemberAll();
-//		System.out.println(memberList);
 		String memberId = request.getParameter("member_id");
 		String memberPwd = request.getParameter("member_pwd");
 		String rememberId = request.getParameter("remember_id");

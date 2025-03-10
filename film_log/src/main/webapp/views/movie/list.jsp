@@ -70,7 +70,7 @@
 						  </thead>
 						  <tbody>
 						  	<c:forEach var="movie" items="${resultList }" varStatus="status">
-							    <tr>
+							    <tr onclick="location.href='/updateMoviePass?id=${movie.id}'">
 							      <th scope="row">${status.index +1}</th>
 							      <td>
 						             <img src="https://image.tmdb.org/t/p/w500${movie.posterPath}" alt="포스터" width="100">

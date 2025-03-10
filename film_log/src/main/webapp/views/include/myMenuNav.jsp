@@ -28,7 +28,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/myReviewListPass">리뷰</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">자유 게시글</a></li>
+            <li><a class="dropdown-item" href="/myFreeBoard">자유 게시글</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown">

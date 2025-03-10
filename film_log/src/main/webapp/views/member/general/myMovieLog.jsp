@@ -80,8 +80,8 @@
     <c:forEach var="record" items="${records}" varStatus="vs">
         <tr onclick="" style="cursor: pointer;">
             <fmt:parseDate value="${record.watchedDate}" pattern="yyyy-MM-dd'T'HH:mm" var="strWatchedDate" />
-            <td>
-                <img src="https://image.tmdb.org/t/p/w500/${record.posterPath}'" class="card-img-top" alt="${record.movieTitle}" width="230" height="340">
+            <td style="text-align: center; width:300px">
+                <img src="https://image.tmdb.org/t/p/w500/${record.posterPath}'" class="" alt="${record.movieTitle}" width="300" height="340">
             </td>
             <td>
                 ${record.movieTitle}<br><br>${record.memo}<br><br>

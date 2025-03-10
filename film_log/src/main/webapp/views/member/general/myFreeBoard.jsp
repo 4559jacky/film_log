@@ -8,10 +8,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>자유 게시판</title>
+	<title>내가 쓴 자유 게시글</title>
 	<style>
 	    .table thead th {
-		    background-color: #e9ecef !important; /* 연한 회색 배경 */
+		    background-color: #e9ecef !important;
 		    color: #000 !important;
 		}
         

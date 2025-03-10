@@ -1,15 +1,25 @@
 package com.filmlog.freeboard.model.service;
 
+import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
 import com.filmlog.freeboard.model.dao.FreeBoardDao;
 import com.filmlog.freeboard.model.vo.FreeBoard;
+import com.filmlog.member.model.vo.Member;
 
 public class FreeBoardService {
+	
+	public List<FreeBoard> selectMyBoardList(Member member) {
+		SqlSession session = getSqlSession();
+		List<FreeBoard> resultList = new ArrayList<FreeBoard>();
+		resultList = new FreeBoardDao().selectMyBoardList(session, member);
+		return resultList;
+	}
+	
 	// 게시판 전체 목록조회
 	public List<FreeBoard> selectBoardList(FreeBoard option) {
 		SqlSession session = getSqlSession();
