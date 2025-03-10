@@ -720,93 +720,68 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		
 		//////////////////////////////////////////////////////////////
 
-    	// 가입완료 버튼
     	$(document).ready(function () {
-            $('#joinButton').click(function(event) {
-             	// 사용자가 입력한 값들을 이 시점에서 가져오기
-             	let form = $('.validation-form');
-	            let name = form.find("input[name='member_name']").val();
-	            let nickname = form.find("input[name='member_nickname']").val();
-	            let duplicateNicknameCheck = false;
-	            let email = form.find("input[name='member_email']").val();
-	            let code = form.find("input[name='email_code']").val();
-	            let address = form.find("input[name='member_address']").val();
-	            let phone = form.find("input[name='member_phone']").val();
-	            let birth = form.find("input[name='member_birth']").val();
-	            let gender = form.find("input[name='inlineRadioOptions']:checked").val();
-	            let id = form.find("input[name='member_id']").val();
-	            let duplicateIdCheck = false;
-	            let pwd = form.find("input[name='member_pwd']").val();
-	            let pwdCheck = form.find("input[name='member_pwd_check']").val();
-	            let selectedOptions = [];
-	            $("input[name='interest']:checked").each(function () {
-	                selectedOptions.push($(this).val());
-	            });
-	            
-	            console.log("입력된 데이터 확인:");
-	            console.log(name, nickname, email, address, phone, birth, gender, id, pwd);
-	            console.log("선택된 관심사:", selectedOptions);
-	            
-	            let sendData = new FormData(form.get(0));
-
-	            sendData.forEach((value, key) => {
-	                console.log(key, value);
-	            });
-	            
-	            let personalAgree = document.getElementById('aggrement');
-	            console.log(personalAgree.checked);
-	            
-	            if (personalAgree.checked == false) { // ✅ 체크 여부 확인
-	                event.preventDefault();
-	                event.stopPropagation();
-	                console.log('실패');
-	                alert('개인정보 수집 및 이용에 동의해주세요.');
-	                personalAgree.classList.add("is-invalid");
-	            } else if(emailCheck == false) {
-	            	event.preventDefault();
-	                event.stopPropagation();
-	                alert('이메일 인증이 필요합니다.');
-	                $("#emailCode").addClass("is-invalid");
-	            } else {
-	            	$.ajax({
-	            		url : "/encryptPassword",
-						type : 'post',
-						data : {
-							"member_pwd" : pwd
-						},
-						dataType : 'JSON',
-						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-						success: function (response) {
-			                console.log("암호화된 비밀번호:", response.member_pwd);
-			                sendData.set("member_pwd", response.member_pwd);
-			                
-			                $.ajax({
-					            url: "/memberCreate",
-					            type : 'post',
-								// 파일데이터를 보내기 위해 추가해야하는 속성들
-								// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
-								enctype : 'multipart/form-data',
-								cache : false,
-								async : false,
-								contentType : false,
-								processData : false,
-								data : sendData,
-					            dataType: 'JSON',
-					            success: function (data) {
-					            	alert(data.res_msg);
-					            	if(data.res_code == '200') {
-				            			location.href = "/memberLoginPass";
-				            		} else {
-				            			event.preventDefault();
-				    		            event.stopPropagation();
-				            		}
-					            }
-					        });
-	            		}
-	            	});
-	            }
-           	})
-  		});
+		    $('#joinButton').click(async function(event) {
+		        event.preventDefault(); // 기본 이벤트 중단
+		
+		        let form = $('.validation-form');
+		        let name = form.find("input[name='member_name']").val();
+		        let email = form.find("input[name='member_email']").val();
+		        let pwd = form.find("input[name='member_pwd']").val();
+		        let personalAgree = document.getElementById('aggrement');
+		
+		        // 개인정보 수집 동의 체크 확인
+		        if (!personalAgree.checked) {
+		            alert('개인정보 수집 및 이용에 동의해주세요.');
+		            personalAgree.classList.add("is-invalid");
+		            return;
+		        }
+		
+		        // 이메일 인증 확인
+		        if (emailCheck === false) {
+		            alert('이메일 인증이 필요합니다.');
+		            $("#emailCode").addClass("is-invalid");
+		            return;
+		        }
+		
+		        try {
+		            // 암호화 먼저 진행
+		            let encryptResponse = await $.ajax({
+		                url: "/encryptPassword",
+		                type: "post",
+		                data: { "member_pwd": pwd },
+		                dataType: "JSON",
+		                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		            });
+		
+		            console.log("암호화된 비밀번호:", encryptResponse.member_pwd);
+		
+		            let sendData = new FormData(form.get(0));
+		            sendData.set("member_pwd", encryptResponse.member_pwd); // 암호화된 비밀번호 적용
+		
+		            let registerResponse = await $.ajax({
+		                url: "/memberCreate",
+		                type: "post",
+		                enctype: "multipart/form-data",
+		                cache: false,
+		                async: false,
+		                contentType: false,
+		                processData: false,
+		                data: sendData,
+		                dataType: "JSON",
+		            });
+		
+		            alert(registerResponse.res_msg);
+		            if (registerResponse.res_code === '200') {
+		                location.href = "/memberLoginPass";
+		            }
+		
+		        } catch (error) {
+		            console.error("오류 발생", error);
+		            alert("회원가입 중 오류가 발생했습니다.");
+		        }
+		    });
+		});
 	</script>
 	
 </body>

@@ -17,11 +17,25 @@ public class FreeBoardDao {
 		int result = session.selectOne("freeboardMapper.selectBoardListCount");
 		return result;
 	}
-
+	// insert 코드
 	public int insertFreeBoard(SqlSession session, FreeBoard board) {
 		int result = session.insert("freeboardMapper.insertFreeBoard",board);
 		result = board.getFreeBoardNo();
 		return result;
 	}
+	// detail 코드
+	public FreeBoard selectBoardOne(SqlSession session, int boardNo) {
+	    return session.selectOne("freeboardMapper.selectBoardOne",boardNo);
+	}
+	// update 코드
+	public int updateBoard(SqlSession session, FreeBoard board){
+	     return session.update("freeboardMapper.updateBoard",board);
+	}
+	// delete 코드
+	public int deleteBoard(SqlSession session, int boardNo) {
+		return session.delete("freeboardMapper.deleteBoard",boardNo);
+	}
 
+	
+	
 }
