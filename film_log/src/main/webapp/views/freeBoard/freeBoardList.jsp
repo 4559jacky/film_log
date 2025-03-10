@@ -63,8 +63,8 @@
 				<c:choose>
 					<c:when test="${not empty freeBoardList}">
 						<c:forEach var="board" items="${freeBoardList }" varStatus="vs">
-							<tr>
-								<td>${board.freeBoardNo }</td>
+							<tr data-board-no="${board.freeBoardNo}">
+								<td>${vs.index+=1}</td>
 								<td>${board.freeBoardTitle }</td>
 								<td>${board.freeBoardContent }</td>
 								<td>${board.memberNickname }</td>
@@ -81,8 +81,14 @@
 			</tbody>
 		</table>
 	</div>
-
-
+	<script>
+		// 게시글 하나 클릭시 상세페이지로 이동
+		$('table.table-hover tbody tr').on('click',function(){
+			const boardNo = $(this).data('board-no');
+			console.log(boardNo);
+			location.href="/freeBoardDetail?boardNo="+boardNo;
+		})
+	</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -17,7 +17,6 @@ public class FreeBoardService {
 		resultList = new FreeBoardDao().selectBoardList(session,option);
 		return resultList;
 	}
-	
 	// 페이징 처리
 	public int selectBoardListCount() {
 		SqlSession session = getSqlSession();
@@ -25,14 +24,36 @@ public class FreeBoardService {
 		session.close();
 		return result;
 	}
-
+	// insert 코드
 	public int insertFreeBoard(FreeBoard board) {
 		SqlSession session = getSqlSession();
 		int result = new FreeBoardDao().insertFreeBoard(session,board);
 		session.close();
 		return result;
 	}
-
+	
+	// detail 코드
+	public FreeBoard selectBoardOne(int boardNo) {
+		SqlSession session = getSqlSession();
+	    FreeBoard fb = new FreeBoardDao().selectBoardOne(session,boardNo);
+	    session.close();
+		return fb;
+	}
+	// update 코드
+	public int updateBoard(FreeBoard board){
+	     SqlSession session = getSqlSession();
+	     int result = new FreeBoardDao().updateBoard(session,board);
+	     session.close();
+	     return result;
+	}
+	// delete 코드
+	public int deleteBoard(int boardNo) {
+		 SqlSession session = getSqlSession();
+	     int result = new FreeBoardDao().deleteBoard(session,boardNo);
+	     session.close();
+	     return result;
+	}
+	
 	
 
 }

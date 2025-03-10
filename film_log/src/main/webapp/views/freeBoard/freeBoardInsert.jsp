@@ -60,10 +60,10 @@
 <body>
 	<%@ include file="/views/include/nav.jsp" %>
     <div class="container mt-5">
-        <h2 class="text-center">리뷰 게시글 작성</h2><br><br>
+        <h2 class="text-center">자유 게시글 작성</h2><br><br>
         <hr class="my-2" id="hr"><br><br>
         <div class="review-box mx-auto mt-4 p-4" style="max-width: 1400px;">
-            <form action='reviewBoardInsert' name="insert_board_form" method="post">
+            <form class="insert_board_form" novalidate>
             <div class="mb-3">
                 <label class="form-label">제목</label>
                 <div class="d-flex">
@@ -77,7 +77,7 @@
                  <small id="comment_count2" class="form-text text-muted">0 / 1000</small>
             </div>
             
-            <input type="hidden" name="free_board_writer" value="<c:out value="${member.memberNo}"/>">
+            <input type="hidden" name="free_board_writer" id="boardWriter" value="<c:out value="${member.memberNo}"/>">
             <div class="text-end">
             	<input type="button" class="btn btn-custom" value="게시글 등록" id="insertButton"
             	style="background-color: #E9ECEF; color: #000; border-color: #CED4DA;">
@@ -86,36 +86,35 @@
         </div>
     </div>
     <script>
-		$('#insertButton').click(function(event){
-			let form = document.insert_board_form;
-			
-			if (!form.free_board_title.value || !form.free_board_content.value) {
-	            alert("제목과 내용을 모두 입력해주세요.");
-	            return;
-	        }
-			
-			let sendData = new FormData(form);
-			$.ajax({
-				url:'/freeBoardInsert',
-				type:'POST',
-				enctype:'multipart/form-data',
-				cache:false,
-				contentType:false,
-				processData:false,
-				data:sendData,
-				dataType:'JSON',
-				success:function(data){
-					alert(data.res_msg);
-					if(data.res_code==200){
-						location.href="/freeBoardList";
-					}else {
-						event.preventDefault();
-			            event.stopPropagation();
-				       }
-				}
-			})	
-			
-		})
+	    $(document).ready(function(){
+	    	  $("#insertButton").click(function(event){
+	    		  let boardTitle = $('#boardTitle').val();
+	    		  let boardContent = $('#boardContent').val();
+	    		  let boardWriter = $('#boardWriter').val();
+	    		 if (!boardTitle || !boardContent){
+	    		   alert("제목과 내용을 모두 입력해주세요.");
+	    		 	return;
+	    		 }
+	    	    $.ajax({
+	    		    url:"/freeBoardInsert",
+	    		    type:"post",
+	    	        data:{
+	    	        	boardTitle : boardTitle,
+	    	        	boardContent : boardContent,
+	    	        	memberNo : boardWriter,
+	    	        },
+	    	        dataType:'JSON',
+	    		    success:function(data){
+	    			   alert(data.res_msg);
+	    			   if(data.res_code==200){
+	    				   location.href="/freeBoardList";
+	    			   }else {
+	    				   event.preventDefault();
+	    				   event.stopPropagation();
+	    			   }
+	    		    }
+	    	     });	
+	    	  });
 		// 제목 글자 수 제한
 		$('#boardTitle').on('input',function(){
 			let content = $(this).val().trim();
@@ -137,7 +136,8 @@
 				alert("1000자 이하로 입려해주세요.");
 				return;
 			}
-		})
+		});
+    })
 	</script>
 </body>
 </html>

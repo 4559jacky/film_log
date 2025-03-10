@@ -23,11 +23,10 @@ public class FreeBoardInsertServlet extends HttpServlet {
 
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String boardTitle = request.getParameter("free_board_title");
-		String boardContent = request.getParameter("free_board_content");
-//		int memberNo = Integer.parseInt(request.getParameter("memberNo"));
+		String boardTitle = request.getParameter("boardTitle");
+		String boardContent = request.getParameter("boardContent");
 		
-		String temp = request.getParameter("free_board_writer");
+		String temp = request.getParameter("memberNo");
 		int memberNo = 0;
 		if(temp != null) memberNo = Integer.parseInt(temp);
 		
