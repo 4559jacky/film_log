@@ -7,12 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인 페이지</title>
-<c:set var="rememberId" value="" />
-<c:forEach var="cookie" items="${pageContext.request.cookies}">
-    <c:if test="${cookie.name == 'remember_id'}">
-        <c:set var="rememberId" value="${cookie.value}" />
-    </c:if>
-</c:forEach>
+<c:if test="${not empty cookie['remember_id']}">
+    <c:set var="rememberId" value="${cookie['remember_id'].value}" />
+</c:if>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
@@ -67,7 +64,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            <div class="mb-3">
 		              <label for="memberId">아이디</label>
 		              <input type="text" class="form-control" name="member_id" id="memberId" placeholder="아이디"
-		              value="<c:out value="${rememberId == null ? '' : rememberId}"/>" required>
+		              value="<c:out value="${rememberId != null ? rememberId : ''}"/>" required>
 		              <div class="invalid-feedback id-error">
 		                아이디를 확인해주세요.
 		              </div>
@@ -80,7 +77,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		              </div>
 		            </div>
 		            <div class="col-md-6 mb-3">
-					    <input type="checkbox" name="remember_id" id="rememberId" <c:if test="${rememberId == null}">checked</c:if> >
+					    <input type="checkbox" name="remember_id" id="rememberId" <c:if test="${not empty rememberId}">checked</c:if> >
 					    <label for="rememberId">아이디 저장</label>
 					</div>
 					<div class="col-md-6 mb-3 find-account">
@@ -160,7 +157,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     		let form = $('.validation-form');
     		let id = form.find("input[name='member_id']").val();
 	        let password = form.find("input[name='member_pwd']").val();
-	        let rememberId =  form.find("input[name='remember_id']").val();
+	        let rememberId = $('#rememberId').is(':checked') ? 'Y' : 'N';
 	        let isValid = true;
     		if (id == '') {
     			event.preventDefault();
