@@ -13,27 +13,62 @@
 		<result property="voteAverage" column="vote_average"/>
 		<result property="posterPath" column="poster_path"/>
 		<result property="adult" column="adult"/>
-		<collection property="actors" resultMap="actorMap"/>	
+		<!-- <collection property="actors" resultMap="actorMap"/>
+		<collection property="director" resultMap="directorMap" column="id"/>
+		<collection property="genres" resultMap="genreMap"/> -->
 	</resultMap>
 	
 	<resultMap type="actor" id="actorMap">
 		<result property="id" column="id"/>
 		<result property="name" column="name"/>
+		<result property="originalName" column="original_name"/>
+		<result property="gender" column="gender"/>
+		<result property="character" column="character"/>
+		<result property="profilePath" column="profile_path"/>
 	</resultMap>
+	
+	<resultMap  type="director" id="directorMap">
+	    <id property="id" column="id"/>
+	    <result property="name" column="name"/>
+	    <result property="originalName" column="original_name"/>
+	    <result property="job" column="job"/>
+	    <result property="profilePath" column="profile_path"/>
+    </resultMap>
+	
+	<resultMap  type="genre" id="genreMap">
+	    <id property="id" column="id"/>
+	    <result property="name" column="name"/>
+    </resultMap>
 	
 	<select id="selectMovieListCount" resultType="int">
 		SELECT COUNT(*) FROM `movie_dto`
 	</select>
   
-  <select id="selectMovieOne" parameterType="_int">
+
+  	<select id="selectMovieGenres" resultMap="movieMap" parameterType="int">
+ 		SELECT *
+		FROM `genre_dto` gd
+		JOIN `movie_genre` mg ON mg.genre_id = gd.id
+		WHERE mg.genre_id = #{movieId}
+ 	</select> 
+  
+ 	<select id="selectMovieDirector" resultMap="directorMap" parameterType="int">
+ 		SELECT *
+		FROM `director` d
+		JOIN `movie_director` md ON md.director_id = d.id 
+		WHERE md.director_id = #{movieId}
+ 	</select> 
+  
+  	<select id="selectMovieOne" resultMap="movieMap" parameterType="int">
 		SELECT *
 		FROM `movie_dto`
-		WHERE id = ${movieId}
+		WHERE id = #{movieId}
+
 	</select>
   
   <!-- 관리자페이지 영화 삭제 -->
 	<delete id="deleteMovie" parameterType="int">
-		DELETE FROM movies WHERE id = #{id}
+		DELETE FROM `movie_dto` WHERE id = #{id}
 	</delete>
   
   <!-- 관리자페이지 영화수정 -->
@@ -154,10 +189,8 @@
 		FROM actor a
 		JOIN movie_actors ma
 		ON a.id = ma.actor_id
-		WHERE ma.movie_id = #{movieNo}
-		limit 3;
+		WHERE ma.movie_id = #{movieId}
 	</select>
-
 
 	<select id="selectMovieListInHome" resultMap="movieMap" parameterType="member">
 		SELECT md.id ,md.title ,md.vote_average ,md.poster_path

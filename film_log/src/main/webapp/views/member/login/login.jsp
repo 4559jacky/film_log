@@ -7,12 +7,9 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인 페이지</title>
-<c:set var="rememberId" value="" />
-<c:forEach var="cookie" items="${pageContext.request.cookies}">
-    <c:if test="${cookie.name == 'remember_id'}">
-        <c:set var="rememberId" value="${cookie.value}" />
-    </c:if>
-</c:forEach>
+<c:if test="${not empty cookie['remember_id']}">
+    <c:set var="rememberId" value="${cookie['remember_id'].value}" />
+</c:if>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
 integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <style>
@@ -67,7 +64,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            <div class="mb-3">
 		              <label for="memberId">아이디</label>
 		              <input type="text" class="form-control" name="member_id" id="memberId" placeholder="아이디"
-		              value="<c:out value="${rememberId == null ? '' : rememberId}"/>" required>
+		              value="<c:out value="${rememberId != null ? rememberId : ''}"/>" required>
 		              <div class="invalid-feedback id-error">
 		                아이디를 확인해주세요.
 		              </div>
@@ -80,7 +77,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		              </div>
 		            </div>
 		            <div class="col-md-6 mb-3">
-					    <input type="checkbox" name="remember_id" id="rememberId" <c:if test="${rememberId == null}">checked</c:if> >
+					    <input type="checkbox" name="remember_id" id="rememberId" <c:if test="${not empty rememberId}">checked</c:if> >
 					    <label for="rememberId">아이디 저장</label>
 					</div>
 					<div class="col-md-6 mb-3 find-account">
@@ -98,11 +95,69 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     </div>
     </div> 
     <script type="text/javascript">
+    	$(document).ready(function(){
+    		$('#memberId, #memberPwd').keyup(function(e){
+    			if(e.code == 'Enter') {
+    				let form = $('.validation-form');
+            		let id = form.find("input[name='member_id']").val();
+        	        let password = form.find("input[name='member_pwd']").val();
+        	        let rememberId =  form.find("input[name='remember_id']").val();
+        	        let isValid = true;
+            		if (id == '') {
+            			event.preventDefault();
+        	            event.stopPropagation();
+        				$("#memberId").addClass("is-invalid");
+        				isValid = false;
+        			} else {
+        				$("#memberId").removeClass("is-invalid").addClass("is-valid");
+        			}
+            		if (password == '') {
+            			event.preventDefault();
+        	            event.stopPropagation();
+        				$("#memberPwd").addClass("is-invalid");
+        				isValid = false;
+        			} else {
+        				$("#memberPwd").removeClass("is-invalid").addClass("is-valid");
+        			}
+            		
+            		if (!isValid) {
+            			event.preventDefault();
+        	            event.stopPropagation();
+        	            alert("형식에 맞지않은 정보가 있습니다.");
+        	        } else {
+        	        	$.ajax({
+        	        		url:'/memberLogin',
+        	        		type:'post',
+        	        		data:{
+        	        			member_id : id,
+        	        			member_pwd : password,
+        	        			remember_id : rememberId
+        	        		},
+        	        		dataType: 'JSON',
+        	        		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+        		            success: function (data) {
+        		            	alert(data.res_msg);
+        		                if (data.res_code === '200') {
+        		                    location.href = '/';
+        		                } else {
+        		                	event.preventDefault();
+        		    	            event.stopPropagation();
+        		    	            $("#memberId").addClass("is-invalid");
+        		    	            $("#memberPwd").addClass("is-invalid");
+        		    	            
+        		                }
+        		            }
+        	        	})
+                	}
+	    		}
+    		})
+    	})
+    	
     	$('#loginButton').click(function(){
     		let form = $('.validation-form');
     		let id = form.find("input[name='member_id']").val();
 	        let password = form.find("input[name='member_pwd']").val();
-	        let rememberId =  form.find("input[name='remember_id']").val();
+	        let rememberId = $('#rememberId').is(':checked') ? 'Y' : 'N';
 	        let isValid = true;
     		if (id == '') {
     			event.preventDefault();
@@ -155,50 +210,5 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
     		location.href = '/memberCreatePass';
     	})
     </script>
-	<%-- <section>
-	<div id="section_wrap">
-			<div class="word">
-				<h3>Login</h3>
-			</div>
-			<div class="login_form">
-				
-				
-				<form action='/memberLogin' name="login_form" method="post">
-					<input type="text"	name="member_id" 	placeholder="아이디"
-					value="<c:out value="${rememberId == null ? '' : rememberId}"/>"> <br>
-					<input type="password"	name="member_pwd" 	placeholder="비밀번호"> <br>
-					<input type="checkbox" id="rememberId"
-					<c:if test="${rememberId == null}">checked</c:if>>
-					<label for="rememberId">아이디 저장</label>
-					
-					<label><input type="checkbox" name="interest" value="10749"> 로맨스</label>
-					
-					
-					
-					<br>
-					<a href="/findId">아이디 찾기</a>
-					<a href="/changePwd">비밀번호 변경</a><br>
-					<input type="button"	value="로그인" onclick="loginForm();">				
-				</form>
-			</div>
-			<div class="find_password_create_account">
-				<a href='/memberCreatePass'>회원가입</a>
-			</div>
-		</div>
-	</section> --%>
-	<!-- <script type="text/javascript">
-		function loginForm() {
-			let form = document.login_form;
-			if (form.member_id.value == '') {
-				alert('아이디를 입력하세요.');
-				form.member_id.focus();	
-			} else if (form.member_pwd.value == '') {
-				alert('비밀번호를 입력하세요.');
-				form.member_pwd.focus();
-			} else {
-				form.submit();
-			}
-		}
-	</script> -->
 </body>
 </html>

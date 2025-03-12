@@ -9,12 +9,73 @@
 		<result property="memberNo" column="member_no"/>
 		<result property="memo" column="memo"/>
 		<result property="watchedDate" column="watched_date"/>
+		<result property="posterPath" column="poster_path"/>
+		<result property="movieTitle" column="title"/>
 	</resultMap>
 	
 	<resultMap type="genre" id="genreMap">
 		<result property="id" column="id"/>
 		<result property="name" column="name"/> 
+		<result property="genreCount" column="genre_count"/>
 	</resultMap>
+	
+	<resultMap type="yearWatch" id="yearWatchMap">
+		<result property="year" column="year"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	
+	<resultMap type="monthWatch" id="monthWatchMap">
+		<result property="month" column="month"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	
+	<update id="updateRecord" parameterType="watchedMovieRecord">
+		UPDATE watched_movie_record
+		SET movie_no = #{movieNo} ,memo = #{memo} ,#{watchedDate}
+		WHERE record_no = #{recordNo}
+	</update>
+	
+	<delete id="deleteRecord" parameterType="_int">
+		DELETE FROM watched_movie_record
+		WHERE record_no = #{recordNo}
+	</delete>
+	
+	<select id="selectRecordOne" resultMap="watchedMovieRecordMap" parameterType="_int">
+		SELECT *
+		FROM watched_movie_record wmr
+		JOIN movie_dto md
+		ON wmr.movie_no = md.id
+		WHERE record_no = #{recordNo}
+	</select>
+	
+	<insert id="insertRecord" parameterType="watchedMovieRecord" >
+		INSERT INTO watched_movie_record(movie_no ,member_no ,memo ,watched_date)
+		VALUES (#{movieNo} ,#{memberNo} ,#{memo} ,#{watchedDate})
+	</insert>
+	
+	<select id="selectChartMonths" resultMap="monthWatchMap" parameterType="_int">
+		SELECT CONCAT(MONTH(watched_date), '월') AS month, COUNT(*) AS count
+		FROM watched_movie_record
+		WHERE member_no = #{memberNo}
+		GROUP BY MONTH(watched_date), member_no
+	</select>
+	
+	<select id="selectChartYears" resultMap="yearWatchMap" parameterType="_int">
+		SELECT YEAR(watched_date) AS YEAR ,COUNT(*) AS count
+		FROM watched_movie_record
+		WHERE member_no = #{memberNo}
+		GROUP BY YEAR(watched_date), member_no
+	</select>
+	
+	<select id="selectChartGenres" resultMap="genreMap" parameterType="_int">		
+		SELECT gd.id, gd.name, COUNT(*) AS genre_count
+		FROM genre_dto gd
+		JOIN movie_genre mg ON gd.id = mg.genre_id
+		JOIN watched_movie_record wmr ON mg.movie_id = wmr.movie_no
+		JOIN member m ON m.member_no = wmr.member_no
+		WHERE wmr.member_no = #{memberNo}
+		GROUP BY gd.id, gd.name;
+	</select>
 	
 	<select id="selectGenre" resultMap="genreMap" parameterType="_int">
 		SELECT DISTINCT gd.id, gd.`name`
@@ -25,8 +86,51 @@
 		WHERE wmr.member_no = #{memberNo};
 	</select>
 	
-	<select id="recordCount" resultMap="watchedMovieRecordMap" parameterType="watchedMovieRecord">
-		
+	<select id="recordCount" resultType="int" parameterType="watchedMovieRecord">
+	    SELECT COUNT(DISTINCT r.movie_no)
+	    FROM watched_movie_record r
+	    JOIN movie_dto md
+	    ON r.movie_no = md.id
+	    JOIN movie_genre mg
+	    ON md.id = mg.movie_id
+	    JOIN genre_dto gd
+	    ON mg.genre_id = gd.id
+	    <where>
+	        <if test="memberNo != null and memberNo != 0">
+	            AND r.member_no = #{memberNo}
+	        </if>
+	        <if test="movieTitle != null and movieTitle.equals('') == false">
+	            AND md.title LIKE CONCAT('%', #{movieTitle}, '%')
+	        </if>
+	        <if test="genreType != null and genreType != 0">
+	            AND gd.id = #{genreType}
+	        </if>
+	    </where>
+	</select>
+
+	
+	<select id="selectRecordAll" resultMap="watchedMovieRecordMap" parameterType="watchedMovieRecord">
+		SELECT DISTINCT r.record_no ,r.movie_no ,r.member_no ,memo ,r.watched_date ,md.poster_path ,md.title
+		FROM watched_movie_record r
+		JOIN movie_dto md
+		ON r.movie_no = md.id
+		JOIN movie_genre mg
+		ON md.id = mg.movie_id
+		JOIN genre_dto gd
+		ON mg.genre_id = gd.id
+		 <where>
+		 	<if test="memberNo != null and memberNo != 0">
+		 		member_no = #{memberNo}
+		 	</if>
+	        <if test="movieTitle != null and movieTitle.equals('') == false">
+	            AND md.title LIKE CONCAT('%', #{movieTitle}, '%')
+	        </if>
+	        <if test="genreType != null and genreType != 0">
+	            AND gd.id = #{genreType}
+	        </if>
+	    </where>
+	    ORDER BY r.watched_date DESC
+		LIMIT #{limitPageNo}, #{numPerPage}
 	</select>
 </mapper>
 

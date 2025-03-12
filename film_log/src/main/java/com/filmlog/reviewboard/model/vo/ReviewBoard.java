@@ -34,4 +34,7 @@ public class ReviewBoard extends Paging{
 	private String oriImg;
 	private String filter;
 	private String word;
+	private int searchNo;
+	private String keyWord;
+	private String movieImgPath;
 }

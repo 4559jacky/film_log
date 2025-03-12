@@ -3,7 +3,6 @@ package com.filmlog.reviewboard.model.service;
 import static com.filmlog.common.sql.SqlSessionTemplate.getSqlSession;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -102,8 +101,7 @@ public class ReviewBoardService {
 		ReviewBoard reviewboard = new ReviewBoardDao().selectReviewBoardOne(reviewBoardNo, session);
 		session.close();
 		
-		return reviewboard;
-		
+		return reviewboard;	
 	}
 	
 	// 이미지 파일 출력
@@ -222,6 +220,16 @@ public class ReviewBoardService {
 		session.close();
 		return result;
 	}
+	
+	// 댓글 수정
+	public int updateReviewBoardComment(ReviewBoardComment comment) {
+		SqlSession session = getSqlSession();
+		int result = new ReviewBoardDao().updateReviewBoardComment(comment,session);
+		session.close();
+		return result;
+	}
+	
+	
 	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo) {
 		SqlSession session = getSqlSession();
 		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardByMemberNo(memberNo,session);
@@ -234,6 +242,13 @@ public class ReviewBoardService {
 		List<ReviewBoard> resultList = new ReviewBoardDao().selectReviewBoardListByWord(option,session);
 		session.close();
 		return resultList;
+	}
+
+	public List<ReviewBoard> selectReviewBoardTop4(String yeaterday) {
+		SqlSession session = getSqlSession();
+		List<ReviewBoard> reviewTop4 = new ReviewBoardDao().selectReviewBoardTop4(yeaterday,session);
+		session.close();
+		return reviewTop4;
 	}
 	
 }

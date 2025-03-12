@@ -1,7 +1,6 @@
 package com.filmlog.reviewboard.model.dao;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -116,6 +115,12 @@ public class ReviewBoardDao {
 		int result = session.delete("reviewboardMapper.deleteReviewBoardComment",commentNo);
 		return result;
 	}
+	
+	// 댓글 수정 
+	public int updateReviewBoardComment(ReviewBoardComment comment, SqlSession session) {
+		int result = session.delete("reviewboardMapper.updateReviewBoardComment",comment);
+		return result;
+	}
 
 	public List<ReviewBoard> selectReviewBoardByMemberNo(int memberNo, SqlSession session) {
 		return session.selectList("reviewboardMapper.selectReviewListByMemberNo",memberNo);
@@ -123,6 +128,10 @@ public class ReviewBoardDao {
 
 	public List<ReviewBoard> selectReviewBoardListByWord(ReviewBoard option, SqlSession session) {
 		return session.selectList("reviewboardMapper.selectReviewBoardAllByWord",option);
+	}
+
+	public List<ReviewBoard> selectReviewBoardTop4(String yeaterday, SqlSession session) {
+		return session.selectList("reviewboardMapper.selectReviewBoardTop4",yeaterday);
 	}
 	
 }

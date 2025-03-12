@@ -1,4 +1,4 @@
-<@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -11,7 +11,7 @@
 </style>
 </head>
 <body class="d-flex justify-content-center align-items-center">
-	<div class="col-md-12 text-center">
+	<div class="col-md-12 text-center" id="img_box">
 		<h1>404</h1>
 		<h2>Page Not Found</h2>
 		<p>죄송합니다. 찾으시는 페이지가 존재하지 않습니다.</p>

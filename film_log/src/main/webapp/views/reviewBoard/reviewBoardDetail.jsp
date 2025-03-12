@@ -29,10 +29,12 @@
         .btn-custom:hover {
             background-color: #c0c0c0;
         }
-        .comment-item {
-            border-bottom: 1px solid #e9ecef;
-            padding: 10px 0;
-        }
+       .comment-item {
+	        border-bottom: 1px solid #e9ecef;
+	        padding: 10px 0;
+	        width: 100%; /* 부모 너비를 모두 사용 */
+	        min-width: 600px; /* 최소 너비 설정 (필요에 따라 조정) */
+	    }
         .comment-item:last-child {
             border-bottom: none;
         }
@@ -64,9 +66,6 @@
             </div>
             <hr>
             <div class="post-content mb-4">
-            	<c:if test="${ReviewBoard.imgNo ne 0}">
-					<img src="<%=request.getContextPath()%>/reviewFilePath?img_no=${ReviewBoard.imgNo}" class="img-fluid mb-3">
-				</c:if> 
                 <p>
                    ${ReviewBoard.reviewBoardContent}
                 </p>
@@ -84,7 +83,7 @@
         </div>
 
         <!-- 두 번째 박스: 댓글 영역 -->
-        <div class="comment-box mx-auto p-4" style="max-width: 1400px;">
+        <div class="comment-box mx-auto p-4" style="max-width: 1600px;">
             <h4 class="mb-3">댓글</h4>
             <div>
                 <div class="comment-item" id="">
@@ -93,20 +92,22 @@
                         	<c:choose>
 								<c:when test="${not empty commentList}">
 									<c:forEach var="c" items="${commentList}"  varStatus="vs">
-									<div class="comment-item">
-										<span><strong>${c.commentWriter}</strong></span>
-										<fmt:parseDate value="${c.regDate}" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
-										<span><small class="text-muted"><fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></small></span>
-        								<p class="mt-2" >${c.comment}</p>
-        								
-        								<c:if test="${member.memberNo eq c.memberNo}">
-								            <button style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no="${c.reviewBoardCommentNo}" class="deleteComment_btn">삭제</button>
-								        </c:if>
-								     </div>
+										<div class="comment-item">
+											<span class="comment-writer"><strong>${c.commentWriter}</strong></span>
+										    <fmt:parseDate value="${c.regDate}" pattern="yyyy-MM-dd'T'HH:mm" var="strRegDate"/>
+										    <span class="comment-date"><small class="text-muted"><fmt:formatDate value="${strRegDate }" pattern="yyyy-MM-dd HH:mm"/></small></span>
+										    <p class="mt-2 comment-content">${c.comment}</p>
+										    <textarea class="form-control update-comment" id="new_comment" data-comment-no="${c.reviewBoardCommentNo}" rows="3" style="width: 400px; display: none;" required>${c.comment}</textarea>
+	        								<c:if test="${member.memberNo eq c.memberNo}">
+									            <button class= "btn btn-sm btn-custom me-1 deleteComment_btn" style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no="${c.reviewBoardCommentNo}" >삭제</button>
+									            <button class= "btn btn-sm btn-custom me-1 updateComment_btn" style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no="${c.reviewBoardCommentNo}" >수정</button>
+									            <button class= "btn btn-sm btn-custom me-1 update_btn" style="display: none; background-color: #d3d3d3; color: #000; border: none;" data-comment-no="${c.reviewBoardCommentNo}" >수정 완료</button>
+									        </c:if>
+									     </div>
 									</c:forEach>
 								</c:when>
 								<c:otherwise>
-										<p>댓글이 없습니다.<p>
+										<p id="commentNull">댓글이 없습니다.<p>
 								</c:otherwise>
 							</c:choose>
                         </div>
@@ -194,9 +195,6 @@
 				const reviewBoardNo = "${ReviewBoard.reviewBoardNo}";
 				const memberNo = "${member.memberNo}";
 				const commentContent = $('#comment').val();
-				console.log("reviewBoardNo:"+ reviewBoardNo);
-				console.log("memberNo:" + memberNo);
-				console.log("commentContent:" +commentContent);
             	if(memberNo){
             		
         			$.ajax({
@@ -211,14 +209,18 @@
         					alert(data.res_msg);
         					if(data.res_code==="200"){
         						$('#comment').val("");
-        						let newComment = '<span><strong>'+data.commentWriter   
-        							+'</strong></span> <span><small class="text-muted">'
+        						let newComment = '<div class="comment-item"><span class="comment-writer"><strong>'+data.commentWriter   
+        							+'</strong></span> <span class="comment-date"><small class="text-muted">'
         							+data.regDate+'</small></span>'
-        							+'<p class="mt-2" >'+data.comment+'</p>'
-        							+ '<button style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no='+ data.commentNo +' class="deleteComment_btn">삭제</button>';	
+        							+'<p class="mt-2 comment-content" >'+data.comment+'</p>'
+        							+' <textarea class="form-control update-comment" rows="3" style="width: 400px; display: none;" data-comment-no='+ data.commentNo +' required>'+data.comment+'</textarea>'
+        							+ '<button class= "btn btn-sm btn-custom me-1 deleteComment_btn" style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no='+ data.commentNo +'>삭제</button>'
+        							+ '<button class= "btn btn-sm btn-custom me-1 updateComment_btn" style=" background-color: #d3d3d3; color: #000; border: none;" data-comment-no='+ data.commentNo +'>수정</button>'
+        							+ '<button class= "btn btn-sm btn-custom me-1 update_btn" style="display: none; background-color: #d3d3d3; color: #000; border: none;" data-comment-no='+ data.commentNo +'>수정 완료</button>'
+        							+'</div>';
                                 $('#commentList').append(newComment);
-                             
-        				
+                                $('#commentNull').hide();
+                          
         					}
         				}
         			});		
@@ -234,27 +236,69 @@
 		// 댓글 삭제 
 		$(document).ready(function(){
 			// append한 코드에 강제 이벤트 발생 
-			$(document).on('click','.deleteComment_btn',function(e){
-				if(confirm("정말 댓글을 삭제하시겠습니까?")){
-					const commentNo = $(this).data("comment-no");
-					//window.location = window.location;
-					$.ajax({
-						url:"/reviewBoardCommentDelete",
-						type: "post",
-						contentType:"application/x-www-form-urlencoded; charset=UTF-8",
-						data:{commentNo : commentNo},
-						dataType:"JSON",
-						success:function(data){
-							alert(data.res_msg);
-							if(data.res_code === "200") {
-								location.reload();
-							}
-						}
-					})				
-				}
+			$(document).on('click', '.deleteComment_btn', function() {
+			    if (confirm("정말 댓글을 삭제하시겠습니까?")) {
+			        const commentNo = $(this).data("comment-no");
+
+			        $.ajax({
+			            url: "/reviewBoardCommentDelete",
+			            type: "post",
+			            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			            data: { commentNo: commentNo },
+			            dataType: "JSON",
+			            success: function(data) {
+			                alert(data.res_msg);
+			                if (data.res_code === "200") {
+			                    location.reload();
+			                }
+			            }
+			        });
+			    }
 			});
-			
-		})
+		});
+		
+		$(document).ready(function(){
+		    $(document).on('click', '.updateComment_btn', function(){
+		        const commentItem = $(this).closest('.comment-item'); 
+		       
+		        commentItem.find('.comment-writer').hide();
+		        commentItem.find('.comment-date').hide();
+		        commentItem.find('.comment-content').hide();
+		        commentItem.find('.update-comment').show();
+		        
+		        // 버튼 숨기기 
+		        commentItem.find('.update_btn').show();
+		        commentItem.find('.deleteComment_btn').hide();
+		        commentItem.find('.updateComment_btn').hide();
+		        
+		    });
+		});
+		
+		$(document).ready(function(){
+		    $(document).on('click', '.update_btn', function(){
+		    	const commentItem = $(this).closest('.comment-item'); 
+		        const commentNo = $(this).data("comment-no");
+		        const commentContent = commentItem.find('.update-comment').val();
+		        console.log(commentContent);
+		        console.log(commentNo);
+		    	
+		        $.ajax({
+		            url: "/reviewBoardCommentUpdate",
+		            type: "post",
+		            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		            data: { commentNo: commentNo,
+		            	commentContent : commentContent
+		             	 },
+		            dataType: "JSON",
+		            success: function(data) {
+		                alert(data.res_msg);
+		                if (data.res_code === "200") {
+		                    location.reload();
+		                }
+		            }
+		        });		        
+		    });
+		});
 		
 		// 댓글 글자 수 제한 
 		$('#comment').on('input',function(){
@@ -264,7 +308,9 @@
 	        $('#comment_count').text(length + ' /50 ');
 	        
 			if(length>50){
-				alert("50자 이하로 입려해주세요.");
+				$(this).val(content.substring(0, 50));
+				alert("50자 이하로 입력해주세요.");
+				return;
 			}
 		})
 	

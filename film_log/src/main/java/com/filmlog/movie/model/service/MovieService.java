@@ -18,9 +18,9 @@ import com.filmlog.movie.model.vo.MovieDTO;
 
 public class MovieService {
 	
-	public List<Actor> selectMovieActors(int movieNo) {
+	public List<Actor> selectMovieActors(int movieId) {
 		SqlSession session = getSqlSession();
-		List<Actor> actors = new MovieDao().selectMovieActors(session, movieNo);
+		List<Actor> actors = new MovieDao().selectMovieActors(session, movieId);
 		session.close();
 		return actors;
 	}
@@ -247,6 +247,28 @@ public class MovieService {
 		session.close();
 		return movie;
 	}
+
+	public Director selectMovieDirector(int movieId) {
+		SqlSession session = getSqlSession();
+		Director director = new MovieDao().selectMovieDirector(session,movieId);
+		session.close();
+		return director;
+	}
+
+	public List<Genre> selectMovieGenres(int movieId) {
+		SqlSession session = getSqlSession();
+		List<Genre> genre = new MovieDao().selectMovieGenres(session,movieId);
+		session.close();
+		return genre;
+	}
+
+	public int deleteMovie(int movieId) {
+		SqlSession session = getSqlSession();
+		int result = new MovieDao().deleteMovie(session,movieId);
+		session.close();
+		return result;
+	}
+
 	
 
 	

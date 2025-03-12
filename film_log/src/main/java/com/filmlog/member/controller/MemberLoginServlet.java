@@ -26,12 +26,10 @@ public class MemberLoginServlet extends HttpServlet {
 
 	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//		List<Member> memberList = memberService.selectMemberAll();
-//		System.out.println(memberList);
 		String memberId = request.getParameter("member_id");
 		String memberPwd = request.getParameter("member_pwd");
 		String rememberId = request.getParameter("remember_id");
-		System.out.println(memberId + " : " + memberPwd);
+		System.out.println(memberId + " : " + rememberId + " : " + memberPwd);
 		
 		Member member = new Member(memberId, memberPwd);
 		Member m = memberService.selectMemberOne(member);
@@ -46,17 +44,24 @@ public class MemberLoginServlet extends HttpServlet {
 			}
 			String value = "";
 			int time = 0;
-			if(rememberId != null) {
+			if(rememberId.equals("Y")) {
 				value = m.getMemberId();
 				time = 60*60*24*7;
+				Cookie cookie = new Cookie("remember_id",value);
+				cookie.setHttpOnly(false); // JS에서 쿠키 접근 가능하도록 설정
+				cookie.setSecure(false); // HTTPS에서만 쿠키 전송 방지 해제
+				cookie.setMaxAge(time);
+				cookie.setPath("/"); // 경로 설정 추가
+				response.addCookie(cookie);
 			} else {
 				Cookie cookie = new Cookie("remember_id","");
+				cookie.setHttpOnly(false); // JS에서 쿠키 접근 가능하도록 설정
+				cookie.setSecure(false); // HTTPS에서만 쿠키 전송 방지 해제
 				cookie.setMaxAge(0);
+				cookie.setPath("/"); // 경로 설정 추가
 				response.addCookie(cookie);
 			}
-			Cookie cookie = new Cookie("remember_id",value);
-			cookie.setMaxAge(time);
-			response.addCookie(cookie);
+			
 			
 			obj.put("res_code", "200");
 			obj.put("res_msg", "로그인에 성공하였습니다.\n메인 페이지로 이동합니다.");

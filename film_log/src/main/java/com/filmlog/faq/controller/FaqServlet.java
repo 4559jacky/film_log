@@ -16,6 +16,7 @@ import com.filmlog.faq.model.vo.Faq;
 import com.filmlog.member.model.service.MemberService;
 import com.filmlog.member.model.vo.Member;
 
+
 @WebServlet("/faq")
 public class FaqServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;

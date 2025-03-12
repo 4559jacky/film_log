@@ -72,7 +72,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	          <label for="membeAddress">주소</label><br>
 				<div class="row">
 		          <div class="col-md-6 mb-3">
-		            <input type="text" class="form-control" name="postcode" id="sample6_postcode" placeholder="우편번호" value="<c:out value="${memberAddress.postcode}"/>"><br>
+		            <input type="text" class="form-control" name="postcode" id="sample6_postcode" placeholder="우편번호" value="<c:out value="${memberAddress.postcode}"/>" readonly><br>
 		            <div class="invalid-feedback">
 		              우편번호를 입력해주세요. (숫자로만 입력가능)
 		            </div>
@@ -83,7 +83,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				</div>
 				<div class="row">
 				  <div class="mb-3">
-					<input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소" value="<c:out value="${memberAddress.address}"/>"><br>
+					<input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소" value="<c:out value="${memberAddress.address}"/>" readonly><br>
 					<div class="invalid-feedback">
 		              주소를 입력해주세요.
 		            </div>
@@ -138,13 +138,13 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 	              	<img src="<%=request.getContextPath()%>/memberImgUpdatePath?member_no=${member.getMemberNo() }" style="width:200px; height:200px; border: 2px solid black; border-radius: 50%; object-fit: cover;">
 					<br><br>
 					<label for="memberImg" style="font-size:20px;"><b>프로필 이미지 변경</b></label><br>
-					<input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br>
+					<input type="file" name="member_img" id="memberImg" accept=".png,.jpg,.jpeg"><br><br>
 					<div class="invalid-feedback file-error">
 	                	형식에 맞지않는 파일입니다.(png만 가능)
 	              	</div>
+	              	<label style="font-size:20px;"><b>기본이미지로 변경 </b><input type="checkbox" name="default_img" id="defaultImg"></label><br>
 	            </div>
 	            <div class="mb-3">
-	              
 	            </div>
 	          </div>
 	          <button class="btn btn-primary btn-lg btn-block btn-next2" type="button">다음</button>
@@ -194,10 +194,10 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 			    <button class="btn btn-secondary btn-lg btn-block btn-prev3" type="button">이전</button>
 			    <hr class="mb-4">
 	            <div class="mb-4"></div>
-	              <div class="custom-control custom-checkbox">
+	              <!-- <div class="custom-control custom-checkbox">
 	                <input type="checkbox" class="custom-control-input" name="aggrement" id="aggrement" required>
 	                <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
-	              </div><br>
+	              </div><br> -->
 	            <button class="btn btn-primary btn-lg btn-block" type="button" id="updateButton">개인정보 수정하기</button>
 				</div>
         </form>
@@ -461,7 +461,7 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        }
 	
 		        // 생년월일 유효성 검사
-		        const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-([0-2][1-9]|3[01])$/;
+		        const dateRegex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
 		        if (!birth || dateRegex.test(birth) == false) {
 		            $("#memberBirth").addClass("is-invalid");
 		            isValid = false;
@@ -511,8 +511,20 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        $("#join2").hide();
 		        $("#join3").show();
 		    }); */
+		    $('#memberImg').change(function(){
+		    	console.log('이미지 확인');
+		    	if($('#defaultImg').is(":checked")) {
+		    		$('#defaultImg').prop("checked", false);
+		    	}
+		    })
 	    
 		    ///////////////////////////////////////
+		    $('#defaultImg').change(function(){
+		    	console.log('체크박스 확인');
+		    	if($('#defaultImg').is(":checked")){
+		    		$('#memberImg').val('');
+		    	}
+		    })
 		    
 		    // 두번째 버튼(이미지)
 		    $(".btn-next2").click(function (event) { 
@@ -559,76 +571,66 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
         	let form = $('.validation-form');
         	let memberImg = form.find("input[name='member_img']").val();
             let sendData = new FormData(form.get(0));
-
+            
+            let defaultImgChecked = $('#defaultImg').is(':checked') ? 'Y' : 'N';
+            sendData.append('default_img', defaultImgChecked);
+           
             sendData.forEach((value, key) => {
                 console.log(key, value);
             });
-            
-            let personalAgree = document.getElementById('aggrement');
-            console.log(personalAgree.checked);
-            
-            if (personalAgree.checked == false) { // ✅ 체크 여부 확인
-                event.preventDefault();
-                event.stopPropagation();
-                console.log('실패');
-                alert('개인정보 수집 및 이용에 동의해주세요.');
-                personalAgree.classList.add("is-invalid");
-            } else {
-            	if(memberImg) {
-            		const val = memberImg;
-    				const idx = val.lastIndexOf('.');
-    				const type = val.substring(idx+1, val.length);
-    				if(type == 'png') {
-    					// form.submit();
-    					console.log(val);
-    					$.ajax({
-    						url : '/memberInfoChange',
-    						type : 'post',
-    						// 파일데이터를 보내기 위해 추가해야하는 속성들
-    						// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
-    						enctype : 'multipart/form-data',
-    						cache : false,
-    						async : false,
-    						contentType : false,
-    						processData : false,
-    						data : sendData,
-    						dataType : 'JSON',
-    						success : function(data){
-    							alert(data.res_msg);
-    							if(data.res_code == 200) {
-    								location.href="/myPass";
-    							}
-    						}
-    						
-    					})
-    				} else {
-       					alert('이미지 파일만 선택할 수 있습니다.');
-       					memberImg = '';
-                	}
-            	} else {
-					$.ajax({
-						url : '/memberInfoChange',
-						type : 'post',
-						// 파일데이터를 보내기 위해 추가해야하는 속성들
-						// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
-						enctype : 'multipart/form-data',
-						cache : false,
-						async : false,
-						contentType : false,
-						processData : false,
-						data : sendData,
-						dataType : 'JSON',
-						success : function(data){
-							alert(data.res_msg);
-							if(data.res_code == 200) {
-								location.href="/myPass";
-							}
+
+           	if(memberImg) {
+           		const val = memberImg;
+   				const idx = val.lastIndexOf('.');
+   				const type = val.substring(idx+1, val.length);
+   				if(type == 'png') {
+   					// form.submit();
+   					console.log(val);
+   					$.ajax({
+   						url : '/memberInfoChange',
+   						type : 'post',
+   						// 파일데이터를 보내기 위해 추가해야하는 속성들
+   						// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
+   						enctype : 'multipart/form-data',
+   						cache : false,
+   						async : false,
+   						contentType : false,
+   						processData : false,
+   						data : sendData,
+   						dataType : 'JSON',
+   						success : function(data){
+   							alert(data.res_msg);
+   							if(data.res_code == 200) {
+   								location.href="/dashBoard";
+   							}
+   						}
+   					})
+   				} else {
+      					alert('이미지 파일만 선택할 수 있습니다.');
+      					memberImg = '';
+               	}
+           	} else {
+				$.ajax({
+					url : '/memberInfoChange',
+					type : 'post',
+					// 파일데이터를 보내기 위해 추가해야하는 속성들
+					// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
+					enctype : 'multipart/form-data',
+					cache : false,
+					async : false,
+					contentType : false,
+					processData : false,
+					data : sendData,
+					dataType : 'JSON',
+					success : function(data){
+						alert(data.res_msg);
+						if(data.res_code == 200) {
+							location.href="/dashBoard";
 						}
-						
-					})
-            	}
-            	
-            }
+					}
+					
+				})
+           	}
        	})
 		});
     </script>

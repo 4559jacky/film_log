@@ -178,7 +178,7 @@ public class MemberCreateServlet extends HttpServlet {
 		obj2.put("res_code","500");
 		obj2.put("res_msg", "회원가입에 실패하였습니다.\n정확하지않은 정보가있는지 확인해주세요.");
 		
-		if(result >= 4) {
+		if(result >= 5) {
 			obj2.put("res_code","200");
 			obj2.put("res_msg", "회원가입에 성공하였습니다.\n로그인 페이지로 이동합니다.");
 		}
