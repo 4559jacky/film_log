@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -5,8 +6,9 @@
 <head>
 <meta charset="UTF-8">
 <title>메인 페이지</title>
+
+<link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <%-- <script src="<c:url value='/resources/js/jquery-3.7.1.js'/>"></script> --%>
-<!-- <link href="/resources/css/bootstrap.min.css" rel="stylesheet" type="text/css"> -->
 <link href="/resources/css/include/allpage.css" rel="stylesheet" type="text/css">
 </head>
 <body id="body">

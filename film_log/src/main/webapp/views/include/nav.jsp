@@ -2,9 +2,9 @@
     pageEncoding="UTF-8"%>
 <%@ page import="com.filmlog.member.model.vo.Member" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link href="<c:url value='/resources/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css">
 <script src="<c:url value='/resources/js/jquery-3.7.1.js'/>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<link href="<c:url value='/resources/css/bootstrap.min.css'/>" rel="stylesheet" type="text/css">
 <c:set var="member" value="${member}"/>
 <nav class="navbar navbar-expand-lg bg-light" data-bs-theme="light" style="height : 80px;">
   <div class="container-fluid">

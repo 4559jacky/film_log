@@ -21,7 +21,7 @@ import com.filmlog.member.model.vo.Member;
 public class FaqServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private MemberService memberService = new MemberService();
-	private FaqService faqService = new FaqService();
+	private FaqService faqService = new FaqService(); 
        
     public FaqServlet() {}
 
