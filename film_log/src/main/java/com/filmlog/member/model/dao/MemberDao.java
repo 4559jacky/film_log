@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import com.filmlog.member.model.vo.EmailCode;
 import com.filmlog.member.model.vo.Member;
+import com.filmlog.member.model.vo.MemberAddress;
 import com.filmlog.member.model.vo.MemberImg;
 
 public class MemberDao {
@@ -81,6 +83,52 @@ public class MemberDao {
 	// update전 관심장르 삭제
 	public int deleteMemberInterestGenre(SqlSession session, int memberNo) {
 		return session.delete("memberMapper.deleteMemberGenre",memberNo);
+	}
+
+	public int insertMemberAddress(SqlSession session, MemberAddress ma) {
+		return session.insert("memberMapper.insertMemberAddress",ma);
+	}
+
+	public Member selectMemberByPhone(SqlSession session, String memberPhone) {
+		return session.selectOne("memberMapper.selectMemberByPhone",memberPhone);
+	}
+
+	public MemberAddress selectMemberAddress(SqlSession session, int memberNo) {
+		return session.selectOne("memberMapper.selectMemberAddress",memberNo);
+	}
+
+	public int updateMemberAddress(SqlSession session, MemberAddress memberAddress) {
+		return session.update("memberMapper.updateMemberAddress",memberAddress);
+	}
+
+	public Member selectMemberPwdForChangePwd(SqlSession session, Member m) {
+		return session.selectOne("memberMapper.selectMemberOneByIdAndPwd",m);
+	}
+
+	public int deleteMemberById(SqlSession session, String memberId) {
+		return session.delete("memberMapper.deleteMemberById",memberId);
+	}
+
+	public int insertEmailCode(SqlSession session, Map<String, String> paramMap) {
+		return session.insert("memberMapper.insertEmailCode",paramMap);
+	}
+
+	public Member selectEmail(SqlSession session, String email) {
+		return session.selectOne("memberMapper.selectEmail",email);
+	}
+
+	public EmailCode checkEmailCode(SqlSession session, Map<String, String> paramMap) {
+		System.out.println("코드 : "+paramMap.get("code"));
+		System.out.println("이메일 : "+paramMap.get("email"));
+		return session.selectOne("memberMapper.selectEmailCode", paramMap);
+	}
+
+	public int updateEmailCode(SqlSession session, Map<String, String> paramMap) {
+		return session.update("memberMapper.updateEmailCode",paramMap);
+	}
+
+	public int deleteEmailCode(SqlSession session, String memberEmail) {
+		return session.delete("memberMapper.deleteEmailCode",memberEmail);
 	}
 
 	/*

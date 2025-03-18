@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
+import com.filmlog.member.model.vo.Member;
 import com.filmlog.movie.model.vo.Actor;
 import com.filmlog.movie.model.vo.Director;
 import com.filmlog.movie.model.vo.Genre;
@@ -13,6 +14,14 @@ import com.filmlog.movie.model.vo.MovieDTO;
 
 public class MovieDao {
 	private SqlSessionFactory sqlSessionFactory;
+	
+	public List<Actor> selectMovieActors(SqlSession session, int movieId) {
+		return session.selectList("movieMapper.selectMovieActors", movieId);
+	}
+	
+	public List<MovieDTO> selectMovieListInHome(SqlSession session, Member member) {
+		return session.selectList("movieMapper.selectMovieListInHome", member);
+	}
 	
 	// 배우 추가
 	public int insertActor(SqlSession session, Actor actor) {
@@ -61,6 +70,38 @@ public class MovieDao {
 	// 영화별 배우 매핑
 	public int insertMovieDirector(SqlSession session, Map<String, Integer> paramMap) {
 		return session.insert("movieMapper.insertMovieDirector",paramMap);
+	}
+	// 관리자 페이지 영화 전체 목록 출력
+	public List<MovieDTO> selectMovieList(SqlSession session,MovieDTO option) {
+		return session.selectList("movieMapper.selectMovieList",option);
+	}
+	// 관리자 페이지 영화 추가
+	public int insertMovieAdmin(SqlSession session, MovieDTO movie) {
+		return session.insert("movieMapper.insertMovieAdmin",movie);
+	}
+	public int selectMovieListCount(SqlSession session) {
+		int result = session.selectOne("movieMapper.selectMovieListCount");
+		return result;
+	}
+	// 관리자 페이지 영화 수정(update)
+	public int updateMovie(SqlSession session, MovieDTO movie) {
+		return session.update("movieMapper.updateMovieAdmin",movie);
+	}
+	// 관리자 페이지 영화 수정페이지 데이터 불러와서 고정시키기
+	public MovieDTO selectMovieOne(SqlSession session, int movieId) {
+		return session.selectOne("movieMapper.selectMovieOne",movieId);
+	}
+
+	public Director selectMovieDirector(SqlSession session, int movieId) {
+		return session.selectOne("movieMapper.selectMovieDirector",movieId);
+	}
+
+	public List<Genre> selectMovieGenres(SqlSession session, int movieId) {
+		return session.selectList("movieMapper.selectMovieGenres",movieId);
+	}
+
+	public int deleteMovie(SqlSession session, int movieId) {
+		return session.update("movieMapper.deleteMovie",movieId);
 	}
 	
 	// API

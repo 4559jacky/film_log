@@ -60,28 +60,64 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 				    </div>
 				</div>
 	          </div>
-	
-	          <div class="mb-3">
-	            <label for="memberEmail">이메일</label>
-	            <input type="email" class="form-control" name="member_email" id="memberEmail" placeholder="you@example.com" required>
-	            <div class="invalid-feedback">
-	              이메일을 형식에 맞게 입력해주세요. ex) hogildong123@gmail.com
-	            </div>
-	          </div>
-	
-	          <div class="mb-3">
-	            <label for="membeAddress">주소</label>
-	            <input type="text" class="form-control" name="member_address" id="membeAddress" placeholder="서울특별시 강남구" required>
-	            <div class="invalid-feedback">
-	              주소를 입력해주세요.
-	            </div>
-	          </div>
+	          <label for="memberEmail">이메일</label>
+			  <div class="row">
+		          <div class="col-md-6 mb-3">
+		            <input type="email" class="form-control" name="member_email" id="memberEmail" placeholder="you@example.com" required>
+		            <div class="invalid-feedback email-error">
+		              	이메일을 형식에 맞게 입력해주세요. ex) hogildong123@gmail.com
+		            </div>
+		          </div>
+		          <div class="col-md-6 mb-3">
+					<input type="button" class="form-control" id="sendCode" value="인증번호 보내기">
+				  </div>
+		      </div>
+		      <label for="emailCode">인증번호</label>
+		      <div class="row">
+		          <div class="col-md-6 mb-3">
+		            <input type="text" class="form-control" name="email_code" id="emailCode" placeholder="인증번호" required>
+		            <div class="invalid-feedback code-error">
+		              	인증번호를 입력해주세요.
+		            </div>
+		          </div>
+		          <div class="col-md-6 mb-3">
+					<input type="button" class="form-control" id="checkCode" value="인증번호 확인">
+				  </div>
+		      </div>
+		        <label for="membeAddress">주소</label><br>
+				<div class="row">
+		          <div class="col-md-6 mb-3">
+		            <input type="text" class="form-control" name="postcode" id="sample6_postcode" placeholder="우편번호" readonly><br>
+		            <div class="invalid-feedback">
+		              우편번호를 입력해주세요. (숫자로만 입력가능)
+		            </div>
+		          </div>
+		          <div class="col-md-6 mb-3">
+					<input type="button" class="form-control" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+				  </div>
+				</div>
+				<div class="row">
+				  <div class="mb-3">
+					<input type="text" class="form-control" name="address" id="sample6_address" placeholder="주소" readonly><br>
+					<div class="invalid-feedback">
+		              주소를 입력해주세요.
+		            </div>
+				  </div>
+				  <div class="col-md-6 mb-3">
+					<input type="text" class="form-control" name="detail_address" id="sample6_detailAddress" placeholder="상세주소"><br>
+				  </div>
+				  <div class="col-md-6 mb-3">
+					<input type="text" class="form-control" name="extra_address" id="sample6_extraAddress" placeholder="참고항목" readonly>
+				  </div>
+		            <!-- <input type="text" class="form-control" name="member_address" id="membeAddress" placeholder="서울특별시 강남구" required> -->
+		         </div>
+	          
 
 	          <div class="row">
 	            <div class="col-md-6 mb-3">
 	              <label for="memberPhone">전화번호</label>
 	              <input type="text" class="form-control" name="member_phone" id="memberPhone" placeholder="ex) 010-1111-1111" value="" required>
-	              <div class="invalid-feedback">
+	              <div class="invalid-feedback phone-error">
 	                전화번호를 형식에 맞게 입력해주세요.
 	              </div>
 	            </div>
@@ -196,8 +232,153 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
       </div>
     </div>
     </div> 
-
+    
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script type="text/javascript">
+		let emailCheck = false;
+		// 주소 데이터 가져오기
+		function sample6_execDaumPostcode() {
+	        new daum.Postcode({
+	            oncomplete: function(data) {
+	                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+	                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	                var addr = ''; // 주소 변수
+	                var extraAddr = ''; // 참고항목 변수
+	
+	                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                    addr = data.roadAddress;
+	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.jibunAddress;
+	                }
+	
+	                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+	                if(data.userSelectedType === 'R'){
+	                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+	                        extraAddr += data.bname;
+	                    }
+	                    // 건물명이 있고, 공동주택일 경우 추가한다.
+	                    if(data.buildingName !== '' && data.apartment === 'Y'){
+	                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                    }
+	                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	                    if(extraAddr !== ''){
+	                        extraAddr = ' (' + extraAddr + ')';
+	                    }
+	                    // 조합된 참고항목을 해당 필드에 넣는다.
+	                    document.getElementById("sample6_extraAddress").value = extraAddr;
+	                
+	                } else {
+	                    document.getElementById("sample6_extraAddress").value = '';
+	                }
+	
+	                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	                document.getElementById('sample6_postcode').value = data.zonecode;
+	                document.getElementById("sample6_address").value = addr;
+	                // 커서를 상세주소 필드로 이동한다.
+	                document.getElementById("sample6_detailAddress").focus();
+	            }
+	        }).open();
+	    }
+		
+      	$(document).ready(function(){
+      		$('#sendCode').click(function(event){
+	      		let form = $('.validation-form');
+			    let email = form.find("input[name='member_email']").val();
+	      		isValid = true;
+	      		const regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i
+	      		if (!email || !regEmail.test(email)) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#memberEmail").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+		        }
+	      		
+	      		if(isValid) {
+	      			$.ajax({
+	      				url:'/emailVerification',
+	      				type:'post',
+	      				data:{email : email},
+	      				dataType:'JSON',
+	      				contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
+	      				success : function(data) {
+	      					alert(data.res_msg);
+	      					if(data.res_code == '200') {
+	      						$("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+	      					} else {
+	      						$("#memberEmail").addClass("is-invalid");
+	      						$('.email-error').text('이미 사용중인 이메일입니다.').show();
+	      					}
+	      				},
+	      				error: function (error) {
+	      			        console.log("오류 발생", error);
+	      			    }
+	      			})
+	      		} else {
+	      			alert('이메일 형식이 맞지않습니다.');
+	      			event.preventDefault();
+		            event.stopPropagation();
+	      		}
+	      	});
+      		
+      		$('#checkCode').click(function(event){
+      			console.log('왜안찍혀 이거;;');
+	      		let form = $('.validation-form');
+	      		let email = form.find("input[name='member_email']").val();
+			    let code = form.find("input[name='email_code']").val();
+	      		isValid = true;
+	      		let regex = /^\d{6}$/;
+	      		if (!code || !regex.test(code)) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#emailCode").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#emailCode").removeClass("is-invalid").addClass("is-valid");
+		            $("#emailCode").addClass("noValid");
+		        }
+	      		
+	      		if(isValid) {
+	      			$.ajax({
+	      				url:'/emailCheck',
+	      				type:'post',
+	      				data:{
+	      					email : email,
+	      					code : code
+	      					},
+	      				dataType:'JSON',
+	      				contentType : "application/x-www-form-urlencoded; charset=UTF-8;",
+	      				success : function(data) {
+	      					alert(data.res_msg);
+	      					if(data.res_code == '200') {
+	      						emailCheck = true;
+	      						$('#memberEmail').prop('readonly', true);
+	      						$("#emailCode").prop('readonly', true);
+	      						$("#memberEmail").removeClass("is-invalid").addClass("is-valid");
+	      						$("#emailCode").removeClass("is-invalid").addClass("is-valid");
+	      						$("#emailCode").removeClass("noValid");
+	      					} else {
+	      						$("#emailCode").addClass("is-invalid");
+	      						$("#emailCode").addClass("noValid")
+	      					}
+	      				}
+	      			})
+	      		} else {
+	      			alert('코드는 6자리입니다.');
+	      			event.preventDefault();
+		            event.stopPropagation();
+		            $("#emailCode").addClass("is-invalid");
+	      		}
+	      	});
+      		
+      	})
+	
 		// 버튼을 활용하여 페이지 전환 기능
 		$(document).ready(function () {
 			// div 숨기기
@@ -238,19 +419,55 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            }
 		        });
 		    });
+		    
+			// 번호 중복 검사
+		    $('#memberPhone').on('input', function () {
+		        let phone = $(this).val();
+		        let inputField = $(this);
+		        
+		     	// 번호가 형식에 맞지않는 경우
+		        if (!/^\d{3}-\d{4}-\d{4}$/.test(phone)) {
+		            inputField.addClass('is-invalid').removeClass('is-valid');
+		            $('.phone-error').text('형식에 맞게 입력해주세요.').show();
+		            return; // 중복 검사 실행 X
+		        }
+
+		        $.ajax({
+		            url: "/duplicatePhoneCheck",
+		            type: 'post',
+		            data: { "member_phone": phone },
+		            dataType: 'JSON',
+		            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		            success: function (data) {
+		                if (data.res_code === '200') {
+		                    inputField.addClass('is-valid').removeClass('is-invalid');
+		                    $('.phone-error').hide();
+		                } else {
+		                    inputField.addClass('is-invalid').removeClass('is-valid');
+		                    $('.phone-error').text('이미 사용중인 번호입니다.').show();
+		                }
+		            }
+		        });
+		    });
 
 		    // "다음" 버튼 클릭 시 유효성 검사 및 페이지 이동
 		    $(".btn-next1").click(function (event) {
 		        let form = $('.validation-form');
 		        let name = form.find("input[name='member_name']").val();
 		        let nickname = form.find("input[name='member_nickname']").val();
-		        let email = form.find("input[name='member_email']")[0]; // HTML input element 직접 가져옴
-		        let address = form.find("input[name='member_address']").val();
+		        let email = form.find("input[name='member_email']")[0]; // HTML input element 직접 가져옴 */
+		        let code = form.find("input[name='email_code']")[0];
+		        let postCode = form.find("input[name='postcode']").val();
+		        let address = form.find("input[name='address']").val();
+		        let detailAddress = form.find("input[name='detail_address']").val();
+		        let extraAddress = form.find("input[name='extra_address']").val();
 		        let phone = form.find("input[name='member_phone']").val();
 		        let birth = form.find("input[name='member_birth']").val();
 		        let gender = form.find("input[name='member_gender']").val();
 
 		        let isNicknameValid = $("#memberNickname").hasClass("is-valid");
+		        let isCodeValid = $("#emailCode").hasClass("noValid");
+		        let isPhoneValid = $("#memberPhone").hasClass("is-valid");
 		        let isValid = true;
 		        // 유효성 검사
 		        if (!name || name.length < 2 || name.length > 10) {
@@ -268,6 +485,21 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		            $("#memberNickname").addClass("is-invalid");
 		            isValid = false;
 		        }
+		        
+		        if (!isPhoneValid) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            console.log('여기걸리나');
+		            $("#memberphone").addClass("is-invalid");
+		            isValid = false;
+		        }
+		        
+		        if (isCodeValid) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#memberPhone").addClass("is-invalid");
+		            isValid = false;
+		        }
 
 		        if (!email.checkValidity()) {
 		            event.preventDefault();
@@ -277,27 +509,50 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		        } else {
 		            $("#memberEmail").removeClass("is-invalid").addClass("is-valid");
 		        }
+		        
+		        if (!code.checkValidity()) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            console.log('여기걸리나');
+		            $("#emailCode").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#emailCode").removeClass("is-invalid").addClass("is-valid");
+		        }
+		        
+		        // 우편번호 숫자인지 확인
+		        var regex = /^[0-9]*$/;
+		        
+		        if (!postCode || !regex.test(postCode)) {
+		            event.preventDefault();
+		            event.stopPropagation();
+		            $("#sample6_postcode").addClass("is-invalid");
+		            isValid = false;
+		        } else {
+		            $("#sample6_postcode").removeClass("is-invalid").addClass("is-valid");
+		        }
 
 		        if (!address) {
 		            event.preventDefault();
 		            event.stopPropagation();
-		            $("#membeAddress").addClass("is-invalid");
+		            $("#sample6_address").addClass("is-invalid");
 		            isValid = false;
 		        } else {
-		            $("#membeAddress").removeClass("is-invalid").addClass("is-valid");
+		            $("#sample6_address").removeClass("is-invalid").addClass("is-valid");
 		        }
-
+		        
+		        
 		        if (!phone || !/^\d{3}-\d{4}-\d{4}$/.test(phone)) {
 		            event.preventDefault();
 		            event.stopPropagation();
-		            $("#memberPhone").addClass("is-invalid");
+		            $("#memberPhone").addClass("is-invalid").text('형식에 맞게 입력해주세요.').show();;
 		            isValid = false;
 		        } else {
 		            $("#memberPhone").removeClass("is-invalid").addClass("is-valid");
 		        }
 		        
 		        // 생년월일 정규식표현
-		        const dateRegex = /^(19|20)\d{2}-(0[1-9]|1[0-2])-([0-2][1-9]|3[01])$/;
+		        const dateRegex = RegExp(/^\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/);
 
 		        if (!birth || dateRegex.test(birth) == false) {
 		            event.preventDefault();
@@ -465,87 +720,68 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
 		
 		//////////////////////////////////////////////////////////////
 
-    	// 가입완료 버튼
     	$(document).ready(function () {
-            $('#joinButton').click(function(event) {
-             	// 사용자가 입력한 값들을 이 시점에서 가져오기
-             	let form = $('.validation-form');
-	            let name = form.find("input[name='member_name']").val();
-	            let nickname = form.find("input[name='member_nickname']").val();
-	            let duplicateNicknameCheck = false;
-	            let email = form.find("input[name='member_email']").val();
-	            let address = form.find("input[name='member_address']").val();
-	            let phone = form.find("input[name='member_phone']").val();
-	            let birth = form.find("input[name='member_birth']").val();
-	            let gender = form.find("input[name='inlineRadioOptions']:checked").val();
-	            let id = form.find("input[name='member_id']").val();
-	            let duplicateIdCheck = false;
-	            let pwd = form.find("input[name='member_pwd']").val();
-	            let pwdCheck = form.find("input[name='member_pwd_check']").val();
-	            let selectedOptions = [];
-	            $("input[name='interest']:checked").each(function () {
-	                selectedOptions.push($(this).val());
-	            });
-	            
-	            console.log("입력된 데이터 확인:");
-	            console.log(name, nickname, email, address, phone, birth, gender, id, pwd);
-	            console.log("선택된 관심사:", selectedOptions);
-	            
-	            let sendData = new FormData(form.get(0));
-
-	            sendData.forEach((value, key) => {
-	                console.log(key, value);
-	            });
-	            
-	            let personalAgree = document.getElementById('aggrement');
-	            console.log(personalAgree.checked);
-	            
-	            if (personalAgree.checked == false) { // ✅ 체크 여부 확인
-	                event.preventDefault();
-	                event.stopPropagation();
-	                console.log('실패');
-	                alert('개인정보 수집 및 이용에 동의해주세요.');
-	                personalAgree.classList.add("is-invalid");
-	            } else {
-	            	$.ajax({
-	            		url : "/encryptPassword",
-						type : 'post',
-						data : {
-							"member_pwd" : pwd
-						},
-						dataType : 'JSON',
-						contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-						success: function (response) {
-			                console.log("암호화된 비밀번호:", response.member_pwd);
-			                sendData.set("member_pwd", response.member_pwd);
-			                
-			                $.ajax({
-					            url: "/memberCreate",
-					            type : 'post',
-								// 파일데이터를 보내기 위해 추가해야하는 속성들
-								// enctype이랑 cache, async, contentType, processData은 짝꿍이다.
-								enctype : 'multipart/form-data',
-								cache : false,
-								async : false,
-								contentType : false,
-								processData : false,
-								data : sendData,
-					            dataType: 'JSON',
-					            success: function (data) {
-					            	alert(data.res_msg);
-					            	if(data.res_code == '200') {
-				            			location.href = "/memberLoginPass";
-				            		} else {
-				            			event.preventDefault();
-				    		            event.stopPropagation();
-				            		}
-					            }
-					        });
-	            		}
-	            	});
-	            }
-           	})
-  		});
+		    $('#joinButton').click(async function(event) {
+		        event.preventDefault(); // 기본 이벤트 중단
+		
+		        let form = $('.validation-form');
+		        let name = form.find("input[name='member_name']").val();
+		        let email = form.find("input[name='member_email']").val();
+		        let pwd = form.find("input[name='member_pwd']").val();
+		        let personalAgree = document.getElementById('aggrement');
+		
+		        // 개인정보 수집 동의 체크 확인
+		        if (!personalAgree.checked) {
+		            alert('개인정보 수집 및 이용에 동의해주세요.');
+		            personalAgree.classList.add("is-invalid");
+		            return;
+		        }
+		
+		        // 이메일 인증 확인
+		        if (emailCheck === false) {
+		            alert('이메일 인증이 필요합니다.');
+		            $("#emailCode").addClass("is-invalid");
+		            return;
+		        }
+		
+		        try {
+		            // 암호화 먼저 진행
+		            let encryptResponse = await $.ajax({
+		                url: "/encryptPassword",
+		                type: "post",
+		                data: { "member_pwd": pwd },
+		                dataType: "JSON",
+		                contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		            });
+		
+		            console.log("암호화된 비밀번호:", encryptResponse.member_pwd);
+		
+		            let sendData = new FormData(form.get(0));
+		            sendData.set("member_pwd", encryptResponse.member_pwd); // 암호화된 비밀번호 적용
+		
+		            let registerResponse = await $.ajax({
+		                url: "/memberCreate",
+		                type: "post",
+		                enctype: "multipart/form-data",
+		                cache: false,
+		                async: false,
+		                contentType: false,
+		                processData: false,
+		                data: sendData,
+		                dataType: "JSON",
+		            });
+		
+		            alert(registerResponse.res_msg);
+		            if (registerResponse.res_code === '200') {
+		                location.href = "/memberLoginPass";
+		            }
+		
+		        } catch (error) {
+		            console.error("오류 발생", error);
+		            alert("회원가입 중 오류가 발생했습니다.");
+		        }
+		    });
+		});
 	</script>
 	
 </body>
