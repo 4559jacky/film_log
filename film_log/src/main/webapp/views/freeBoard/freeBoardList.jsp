@@ -14,7 +14,7 @@
 		    background-color: #e9ecef !important; /* 연한 회색 배경 */
 		    color: #000 !important;
 		}
-        
+          
         .select_btn, .insert_btn { 
             background-color: #e9ecef !important; 
             color: #000 !important; 
