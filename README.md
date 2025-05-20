@@ -18,8 +18,8 @@
 - **언어**: Java, JavaScript  
 - **백엔드**: Servlet/JSP, EL/JSTL, Maven, Tomcat  
 - **프론트엔드**: HTML5, CSS3, jQuery, Bootstrap  
-- **데이터베이스**: MariaDB, MyBatis, JDBC  
-- **개발환경**: Eclipse, Visual Studio Code, HeidiSQL  
+- **데이터베이스**: MariaDB, MyBatis
+- **개발환경**: Eclipse, HeidiSQL  
 
 ##  주요 기능
 
