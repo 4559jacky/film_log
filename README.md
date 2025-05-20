@@ -17,11 +17,15 @@
 
 ##  기술 스택
 
-- **언어**: Java, JavaScript  
-- **백엔드**: Servlet/JSP, EL/JSTL, Maven, Tomcat  
-- **프론트엔드**: HTML5, CSS3, jQuery, Bootstrap  
-- **데이터베이스**: MariaDB, MyBatis
-- **개발환경**: Eclipse, HeidiSQL  
+| **분류** | **기술** |
+|----------|----------|
+| **언어** | ![Java](https://img.shields.io/badge/Java-orange?logo=openjdk&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-yellow?logo=javascript&logoColor=white) |
+| **백엔드** | ![Tomcat](https://img.shields.io/badge/Tomcat-F8DC75?logo=apachetomcat&logoColor=black) ![Maven](https://img.shields.io/badge/Maven-C71A36?logo=apachemaven&logoColor=white) ![Servlet](https://img.shields.io/badge/Servlet-6DB33F?logo=java&logoColor=white) ![EL/JSTL](https://img.shields.io/badge/EL%2FJSTL-003B57?logo=apache&logoColor=white) ![JSP](https://img.shields.io/badge/JSP-007396?style=flat&logo=java&logoColor=white) |
+| **프론트엔드** | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white) ![jQuery](https://img.shields.io/badge/jQuery-0769AD?logo=jquery&logoColor=white) ![Bootstrap](https://img.shields.io/badge/Bootstrap-7952B3?logo=bootstrap&logoColor=white) |
+| **데이터베이스** | ![MariaDB](https://img.shields.io/badge/MariaDB-003545?logo=mariadb&logoColor=white) ![MyBatis](https://img.shields.io/badge/MyBatis-000000?style=flat) |
+| **개발환경** | ![Eclipse](https://img.shields.io/badge/Eclipse-2C2255?logo=eclipseide&logoColor=white) ![HeidiSQL](https://img.shields.io/badge/HeidiSQL-4479A1?logoColor=white) |
+
+
 
 ##  주요 기능
 
