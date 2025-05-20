@@ -1,6 +1,8 @@
 # 🎬 filmLog  
 영화 감상, 해석, 추천을 자유롭게 공유할 수 있는 영화 기록 커뮤니티 플랫폼
 
+![홈화면](https://github.com/user-attachments/assets/b439befd-3c1b-4a0e-aaaf-e9a95d6713d2)
+
 ##  프로젝트 링크  
 - **GitHub**: [https://github.com/4559jacky/film_log](https://github.com/4559jacky/film_log)  
 - **요구사항 정의서**: [Google Sheet](https://docs.google.com/spreadsheets/d/1z3QFklUzVlJD8Hfv_11_udTZbh2Y3jA9XBvZxV_PLUE/edit?usp=sharing)  
@@ -25,12 +27,5 @@
 -  나만의 영화 기록 작성 및 수정  
 -  리뷰 등록 및 커뮤니티 게시판 기능  
 -  작성한 글 목록 및 관리 기능 (마이페이지)  
--  키워드 기반 영화 필터링  
-
-##  설치 및 실행
-
-
-##  문의
-
--  이메일 : 
-
+-  키워드 기반 영화 필터링
+  
